@@ -1,4 +1,4 @@
-package gdep
+package needy
 
 import groovy.transform.Immutable
 import groovy.transform.ToString

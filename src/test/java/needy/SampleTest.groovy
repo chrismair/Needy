@@ -1,4 +1,4 @@
-package gdep;
+package needy;
 
 import static org.junit.Assert.*
 

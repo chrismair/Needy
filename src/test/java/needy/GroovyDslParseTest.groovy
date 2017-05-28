@@ -1,8 +1,11 @@
-package gdep;
+package needy;
 
 import static groovy.test.GroovyAssert.*
 
 import org.junit.Test
+
+import needy.Dependency
+import needy.GroovyDslParser
 
 class GroovyDslParseTest extends AbstractTestCase {
 
