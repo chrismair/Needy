@@ -35,7 +35,7 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void test_parse_Multiple_DifferentConfigurations() {
+	public void test_parse_DifferentConfigurations() {
 		final SOURCE = """dependencies {
 			compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
 			testCompile group: 'junit', name: 'junit', version: '4.8.1'
@@ -44,6 +44,34 @@ class GroovyDslParseTest extends AbstractTestCase {
 			new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
 			new Dependency(configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
 		]
+	}
+
+	@Test
+	public void test_parse_StringFormat() {
+		final SOURCE = """dependencies {
+			compile "org.hibernate:hibernate-core:3.1"
+			testCompile group: 'junit', name: 'junit', version: '4.8.1'
+		}"""
+		assert parser.parse(SOURCE) == [
+            new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+            new Dependency(configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
+        ]
+	}
+	
+	@Test
+	public void test_parse_StringFormat_NameAndVersionOnly() {
+		final SOURCE = """dependencies {
+			runtime "MyUtil:9"
+		}"""
+		assert parser.parse(SOURCE) == [new Dependency(configuration:"runtime", group:null, name:"MyUtil", version:"9")]
+	}
+
+	@Test
+	public void test_parse_StringFormat_NameOnly() {
+		final SOURCE = """dependencies {
+			other "MyUtil"
+		}"""
+		assert parser.parse(SOURCE) == [new Dependency(configuration:"other", group:null, name:"MyUtil", version:null)]
 	}
 
 	@Test
@@ -77,5 +105,13 @@ class GroovyDslParseTest extends AbstractTestCase {
 		"""
 		assert parser.parse(SOURCE) == [new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
+
+	// Tests for invalid format
+	
+	@Test
+	public void test_parse_StringFormat_Empty() {
+		shouldFail { parser.parse("dependencies { compile '' }") }	
+	}
+
 
 }

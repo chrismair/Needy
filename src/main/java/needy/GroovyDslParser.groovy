@@ -33,6 +33,18 @@ class GroovyDslParser {
 		if (args[0] instanceof Map) {
 			dependencies << new Dependency(args[0] + [configuration:name])
 		}
+		else if (args[0] instanceof String) {
+			println "methodMissing: name=$name value=${args[0]}"
+			assert args[0].size() > 0, "String format dependency error - empty string"
+			def strings = args[0].tokenize(':')
+			println "strings=$strings"
+
+			def group = (strings.size() > 2) ? strings[0] : null
+			def artifactName = (strings.size() < 3) ? strings[0] : strings[1]
+			def version = (strings.size() == 2) ? strings[1] : strings[2]
+			
+			dependencies << new Dependency([group:group, name:artifactName, version:version, configuration:name])
+		}
 	}
 
 	private GroovyShell createGroovyShell() {
