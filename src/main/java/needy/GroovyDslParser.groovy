@@ -38,9 +38,10 @@ class GroovyDslParser {
 				dependencies << new Dependency([group:m.group, name:m.name, version:m.version, configuration:name])
 			}
 		}
-		else if (args[0] instanceof String) {
-//			for (String s: args) {
-				String s = args[0]
+		else {
+			int index = 0
+			while (index < args.length && args[index] instanceof String) {
+				String s = args[index]
 				LOG.info "methodMissing: name=$name value=${s}"
 				assert s.size() > 0, "String format dependency error - empty string"
 				def strings = s.tokenize(':')
@@ -51,7 +52,8 @@ class GroovyDslParser {
 				version = scrubVersion(version)
 			
 				dependencies << new Dependency([group:group, name:artifactName, version:version, configuration:name])
-//			}
+				index++
+			}
 		}
 	}
 

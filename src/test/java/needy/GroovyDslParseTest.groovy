@@ -134,7 +134,7 @@ class GroovyDslParseTest extends AbstractTestCase {
 			        [group: 'org.springframework', name: 'spring-aop', version: '2.5']
 			    )
 
-//			sealife "sea.mammals:orca:1.0", "sea.fish:shark:1.0", "sea.fish:tuna:1.0"
+			sealife "sea.mammals:orca:1.0", "sea.fish:shark:1.0", "sea.fish:tuna:1.0"
 //			alllife configurations.sealife						// ignored
 //
 //			compile project(':shared')							// ignored
@@ -149,9 +149,9 @@ class GroovyDslParseTest extends AbstractTestCase {
 			new Dependency(configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
 			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-core", version:"2.5"),
 			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-aop", version:"2.5"),
-//			new Dependency(configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
-//			new Dependency(configuration:"sealife", group:"sea.fish", name:"shark", version:"1.0"),
-//			new Dependency(configuration:"sealife", group:"sea.fish", name:"tuna", version:"1.0"),
+			new Dependency(configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
+			new Dependency(configuration:"sealife", group:"sea.fish", name:"shark", version:"1.0"),
+			new Dependency(configuration:"sealife", group:"sea.fish", name:"tuna", version:"1.0"),
 		]
 	}
 	
