@@ -12,22 +12,22 @@ class GroovyDslParseTest extends AbstractTestCase {
 	private parser = new GroovyDslParser()
 	
 	@Test
-	public void test_parse_Null() {
+	void test_parse_Null() {
 		shouldFail(IllegalArgumentException) { parser.parse(null) }
 	}
 
 	@Test
-	public void test_parse_EmptyString() {
+	void test_parse_EmptyString() {
 		assert parser.parse("") == []
 	}
 
 	@Test
-	public void test_parse_EmptyDependenciesClosure() {
+	void test_parse_EmptyDependenciesClosure() {
 		assert parser.parse("dependencies { }") == []
 	}
 	
 	@Test
-	public void test_parse_Single() {
+	void test_parse_Single() {
 		final SOURCE = """dependencies {
 			compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
 		}"""
@@ -35,7 +35,7 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void test_parse_DifferentConfigurations() {
+	void test_parse_DifferentConfigurations() {
 		final SOURCE = """dependencies {
 			compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
 			testCompile group: 'junit', name: 'junit', version: '4.8.1'
@@ -47,7 +47,7 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void test_parse_StringFormat() {
+	void test_parse_StringFormat() {
 		final SOURCE = """dependencies {
 			compile "org.hibernate:hibernate-core:3.1"
 			testCompile group: 'junit', name: 'junit', version: '4.8.1'
@@ -59,7 +59,7 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 	
 	@Test
-	public void test_parse_StringFormat_NameAndVersionOnly() {
+	void test_parse_StringFormat_NameAndVersionOnly() {
 		final SOURCE = """dependencies {
 			runtime "MyUtil:9"
 		}"""
@@ -67,7 +67,7 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void test_parse_StringFormat_NameOnly() {
+	void test_parse_StringFormat_NameOnly() {
 		final SOURCE = """dependencies {
 			other "MyUtil"
 		}"""
@@ -75,7 +75,7 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void test_parse_FullGradleBuildFile() {
+	void test_parse_FullGradleBuildFile() {
 		final SOURCE = """
 			plugins {
 			    id 'groovy'
@@ -106,12 +106,65 @@ class GroovyDslParseTest extends AbstractTestCase {
 		assert parser.parse(SOURCE) == [new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
 
-	// Tests for invalid format
+	// Tests for other dependency options and formats
 	
 	@Test
-	public void test_parse_StringFormat_Empty() {
+	void test_parse_OtherProperties() {
+		final SOURCE = """dependencies {
+			compile group: 'org.h7', name: 'h7', version: '3.1', transitive:false, ext: 'jar', classifier:'jdk17', configuration:'c1'
+			runtime "org.groovy:groovy:2.2.0@jar"
+			compile "org.other:service:1.0:jdk15@jar"
+		}"""
+		assert parser.parse(SOURCE) == [
+			new Dependency(configuration:"compile", group:"org.h7", name:"h7", version:"3.1"),
+			new Dependency(configuration:"runtime", group:"org.groovy", name:"groovy", version:"2.2.0"),
+			new Dependency(configuration:"compile", group:"org.other", name:"service", version:"1.0")
+		]
+	}
+
+	@Test
+	void test_parse_OtherSyntax() {
+		final SOURCE = """dependencies {
+			compile("org.gradle:api:1.0") {
+				exclude module: 'shared'
+			}
+
+			runtime(
+			        [group: 'org.springframework', name: 'spring-core', version: '2.5'],
+			        [group: 'org.springframework', name: 'spring-aop', version: '2.5']
+			    )
+
+//			sealife "sea.mammals:orca:1.0", "sea.fish:shark:1.0", "sea.fish:tuna:1.0"
+//			alllife configurations.sealife						// ignored
+//
+//			compile project(':shared')							// ignored
+//			runtime files('libs/a.jar', 'libs/b.jar')			// ignored
+//			runtime fileTree(dir: 'libs', include: '*.jar')		// ignored
+//			compile files("build/classes") {					// ignored
+//        		builtBy 'compile'
+//			}
+//			compile gradleApi()									// ignored
+		}"""
+		assert parser.parse(SOURCE) == [
+			new Dependency(configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
+			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-core", version:"2.5"),
+			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-aop", version:"2.5"),
+//			new Dependency(configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
+//			new Dependency(configuration:"sealife", group:"sea.fish", name:"shark", version:"1.0"),
+//			new Dependency(configuration:"sealife", group:"sea.fish", name:"tuna", version:"1.0"),
+		]
+	}
+	
+	// Tests for invalid DSL syntax/format
+	
+	@Test
+	void test_parse_StringFormat_Empty() {
 		shouldFail { parser.parse("dependencies { compile '' }") }	
 	}
 
-
+	@Test
+	void test_parse_IllegalGroovySyntax() {
+		shouldFail(IllegalStateException) { parser.parse("%^@ &*[]") }	
+	}
+	
 }
