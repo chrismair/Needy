@@ -29,7 +29,12 @@ class GroovyDslParser {
 		return dependencies
 	}
 
+	private static final IGNORED_METHOD_NAMES = ['project', 'files', 'fileTree']
+	
 	def methodMissing(String name, args) {
+		if (IGNORED_METHOD_NAMES.contains(name)) {
+			return
+		}
 		if (args.length == 0) {
 			return
 		}
@@ -68,7 +73,7 @@ class GroovyDslParser {
 			closure.delegate = this
 			closure()
 		}
-		def doNothing = { arg1 = null, arg2 = null, arg3 = null ->	/* accept any args */ } 
+		def doNothing = { arg1 = null, arg2 = null, arg3 = null ->	return null /* accept any args */ } 
 		Map bindingMap = [dependencies:callDependencies].withDefault { name -> 
 			return doNothing 
 		}

@@ -123,35 +123,59 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 
 	@Test
-	void test_parse_OtherSyntax() {
+	void test_parse_MultipleDependenciesPerStatement() {
 		final SOURCE = """dependencies {
-			compile("org.gradle:api:1.0") {
-				exclude module: 'shared'
-			}
-
 			runtime(
 			        [group: 'org.springframework', name: 'spring-core', version: '2.5'],
 			        [group: 'org.springframework', name: 'spring-aop', version: '2.5']
 			    )
 
 			sealife "sea.mammals:orca:1.0", "sea.fish:shark:1.0", "sea.fish:tuna:1.0"
-//			alllife configurations.sealife						// ignored
-//
-//			compile project(':shared')							// ignored
-//			runtime files('libs/a.jar', 'libs/b.jar')			// ignored
-//			runtime fileTree(dir: 'libs', include: '*.jar')		// ignored
-//			compile files("build/classes") {					// ignored
-//        		builtBy 'compile'
-//			}
-//			compile gradleApi()									// ignored
 		}"""
 		assert parser.parse(SOURCE) == [
-			new Dependency(configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
 			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-core", version:"2.5"),
 			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-aop", version:"2.5"),
 			new Dependency(configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
 			new Dependency(configuration:"sealife", group:"sea.fish", name:"shark", version:"1.0"),
 			new Dependency(configuration:"sealife", group:"sea.fish", name:"tuna", version:"1.0"),
+		]
+	}
+	
+	@Test
+	void test_parse_SpecifyDependenciesInAVariable_KnownLimitation() {
+		final SOURCE = """dependencies {
+			List groovy = ["org.codehaus.groovy:groovy-all:2.4.10@jar",
+			               "commons-cli:commons-cli:1.0@jar",
+			               "org.apache.ant:ant:1.9.6@jar"]
+		    runtime groovy
+		}"""
+		assert parser.parse(SOURCE) == []
+			// Should be this:
+			//new Dependency(configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
+			//new Dependency(configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
+			//new Dependency(configuration:"runtime", group:"org.apache.ant", name:"ant", version:"1.9.6"),
+	}
+
+	@Test
+	void test_parse_OtherSyntax() {
+		final SOURCE = """dependencies {
+			compile("org.gradle:api:1.0") {
+				exclude module: 'shared'
+			}
+
+			alllife configurations.sealife						// ignored
+
+			compile project(':shared')							// ignored
+			runtime files('libs/a.jar', 'libs/b.jar')			// ignored
+			runtime fileTree(dir: 'libs', include: '*.jar')		// ignored
+			compile files("build/classes") {					// ignored
+        		builtBy 'compile'
+			}
+			compile gradleApi()									// ignored
+			compile localGroovy()								// ignored
+		}"""
+		assert parser.parse(SOURCE) == [
+			new Dependency(configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
 		]
 	}
 	
