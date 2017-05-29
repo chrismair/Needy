@@ -142,18 +142,32 @@ class GroovyDslParseTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_parse_SpecifyDependenciesInAVariable_KnownLimitation() {
+	void test_parse_SpecifyDependenciesInAVariable_List() {
 		final SOURCE = """dependencies {
 			List groovy = ["org.codehaus.groovy:groovy-all:2.4.10@jar",
 			               "commons-cli:commons-cli:1.0@jar",
 			               "org.apache.ant:ant:1.9.6@jar"]
-		    runtime groovy
+			runtime groovy
 		}"""
-		assert parser.parse(SOURCE) == []
-			// Should be this:
-			//new Dependency(configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
-			//new Dependency(configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
-			//new Dependency(configuration:"runtime", group:"org.apache.ant", name:"ant", version:"1.9.6"),
+		assert parser.parse(SOURCE) == [
+			new Dependency(configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
+			new Dependency(configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
+			new Dependency(configuration:"runtime", group:"org.apache.ant", name:"ant", version:"1.9.6"),
+		]
+	}
+
+	@Test
+	void test_parse_SpecifyDependenciesInAVariable_MultipleLists() {
+		final SOURCE = """dependencies {
+			List groovy = ["org.codehaus.groovy:groovy-all:2.4.10@jar", "commons-cli:commons-cli:1.0@jar"]
+			List hibernate = ['org.hibernate:hibernate:3.0.5@jar']		    
+			runtime groovy, hibernate
+		}"""
+		assert parser.parse(SOURCE) == [
+			new Dependency(configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
+			new Dependency(configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
+			new Dependency(configuration:"runtime", group:"org.hibernate", name:"hibernate", version:"3.0.5"),
+		]
 	}
 
 	@Test
