@@ -1,6 +1,7 @@
 package needy
 
-import org.apache.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.junit.After
 import org.junit.Rule
 import org.junit.rules.TestName
@@ -8,7 +9,7 @@ import org.junit.rules.TestName
 class AbstractTestCase {
 
 	@SuppressWarnings('FieldName')
-	protected final LOG = Logger.getLogger(getClass())
+	protected final LOG = LoggerFactory.getLogger(getClass())
 
 	@SuppressWarnings('PublicInstanceField')
 	@Rule public TestName testName = new TestName()
