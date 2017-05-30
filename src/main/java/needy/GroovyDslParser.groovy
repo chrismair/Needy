@@ -2,12 +2,13 @@ package needy
 
 import java.util.Map
 
-import org.apache.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
 class GroovyDslParser {
 
-	private static final Logger LOG = Logger.getLogger(GroovyDslParser)
+	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslParser)
 
 	private List<Dependency> dependencies = []
 
