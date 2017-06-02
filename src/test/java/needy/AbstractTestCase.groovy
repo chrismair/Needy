@@ -15,6 +15,8 @@
  */
 package needy
 
+import static groovy.test.GroovyAssert.shouldFail
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.junit.After
@@ -32,7 +34,7 @@ class AbstractTestCase {
 	
 	@After
 	void afterAbstractTestCase() {
-        log "----------[ ${getClass().getSimpleName()}.${getName()} ]----------"
+        log("----------[ ${getClass().getSimpleName()}.${getName()} ]----------")
 	}
 	
 	protected void log(message) {
@@ -41,6 +43,16 @@ class AbstractTestCase {
 
 	protected String getName() {
 		return testName.getMethodName()
+	}
+	
+	protected void shouldFailWithMessage(String message, Closure closure) {
+		def e = shouldFail(closure)
+		assert e.message?.contains(message) 
+	}
+
+	protected void shouldFailWithMessage(Class theClass, String message, Closure closure) {
+		def e = shouldFail(theClass, closure)
+		assert e.message?.contains(message) 
 	}
 
 }

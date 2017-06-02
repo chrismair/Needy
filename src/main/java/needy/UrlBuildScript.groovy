@@ -15,19 +15,20 @@
  */
 package needy
 
-/**
- * @author chris
- *
- */
 class UrlBuildScript implements BuildScript {
 
-	/* (non-Javadoc)
-	 * @see needy.BuildScript#getText()
-	 */
+	private final String text
+	
+	public UrlBuildScript(String urlString) {
+		assert urlString != null, "The urlString value must not be null"
+		
+		def url = new URL(urlString)
+		this.text = url.text
+	}
+	
 	@Override
 	public String getText() {
-		// TODO Auto-generated method stub
-		return null;
+		return text
 	}
 
 }
