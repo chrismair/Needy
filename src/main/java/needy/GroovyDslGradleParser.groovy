@@ -21,9 +21,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
-class GroovyDslParser {
+class GroovyDslGradleParser {
 
-	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslParser)
+	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslGradleParser)
 
 	private List<Dependency> dependencies = []
 

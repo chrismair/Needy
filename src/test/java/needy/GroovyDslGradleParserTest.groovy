@@ -20,11 +20,11 @@ import static groovy.test.GroovyAssert.*
 import org.junit.Test
 
 import needy.Dependency
-import needy.GroovyDslParser
+import needy.GroovyDslGradleParser
 
-class GroovyDslParseTest extends AbstractTestCase {
+class GroovyDslGradleParserTest extends AbstractTestCase {
 
-	private parser = new GroovyDslParser()
+	private parser = new GroovyDslGradleParser()
 	
 	@Test
 	void test_parse_Null() {
