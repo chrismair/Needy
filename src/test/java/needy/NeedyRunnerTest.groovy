@@ -40,8 +40,21 @@ class NeedyRunnerTest extends AbstractTestCase {
 		def applicationBuilds = applicationBuildSet.getApplicationBuilds()
 		log(applicationBuilds)
 		needyRunner.applicationBuildSet = applicationBuildSet
-		needyRunner.execute()
+		def result = needyRunner.execute()
 		
+		final EXPECTED = [
+            new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+            new Dependency(applicationName:"Sample1", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
+            new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.gmetrics", name:"GMetrics", version:"0.7"),
+			new Dependency(applicationName:"Sample1", configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1"),
+			new Dependency(applicationName:"Sample1", configuration:"testCompile", group:"commons-cli", name:"commons-cli", version:"1.2"),
+			
+			new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
+            new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"org.codenarc", name:"CodeNarc", version:"0.28"),
+			new Dependency(applicationName:"Sample_Two", configuration:"testCompile", group:"junit", name:"junit", version:"4.12"),
+		]
+		
+		assert result == EXPECTED
 	}
 	
 }

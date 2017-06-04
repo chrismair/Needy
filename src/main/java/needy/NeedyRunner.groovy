@@ -26,21 +26,27 @@ class NeedyRunner {
 	
 	ApplicationBuildSet applicationBuildSet
 	
-	void execute() {
+	List<Dependency>  execute() {
 		assert applicationBuildSet
 		
 		def applicationBuilds = applicationBuildSet.getApplicationBuilds()
 		LOG.info("applicationBuilds=" + applicationBuilds)
+		List<Dependency> allDependencies = []
+		
 		applicationBuilds.forEach{ ApplicationBuild applicationBuild ->
 			LOG.info("Processing application [${applicationBuild.name}]")
 			DependencyParser dependencyParser = new GroovyDslGradleDependencyParser(applicationBuild.name)
 			applicationBuild.buildScripts.each { BuildScript buildScript ->
 				String buildFileText = buildScript.getText()
-				List<Dependency> dependencies = dependencyParser.parse(buildFileText)
-				LOG.info("    dependencies=$dependencies")
+				List<Dependency> buildFileDependencies = dependencyParser.parse(buildFileText)
+				allDependencies.addAll(buildFileDependencies)
+				
+				buildFileDependencies.each { dependency ->
+					LOG.info("  + $dependency")
+				}
 			}
 		}
-
+		return allDependencies
 	}
 	
 }
