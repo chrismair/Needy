@@ -30,14 +30,16 @@ class UrlBuildScriptTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_Constructor_String_FileDoesNotExist() {
-		shouldFailWithMessage(FileNotFoundException, 'NoSuchFile.txt') { new UrlBuildScript("file:///NoSuchFile.txt") }
+	void test_getText_String_FileDoesNotExist() {
+		def buildScript = new UrlBuildScript("file:///NoSuchFile.txt")
+		shouldFailWithMessage(FileNotFoundException, 'NoSuchFile.txt') { buildScript.getText() }
 	}
 	
 	@Test
 	void test_getText() {
 		def buildScript = new UrlBuildScript(TEST_FILE_URL)
 		assert buildScript.getText() == new File(TEST_FILE).text
+		assert buildScript.getUrl() == new URL(TEST_FILE_URL)
 	}
 	
 }

@@ -17,18 +17,16 @@ package needy
 
 class UrlBuildScript implements BuildScript {
 
-	private final String text
+	final URL url
 	
 	public UrlBuildScript(String urlString) {
 		assert urlString != null, "The urlString value must not be null"
-		
-		def url = new URL(urlString)
-		this.text = url.text
+		url = new URL(urlString)
 	}
 	
 	@Override
 	public String getText() {
-		return text
+		return url.text
 	}
 
 }
