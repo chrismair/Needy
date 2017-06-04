@@ -15,10 +15,13 @@
  */
 package needy
 
-import static groovy.test.GroovyAssert.shouldFail
+import groovy.test.GroovyAssert
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import groovy.lang.Closure
+
 import org.junit.After
 import org.junit.Rule
 import org.junit.rules.TestName
@@ -38,11 +41,19 @@ class AbstractTestCase {
 	}
 	
 	protected void log(message) {
-		LOG.info message
+		LOG.info message.toString()
 	}
 
 	protected String getName() {
 		return testName.getMethodName()
+	}
+	
+	protected Throwable shouldFail(Closure code) {
+		GroovyAssert.shouldFail(code)
+	}
+	
+	protected Throwable shouldFail(Class clazz, Closure code) {
+		GroovyAssert.shouldFail(clazz, code)
 	}
 	
 	protected void shouldFailWithMessage(String message, Closure closure) {

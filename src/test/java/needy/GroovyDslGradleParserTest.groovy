@@ -15,8 +15,6 @@
  */
 package needy;
 
-import static groovy.test.GroovyAssert.*
-
 import org.junit.Test
 
 import needy.Dependency
