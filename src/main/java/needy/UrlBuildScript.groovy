@@ -29,4 +29,9 @@ class UrlBuildScript implements BuildScript {
 		return url.text
 	}
 
+	@Override
+	public String toString() {
+		return "UrlBuildScript(url=$url)"
+	}
+	
 }

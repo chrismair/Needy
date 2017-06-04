@@ -42,4 +42,10 @@ class UrlBuildScriptTest extends AbstractTestCase {
 		assert buildScript.getUrl() == new URL(TEST_FILE_URL)
 	}
 	
+	@Test
+	void test_toString() {
+		def buildScript = new UrlBuildScript(TEST_FILE_URL)
+		assert buildScript.toString() == "UrlBuildScript(url=$TEST_FILE_URL)"
+	}
+	
 }
