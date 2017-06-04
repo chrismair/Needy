@@ -19,8 +19,6 @@ import org.junit.Test
 
 class NeedyRunnerTest extends AbstractTestCase {
 
-	private static final String TEXT = "abc123"
-	
 	private NeedyRunner needyRunner = new NeedyRunner()
 	
 	@Test
