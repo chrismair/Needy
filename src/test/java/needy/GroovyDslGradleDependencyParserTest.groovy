@@ -22,7 +22,9 @@ import needy.GroovyDslGradleDependencyParser
 
 class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 
-	private parser = new GroovyDslGradleDependencyParser()
+	private static final String APPLICATION_NAME = "MyApp1"
+	
+	private parser = new GroovyDslGradleDependencyParser(APPLICATION_NAME)
 	
 	@Test
 	void test_ImplementsDependencyParser() {
@@ -49,7 +51,7 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """dependencies {
 			compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
 		}"""
-		assert parser.parse(SOURCE) == [new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
+		assert parser.parse(SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
 
 	@Test
@@ -59,8 +61,8 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			testCompile group: 'junit', name: 'junit', version: '4.8.1'
 		}"""
 		assert parser.parse(SOURCE) == [
-			new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-			new Dependency(configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
 		]
 	}
 
@@ -71,8 +73,8 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			testCompile group: 'junit', name: 'junit', version: '4.8.1'
 		}"""
 		assert parser.parse(SOURCE) == [
-            new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-            new Dependency(configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
         ]
 	}
 	
@@ -81,7 +83,7 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """dependencies {
 			runtime "MyUtil:9"
 		}"""
-		assert parser.parse(SOURCE) == [new Dependency(configuration:"runtime", group:null, name:"MyUtil", version:"9")]
+		assert parser.parse(SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:null, name:"MyUtil", version:"9")]
 	}
 
 	@Test
@@ -89,7 +91,7 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """dependencies {
 			other "MyUtil"
 		}"""
-		assert parser.parse(SOURCE) == [new Dependency(configuration:"other", group:null, name:"MyUtil", version:null)]
+		assert parser.parse(SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"other", group:null, name:"MyUtil", version:null)]
 	}
 
 	@Test
@@ -121,7 +123,7 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			    from javadoc
 			}
 		"""
-		assert parser.parse(SOURCE) == [new Dependency(configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
+		assert parser.parse(SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
 
 	// Tests for other dependency options and formats
@@ -134,9 +136,9 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			compile "org.other:service:1.0:jdk15@jar"
 		}"""
 		assert parser.parse(SOURCE) == [
-			new Dependency(configuration:"compile", group:"org.h7", name:"h7", version:"3.1"),
-			new Dependency(configuration:"runtime", group:"org.groovy", name:"groovy", version:"2.2.0"),
-			new Dependency(configuration:"compile", group:"org.other", name:"service", version:"1.0")
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.h7", name:"h7", version:"3.1"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.groovy", name:"groovy", version:"2.2.0"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.other", name:"service", version:"1.0")
 		]
 	}
 
@@ -151,11 +153,11 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			sealife "sea.mammals:orca:1.0", "sea.fish:shark:1.0", "sea.fish:tuna:1.0"
 		}"""
 		assert parser.parse(SOURCE) == [
-			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-core", version:"2.5"),
-			new Dependency(configuration:"runtime", group:"org.springframework", name:"spring-aop", version:"2.5"),
-			new Dependency(configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
-			new Dependency(configuration:"sealife", group:"sea.fish", name:"shark", version:"1.0"),
-			new Dependency(configuration:"sealife", group:"sea.fish", name:"tuna", version:"1.0"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.springframework", name:"spring-core", version:"2.5"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.springframework", name:"spring-aop", version:"2.5"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"sealife", group:"sea.fish", name:"shark", version:"1.0"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"sealife", group:"sea.fish", name:"tuna", version:"1.0"),
 		]
 	}
 	
@@ -168,9 +170,9 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			runtime groovy
 		}"""
 		assert parser.parse(SOURCE) == [
-			new Dependency(configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
-			new Dependency(configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
-			new Dependency(configuration:"runtime", group:"org.apache.ant", name:"ant", version:"1.9.6"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.apache.ant", name:"ant", version:"1.9.6"),
 		]
 	}
 
@@ -182,9 +184,9 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			runtime groovy, hibernate
 		}"""
 		assert parser.parse(SOURCE) == [
-			new Dependency(configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
-			new Dependency(configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
-			new Dependency(configuration:"runtime", group:"org.hibernate", name:"hibernate", version:"3.0.5"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.hibernate", name:"hibernate", version:"3.0.5"),
 		]
 	}
 
@@ -207,7 +209,7 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 			compile localGroovy()								// ignored
 		}"""
 		assert parser.parse(SOURCE) == [
-			new Dependency(configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
 		]
 	}
 	

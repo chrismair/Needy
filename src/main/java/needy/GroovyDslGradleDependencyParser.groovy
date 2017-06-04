@@ -23,12 +23,18 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslGradleDependencyParser)
 
+	final String applicationName
+	
+	GroovyDslGradleDependencyParser(String applicationName) {
+		this.applicationName = applicationName
+	}
+	
 	List<Dependency> parse(String source) {
 		if (source == null) {
 			throw new IllegalArgumentException("Parameter closure was null")
 		}
 
-		GroovyDslGradleDependencyParser_DslEvaluator dslEvaluator = new GroovyDslGradleDependencyParser_DslEvaluator()
+		GroovyDslGradleDependencyParser_DslEvaluator dslEvaluator = new GroovyDslGradleDependencyParser_DslEvaluator(applicationName)
 		
 		GroovyShell shell = createGroovyShell(dslEvaluator)
 		try {
@@ -64,7 +70,12 @@ class GroovyDslGradleDependencyParser_DslEvaluator {
 	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslGradleDependencyParser_DslEvaluator)
 	private static final IGNORED_METHOD_NAMES = ['project', 'files', 'fileTree']
 	
-	List<Dependency> dependencies = []
+	final List<Dependency> dependencies = []
+	final String applicationName
+	
+	GroovyDslGradleDependencyParser_DslEvaluator(String applicationName) {
+		this.applicationName = applicationName
+	}
 	
 	void evaluate(Closure closure) {
 		closure.delegate = this
@@ -82,7 +93,7 @@ class GroovyDslGradleDependencyParser_DslEvaluator {
 		if (args[0] instanceof Map) {
 			LOG.info "methodMissing (Map): name=$name value=${args[0]}"
 			for (Map m: args) {
-				dependencies << new Dependency([group:m.group, name:m.name, version:m.version, configuration:name])
+				dependencies << new Dependency(applicationName:applicationName, group:m.group, name:m.name, version:m.version, configuration:name)
 			}
 		}
 		else if (args[0] instanceof List) {
@@ -118,7 +129,7 @@ class GroovyDslGradleDependencyParser_DslEvaluator {
 		def version = (strings.size() == 2) ? strings[1] : strings[2]
 		version = scrubVersion(version)
 	
-		dependencies << new Dependency([group:group, name:artifactName, version:version, configuration:name])
+		dependencies << new Dependency(applicationName:applicationName, group:group, name:artifactName, version:version, configuration:name)
 	}
 	
 	private String scrubVersion(String version) {

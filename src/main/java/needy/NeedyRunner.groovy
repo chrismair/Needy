@@ -29,11 +29,11 @@ class NeedyRunner {
 	void execute() {
 		assert applicationBuildSet
 		
-		DependencyParser dependencyParser = new GroovyDslGradleDependencyParser()
 		def applicationBuilds = applicationBuildSet.getApplicationBuilds()
 		LOG.info("applicationBuilds=" + applicationBuilds)
 		applicationBuilds.forEach{ ApplicationBuild applicationBuild ->
 			LOG.info("Processing application [${applicationBuild.name}]")
+			DependencyParser dependencyParser = new GroovyDslGradleDependencyParser(applicationBuild.name)
 			applicationBuild.buildScripts.each { BuildScript buildScript ->
 				String buildFileText = buildScript.getText()
 				List<Dependency> dependencies = dependencyParser.parse(buildFileText)

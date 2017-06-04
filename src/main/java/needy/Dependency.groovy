@@ -22,6 +22,7 @@ import groovy.transform.ToString
 @ToString(includePackage=false, includeNames=true)
 class Dependency {
 	
+	String applicationName
 	String group
 	String name
 	String version
