@@ -129,7 +129,7 @@ class GroovyDslGradleDependencyParser_DslEvaluator {
 		def version = (strings.size() == 2) ? strings[1] : strings[2]
 		version = scrubVersion(version)
 	
-		dependencies << new Dependency(applicationName:applicationName, group:group, name:artifactName, version:version, configuration:name)
+		dependencies << new Dependency([applicationName:applicationName, group:group, name:artifactName, version:version, configuration:name])
 	}
 	
 	private String scrubVersion(String version) {
