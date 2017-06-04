@@ -18,11 +18,11 @@ package needy;
 import org.junit.Test
 
 import needy.Dependency
-import needy.GroovyDslGradleParser
+import needy.GroovyDslGradleDependencyParser
 
-class GroovyDslGradleParserTest extends AbstractTestCase {
+class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 
-	private parser = new GroovyDslGradleParser()
+	private parser = new GroovyDslGradleDependencyParser()
 	
 	@Test
 	void test_ImplementsDependencyParser() {
