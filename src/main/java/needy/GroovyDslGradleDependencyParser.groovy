@@ -15,24 +15,22 @@
  */
 package needy
 
-import java.util.Map
-
+import org.codehaus.groovy.control.MultipleCompilationErrorsException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
 class GroovyDslGradleDependencyParser implements DependencyParser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslGradleDependencyParser)
-
-	private List<Dependency> dependencies = []
 
 	List<Dependency> parse(String source) {
 		if (source == null) {
 			throw new IllegalArgumentException("Parameter closure was null")
 		}
 
-		GroovyShell shell = createGroovyShell()
+		GroovyDslGradleDependencyParser_DslEvaluator dslEvaluator = new GroovyDslGradleDependencyParser_DslEvaluator()
+		
+		GroovyShell shell = createGroovyShell(dslEvaluator)
 		try {
 			shell.evaluate(source)
 		} 
@@ -41,12 +39,39 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 			throw new IllegalStateException("An error occurred compiling: [$source]\n${compileError.message}")
 		}
 
+		List<Dependency> dependencies = dslEvaluator.dependencies
 		LOG.info "dependencies = $dependencies"
 		return dependencies
 	}
 
+	private GroovyShell createGroovyShell(GroovyDslGradleDependencyParser_DslEvaluator dslEvaluator) {
+		def callDependencies = { Closure closure ->
+			dslEvaluator.evaluate(closure)
+		}
+		def doNothing = { arg1 = null, arg2 = null, arg3 = null ->	return null /* accept any args */ } 
+		Map bindingMap = [dependencies:callDependencies].withDefault { name -> 
+			return doNothing 
+		}
+		Binding binding = new Binding(bindingMap)
+
+		return new GroovyShell(this.class.classLoader, binding)
+	}
+	
+}
+
+class GroovyDslGradleDependencyParser_DslEvaluator {
+
+	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslGradleDependencyParser_DslEvaluator)
 	private static final IGNORED_METHOD_NAMES = ['project', 'files', 'fileTree']
 	
+	List<Dependency> dependencies = []
+	
+	void evaluate(Closure closure) {
+		closure.delegate = this
+		closure.setResolveStrategy(Closure.DELEGATE_FIRST)
+		closure.call()
+	}
+
 	def methodMissing(String name, args) {
 		if (IGNORED_METHOD_NAMES.contains(name)) {
 			return
@@ -66,7 +91,7 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 				for (String s: list) {
 					addDependencyFromString(s, name)
 				}
-			}	
+			}
 		}
 		else {
 			int index = 0
@@ -79,6 +104,11 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 		}
 	}
 
+	def propertyMissing(String name) {
+		LOG.info("propertyMissing: $name") 
+		return [:] 
+	}
+	
 	private void addDependencyFromString(String s, String name) {
 		assert s.size() > 0, "String format dependency error - empty string"
 		def strings = s.tokenize(':')
@@ -89,26 +119,6 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 		version = scrubVersion(version)
 	
 		dependencies << new Dependency([group:group, name:artifactName, version:version, configuration:name])
-	}
-	
-	def propertyMissing(String name) {
-		LOG.info("propertyMissing: $name") 
-		return [:] 
-	}
-	
-	private GroovyShell createGroovyShell() {
-		def callDependencies = { Closure closure ->
-			closure.setResolveStrategy(Closure.DELEGATE_ONLY)
-			closure.delegate = this
-			closure()
-		}
-		def doNothing = { arg1 = null, arg2 = null, arg3 = null ->	return null /* accept any args */ } 
-		Map bindingMap = [dependencies:callDependencies].withDefault { name -> 
-			return doNothing 
-		}
-		Binding binding = new Binding(bindingMap)
-
-		return new GroovyShell(this.class.classLoader, binding)
 	}
 	
 	private String scrubVersion(String version) {
