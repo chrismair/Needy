@@ -89,6 +89,13 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 			[name:"Fidget", urls:["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"]]]) 
 	}
 	
+	@Test
+	void test_getApplicationBuilds_InvalidSyntaxOfFile() {
+		final TEXT = "%^&*()GHJ"
+		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
+		shouldFail(IllegalStateException) { applicationBuildSet.getApplicationBuilds() }
+	}
+	
 	//--------------------------------------------------------------------------
 	// Helper methods
 	//--------------------------------------------------------------------------
