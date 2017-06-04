@@ -27,6 +27,11 @@ class GroovyDslGradleParserTest extends AbstractTestCase {
 	private parser = new GroovyDslGradleParser()
 	
 	@Test
+	void test_ImplementsDependencyParser() {
+		assert parser instanceof DependencyParser
+	}
+
+	@Test
 	void test_parse_Null() {
 		shouldFail(IllegalArgumentException) { parser.parse(null) }
 	}
