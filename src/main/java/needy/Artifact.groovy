@@ -19,17 +19,11 @@ import groovy.transform.Immutable
 import groovy.transform.ToString
 
 @Immutable
-@ToString(includePackage=false, includeNames=true, excludes="artifact")
-class Dependency {
+@ToString(includePackage=false, includeNames=true)
+class Artifact {
 	
-	String applicationName
 	String group
 	String name
 	String version
-	String configuration
-	
-	Artifact getArtifact() {
-		return new Artifact(group:group, name:name, version:version)
-	}
 	
 }

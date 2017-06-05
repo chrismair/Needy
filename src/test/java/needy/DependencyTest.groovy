@@ -15,21 +15,14 @@
  */
 package needy
 
-import groovy.transform.Immutable
-import groovy.transform.ToString
+import org.junit.Test
 
-@Immutable
-@ToString(includePackage=false, includeNames=true, excludes="artifact")
-class Dependency {
-	
-	String applicationName
-	String group
-	String name
-	String version
-	String configuration
-	
-	Artifact getArtifact() {
-		return new Artifact(group:group, name:name, version:version)
+class DependencyTest extends AbstractTestCase {
+
+	@Test
+	void test_getArtifact() {
+		def dependency = new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")
+		assert dependency.getArtifact() == new Artifact(group:"org.hibernate", name:"hibernate-core", version:"3.1")
 	}
 	
 }
