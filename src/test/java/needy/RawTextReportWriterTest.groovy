@@ -17,11 +17,11 @@ package needy
 
 import org.junit.Test
 
-class TextReportWriterTest extends AbstractTestCase {
+class RawTextReportWriterTest extends AbstractTestCase {
 
 	private static final String TEXT = "abc123"
 	
-	private TextReportWriter reportWriter = new TextReportWriter()
+	private RawTextReportWriter reportWriter = new RawTextReportWriter()
 	
 	@Test
 	void test_writeReport_Null() {

@@ -17,7 +17,7 @@ package needy
 
 import java.util.List
 
-class TextReportWriter implements ReportWriter {
+class RawTextReportWriter implements ReportWriter {
 
 	@Override
 	void writeReport(List<Dependency> dependencies) {
