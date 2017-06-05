@@ -40,28 +40,13 @@ class RawTextReportWriterTest extends AbstractTestCase {
 			reportWriter.writeReport(dependencies)
 		}
 
-		println "output="
-		println output
+		log "output=\n$output"
 
 		assert output.trim() == """
 Dependency(applicationName:Sample1, group:org.hibernate, name:hibernate-core, version:3.1, configuration:compile)
 Dependency(applicationName:Sample1, group:log4j, name:log4j, version:1.2.14, configuration:compile)
 Dependency(applicationName:Sample_Two, group:log4j, name:log4j, version:1.2.14, configuration:compile)
 		""".trim()
-			
 	}
 	
-	private static String captureSystemOut(Closure closure) {
-		def originalSystemOut = System.out
-		def outputStream = new ByteArrayOutputStream()
-		try {
-			System.out = new PrintStream(outputStream)
-			closure()
-		}
-		finally {
-			System.out = originalSystemOut
-		}
-		outputStream.toString()
-	}
-
 }

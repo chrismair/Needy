@@ -66,4 +66,17 @@ class AbstractTestCase {
 		assert e.message?.contains(message) 
 	}
 
+	protected static String captureSystemOut(Closure closure) {
+		def originalSystemOut = System.out
+		def outputStream = new ByteArrayOutputStream()
+		try {
+			System.out = new PrintStream(outputStream)
+			closure()
+		}
+		finally {
+			System.out = originalSystemOut
+		}
+		outputStream.toString()
+	}
+
 }
