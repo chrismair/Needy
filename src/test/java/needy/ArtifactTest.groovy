@@ -15,23 +15,15 @@
  */
 package needy
 
-import groovy.transform.Immutable
-import groovy.transform.ToString
+import org.junit.Test
 
-@Immutable
-class Artifact {
-	
-	String group
-	String name
-	String version
+class ArtifactTest extends AbstractTestCase {
 
-	@Override
-	String toString() {
-		return emptyIfNull(group) + ":" + name + ":" + emptyIfNull(version)
-	}
-		
-	private String emptyIfNull(String string) {
-		return string == null ? "" : string
+	@Test
+	void test_toString() {
+		assert new Artifact(group:"org.hibernate", name:"hibernate", version:"3.1").toString() == "org.hibernate:hibernate:3.1"
+		assert new Artifact(group:null, name:"hibernate", version:"3.1").toString() == ":hibernate:3.1"
+		assert new Artifact(group:"org.hibernate", name:"hibernate", version:null).toString() == "org.hibernate:hibernate:"
 	}
 	
 }

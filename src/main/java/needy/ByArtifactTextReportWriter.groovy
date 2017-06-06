@@ -15,23 +15,19 @@
  */
 package needy
 
-import groovy.transform.Immutable
-import groovy.transform.ToString
-
-@Immutable
-class Artifact {
-	
-	String group
-	String name
-	String version
+class ByArtifactTextReportWriter implements ReportWriter {
 
 	@Override
-	String toString() {
-		return emptyIfNull(group) + ":" + name + ":" + emptyIfNull(version)
-	}
+	void writeReport(List<Dependency> dependencies) {
+		assert dependencies != null
+	
+		Map sortedMap = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
 		
-	private String emptyIfNull(String string) {
-		return string == null ? "" : string
+		println "Needy\n"
+		sortedMap.each { k, v ->
+			println(/"$k" -- $v/)
+		}
+
 	}
 	
 }

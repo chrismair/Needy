@@ -15,23 +15,28 @@
  */
 package needy
 
-import groovy.transform.Immutable
-import groovy.transform.ToString
+import java.util.List
+import java.util.Map
+import java.util.Set
 
-@Immutable
-class Artifact {
-	
-	String group
-	String name
-	String version
+class ReportUtil {
 
-	@Override
-	String toString() {
-		return emptyIfNull(group) + ":" + name + ":" + emptyIfNull(version)
-	}
+	static Map<String, Set<String>> buildMapOfArtifactNameToApplicationNames(List<Dependency> dependencies) {
+		def comparator = { String k1, String k2 ->
+			def c1 =  k1.replace(":", " ")
+			def c2 =  k2.replace(":", " ")
+			return c1.compareTo(c2)
+		} as Comparator
+		Map<String, Set<String>> map = new TreeMap<>(comparator)
 		
-	private String emptyIfNull(String string) {
-		return string == null ? "" : string
+		dependencies.each { dependency ->
+			String key = dependency.artifact.toString()
+			if (!map.containsKey(key)) {
+				map[key] = new TreeSet<String>()
+			}
+			map[key] << dependency.applicationName
+		}
+		return map
 	}
-	
+
 }
