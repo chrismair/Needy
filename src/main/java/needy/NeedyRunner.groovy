@@ -25,6 +25,7 @@ class NeedyRunner {
 	private static final Logger LOG = LoggerFactory.getLogger(NeedyRunner)
 	
 	ApplicationBuildSet applicationBuildSet
+	List<ReportWriter> reportWriters
 	
 	List<Dependency>  execute() {
 		assert applicationBuildSet
@@ -46,6 +47,11 @@ class NeedyRunner {
 				}
 			}
 		}
+		
+		reportWriters.each { ReportWriter reportWriter ->
+			reportWriter.writeReport(allDependencies)
+		}
+		
 		return allDependencies
 	}
 	
