@@ -86,6 +86,7 @@ class DslEvaluator {
 	private static final Logger LOG = LoggerFactory.getLogger(DslEvaluator)
 
 	List<ApplicationBuild> applicationBuilds = []
+	private boolean withinApplications = false
 	
 	void evaluate(Closure closure) {
 		closure.delegate = this
@@ -93,7 +94,16 @@ class DslEvaluator {
 		closure.call()
 	}
 	
+	def applications(Closure closure) {
+		withinApplications = true
+		closure.call()
+		withinApplications = false
+	}
+	
 	def methodMissing(String name, def args) {
+		if (!withinApplications) {
+			throw new MissingMethodException(name, getClass(), args)
+		}
 		if (args[0] instanceof String) {
 			LOG.info "methodMissing (String): name=$name value=${args[0]}"
 			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(args[0])])

@@ -1,13 +1,15 @@
 // Sample Needy Application Build Set configuration file
 
-Needy {
-	NowTrack(‘http://svn/NowTrack/build.gradle’)
-	// or
-	//Architecture(url:’http://svn/Architecture/build.gradle’, type:’Gradle’)
- 
-	// What about multiple build files per application/group?
-	Web_Services([
-		’http://svn/AccountWebServices/build.gradle’,
-		’http://svn/WystarWebServices/build.gradle’])
-		
+needy {
+
+	applications {
+		NowTrack(‘http://svn/NowTrack/build.gradle’)
+		// or
+		//Architecture(url:’http://svn/Architecture/build.gradle’, type:’Gradle’)
+	 
+		// What about multiple build files per application/group?
+		Web_Services([
+			’http://svn/AccountWebServices/build.gradle’,
+			’http://svn/WystarWebServices/build.gradle’])
+	}		
 }

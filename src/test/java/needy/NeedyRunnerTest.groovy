@@ -21,8 +21,10 @@ class NeedyRunnerTest extends AbstractTestCase {
 
 	private static final String CONFIG_TEXT = """
 		needy {
-			Sample1("file:src/test/resources/sample1-build.gradle")
-			Sample_Two("file:src/test/resources/sample2-build.gradle")
+			applications {
+				Sample1("file:src/test/resources/sample1-build.gradle")
+				Sample_Two("file:src/test/resources/sample2-build.gradle")
+			}
 		}"""
 
 	private static final DEPENDENCIES = [

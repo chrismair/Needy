@@ -54,7 +54,9 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 	void test_getApplicationBuilds_SingleApplication() {
 		final TEXT = """
 			needy {
-				Fidget("http://svn/Fidget/build.gradle")
+				applications {
+					Fidget("http://svn/Fidget/build.gradle")
+				}
 			}
 		"""
 		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
@@ -65,8 +67,10 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 	void test_getApplicationBuilds_MultipleApplications() {
 		final TEXT = """
 			needy {
-				Fidget("http://svn/Fidget/build.gradle")
-				Wallace("http://svn/Wallace/custom-build.gradle")
+				applications {
+					Fidget("http://svn/Fidget/build.gradle")
+					Wallace("http://svn/Wallace/custom-build.gradle")
+				}
 			}
 		"""
 		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
@@ -79,12 +83,26 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 	void test_getApplicationBuilds_MultipleUrlsPerApplication() {
 		final TEXT = """
 			needy {
-				Fidget(["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"])
+				applications {
+					Fidget(["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"])
+				}
 			}
 		"""
 		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
 		assertApplicationBuilds(applicationBuildSet.getApplicationBuilds(), [
 			[name:"Fidget", urls:["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"]]]) 
+	}
+	
+	@Test
+	void test_getApplicationBuilds_UnknownMethodOutsideApplications() {
+		final TEXT = """
+			needy {
+				// This should not be here; should be within "applications { }"
+				Fidget(["http://svn/Fidget/build.gradle", "http://svn/Fidget/build.gradle"])
+			}
+		"""
+		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
+		shouldFail(MissingMethodException) { applicationBuildSet.getApplicationBuilds() }
 	}
 	
 	@Test
