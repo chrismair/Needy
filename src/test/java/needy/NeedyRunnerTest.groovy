@@ -42,15 +42,15 @@ class NeedyRunnerTest extends AbstractTestCase {
 	
 	@Test
 	void test_execute_RequiredPropertiesNotInitialized() {
-		shouldFailWithMessage("applicationBuildSet") { needyRunner.execute() }
+		shouldFailWithMessage("needyConfiguration") { needyRunner.execute() }
 	}
 	
 	@Test
 	void test_execute_NoReportWriters() {
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(CONFIG_TEXT)
-		def applicationBuilds = applicationBuildSet.getApplicationBuilds()
+		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(CONFIG_TEXT)
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		log(applicationBuilds)
-		needyRunner.applicationBuildSet = applicationBuildSet
+		needyRunner.needyConfiguration = needyConfiguration
 		def result = needyRunner.execute()
 		
 		assert result == DEPENDENCIES
@@ -58,8 +58,8 @@ class NeedyRunnerTest extends AbstractTestCase {
 	
 	@Test
 	void test_execute_ReportWriters() {
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(CONFIG_TEXT)
-		needyRunner.applicationBuildSet = applicationBuildSet
+		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(CONFIG_TEXT)
+		needyRunner.needyConfiguration = needyConfiguration
 		def called = [:]
 		def reportWriter1 = [writeReport:{ dependencies -> 
 			assert dependencies == DEPENDENCIES

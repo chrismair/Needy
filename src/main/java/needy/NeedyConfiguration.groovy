@@ -15,7 +15,7 @@
  */
 package needy
 
-interface ApplicationBuildSet {
+interface NeedyConfiguration {
 	
 	List<ApplicationBuild> getApplicationBuilds()
 

@@ -19,24 +19,24 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
-class GroovyDslApplicationBuildSet implements ApplicationBuildSet {
+class GroovyDslNeedyConfiguration implements NeedyConfiguration {
 
-	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslApplicationBuildSet)
+	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslNeedyConfiguration)
 	
 	private String text
 	
-	static GroovyDslApplicationBuildSet fromFile(String file) {
+	static GroovyDslNeedyConfiguration fromFile(String file) {
 		assert file, "The file parameter must not be null or empty"
 		String text = new File(file).text
-		return new GroovyDslApplicationBuildSet(text)
+		return new GroovyDslNeedyConfiguration(text)
 	}
 	
-	static GroovyDslApplicationBuildSet fromString(String text) {
+	static GroovyDslNeedyConfiguration fromString(String text) {
 		assert text, "The text parameter must not be null or empty"
-		return new GroovyDslApplicationBuildSet(text)
+		return new GroovyDslNeedyConfiguration(text)
 	}
 	
-	private GroovyDslApplicationBuildSet(String text) {
+	private GroovyDslNeedyConfiguration(String text) {
 		this.text = text
 	}
 	

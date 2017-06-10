@@ -19,7 +19,7 @@ import org.junit.Test
 
 class NeedyTest extends AbstractTestCase {
 
-	private static ApplicationBuildSet APPLICATION_BUILD_SET = [:] as ApplicationBuildSet
+	private static NeedyConfiguration APPLICATION_BUILD_SET = [:] as NeedyConfiguration
 	private static final String TEST_CONFIG_FILE = new File('src/test/resource/test-build-set.txt')
 	
 	private Needy needy = new Needy()
@@ -27,15 +27,15 @@ class NeedyTest extends AbstractTestCase {
 	@Test
 	void test_execute() {
 		def called = [:]
-		def applicationBuildSet
+		def needyConfiguration
 		def reportWriters
 		needy.createNeedyRunner = { 
 			return [
 				execute:{ called.execute = true	},
-				setApplicationBuildSet:{ abs -> applicationBuildSet = abs },
+				setNeedyConfiguration:{ abs -> needyConfiguration = abs },
 				setReportWriters: { rw -> reportWriters = rw } ] 
 		}
-		needy.createApplicationBuildSet = { filename ->
+		needy.createNeedyConfiguration = { filename ->
 			assert filename == Needy.DEFAULT_CONFIG_FILE
 			return APPLICATION_BUILD_SET
 		}
@@ -43,7 +43,7 @@ class NeedyTest extends AbstractTestCase {
 		needy.execute([] as String[])
 		
 		assert called.execute
-		assert applicationBuildSet == APPLICATION_BUILD_SET
+		assert needyConfiguration == APPLICATION_BUILD_SET
 		assert reportWriters.size() == 1
 		assert reportWriters[0] instanceof ByArtifactTextReportWriter
 	}

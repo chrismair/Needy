@@ -24,13 +24,13 @@ class NeedyRunner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(NeedyRunner)
 	
-	ApplicationBuildSet applicationBuildSet
+	NeedyConfiguration needyConfiguration
 	List<ReportWriter> reportWriters
 	
 	List<Dependency>  execute() {
-		assert applicationBuildSet
+		assert needyConfiguration
 		
-		def applicationBuilds = applicationBuildSet.getApplicationBuilds()
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		LOG.info("applicationBuilds=" + applicationBuilds)
 		List<Dependency> allDependencies = []
 		

@@ -25,7 +25,7 @@ class Needy {
 
 	// Abstract creation of instance dependencies to allow substitution of test spy for unit tests
 	protected Closure createNeedyRunner = { new NeedyRunner() }
-	protected Closure createApplicationBuildSet = { filename -> GroovyDslApplicationBuildSet.fromFile(filename) }
+	protected Closure createNeedyConfiguration = { filename -> GroovyDslNeedyConfiguration.fromFile(filename) }
 
 
 	static main(String[] args) {
@@ -35,10 +35,10 @@ class Needy {
 
 	protected void execute(String[] args) {
 		def needyRunner = createNeedyRunner()
-		def applicationBuildSet = createApplicationBuildSet(DEFAULT_CONFIG_FILE)
+		def needyConfiguration = createNeedyConfiguration(DEFAULT_CONFIG_FILE)
 		def reportWriters = [new ByArtifactTextReportWriter()]
 		
-		needyRunner.setApplicationBuildSet(applicationBuildSet)
+		needyRunner.setNeedyConfiguration(needyConfiguration)
 		needyRunner.setReportWriters(reportWriters)
 		needyRunner.execute()
 	}

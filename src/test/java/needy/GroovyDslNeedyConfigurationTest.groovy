@@ -17,36 +17,36 @@ package needy;
 
 import org.junit.Test
 
-class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
+class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 
 	private static final TEST_BUILD_SET_FILE = "src/test/resources/test-build-set.txt"
 	
 	@Test
 	void test_fromString_NullOrEmptyString() {
-		shouldFailWithMessage("text") { GroovyDslApplicationBuildSet.fromString(null) }
-		shouldFailWithMessage("text") { GroovyDslApplicationBuildSet.fromString("") }
+		shouldFailWithMessage("text") { GroovyDslNeedyConfiguration.fromString(null) }
+		shouldFailWithMessage("text") { GroovyDslNeedyConfiguration.fromString("") }
 	}
 
 	@Test
 	void test_fromFile_NullOrEmptyFilename() {
-		shouldFailWithMessage("file") { GroovyDslApplicationBuildSet.fromFile(null) }
-		shouldFailWithMessage("file") { GroovyDslApplicationBuildSet.fromFile("") }
+		shouldFailWithMessage("file") { GroovyDslNeedyConfiguration.fromFile(null) }
+		shouldFailWithMessage("file") { GroovyDslNeedyConfiguration.fromFile("") }
 	}
 
 	@Test
 	void test_fromFile_FileDoesNotExist() {
-		shouldFail(IOException) { GroovyDslApplicationBuildSet.fromFile("NoSuchFile.txt") }
+		shouldFail(IOException) { GroovyDslNeedyConfiguration.fromFile("NoSuchFile.txt") }
 	}
 
 	@Test
 	void test_fromFile_ReadsInFileText() {
-		def buildSet = GroovyDslApplicationBuildSet.fromFile(TEST_BUILD_SET_FILE)
+		def buildSet = GroovyDslNeedyConfiguration.fromFile(TEST_BUILD_SET_FILE)
 		assert buildSet.getText() == new File(TEST_BUILD_SET_FILE).text
 	}
 
 	@Test
 	void test_getApplicationBuilds_EmptyNeedyClosure() {
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString("needy { }")
+		def applicationBuildSet = GroovyDslNeedyConfiguration.fromString("needy { }")
 		assert applicationBuildSet.getApplicationBuilds() == []
 	}
 
@@ -59,7 +59,7 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
+		def applicationBuildSet = GroovyDslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(applicationBuildSet.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
 	}
 	
@@ -73,7 +73,7 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
+		def applicationBuildSet = GroovyDslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(applicationBuildSet.getApplicationBuilds(), [
 			[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]], 
 			[name:"Wallace", urls:["http://svn/Wallace/custom-build.gradle"]]]) 
@@ -88,7 +88,7 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
+		def applicationBuildSet = GroovyDslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(applicationBuildSet.getApplicationBuilds(), [
 			[name:"Fidget", urls:["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"]]]) 
 	}
@@ -101,14 +101,14 @@ class GroovyDslApplicationBuildSetTest extends AbstractTestCase {
 				Fidget(["http://svn/Fidget/build.gradle", "http://svn/Fidget/build.gradle"])
 			}
 		"""
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
+		def applicationBuildSet = GroovyDslNeedyConfiguration.fromString(TEXT)
 		shouldFail(MissingMethodException) { applicationBuildSet.getApplicationBuilds() }
 	}
 	
 	@Test
 	void test_getApplicationBuilds_InvalidSyntaxOfFile() {
 		final TEXT = "%^&*()GHJ"
-		def applicationBuildSet = GroovyDslApplicationBuildSet.fromString(TEXT)
+		def applicationBuildSet = GroovyDslNeedyConfiguration.fromString(TEXT)
 		shouldFail(IllegalStateException) { applicationBuildSet.getApplicationBuilds() }
 	}
 	
