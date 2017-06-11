@@ -15,8 +15,12 @@
  */
 package needy
 
+import java.util.List
+
 interface NeedyConfiguration {
 	
 	List<ApplicationBuild> getApplicationBuilds()
 
+	List<ReportWriter> getReportWriters()
+	
 }

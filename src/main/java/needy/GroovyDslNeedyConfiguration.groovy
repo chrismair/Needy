@@ -17,6 +17,9 @@ package needy
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import java.util.List
+
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
 class GroovyDslNeedyConfiguration implements NeedyConfiguration {
@@ -24,6 +27,8 @@ class GroovyDslNeedyConfiguration implements NeedyConfiguration {
 	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslNeedyConfiguration)
 	
 	private String text
+	private List<ApplicationBuild> applicationBuilds
+	private List<ReportWriter> reportWriters
 	
 	static GroovyDslNeedyConfiguration fromFile(String file) {
 		assert file, "The file parameter must not be null or empty"
@@ -38,11 +43,17 @@ class GroovyDslNeedyConfiguration implements NeedyConfiguration {
 	
 	private GroovyDslNeedyConfiguration(String text) {
 		this.text = text
+		parse(text)
 	}
 	
 	@Override
-	public List<ApplicationBuild> getApplicationBuilds() {
-		return parse(text)
+	List<ApplicationBuild> getApplicationBuilds() {
+		return applicationBuilds
+	}
+	
+	@Override
+	List<ReportWriter> getReportWriters() {
+		return reportWriters
 	}
 	
 	// For testing
@@ -50,7 +61,7 @@ class GroovyDslNeedyConfiguration implements NeedyConfiguration {
 		return text
 	}
 
-	private List<ApplicationBuild> parse(String source) {
+	private void parse(String source) {
 		assert source
 
 		DslEvaluator dslEvaluator = new DslEvaluator()
@@ -64,9 +75,9 @@ class GroovyDslNeedyConfiguration implements NeedyConfiguration {
 			throw new IllegalStateException("An error occurred compiling: [$source]\n${compileError.message}")
 		}
 
-		List<ApplicationBuild> applicationBuilds = dslEvaluator.applicationBuilds
+		applicationBuilds = dslEvaluator.applicationBuilds
+		reportWriters = dslEvaluator.reportWriters
 		LOG.info "applicationBuilds = $applicationBuilds"
-		return applicationBuilds
 	}
 
 	private GroovyShell createGroovyShell(DslEvaluator dslEvaluator) {
@@ -78,7 +89,7 @@ class GroovyDslNeedyConfiguration implements NeedyConfiguration {
 
 		return new GroovyShell(this.class.classLoader, binding)
 	}
-	
+
 }
 
 class DslEvaluator {
@@ -86,7 +97,9 @@ class DslEvaluator {
 	private static final Logger LOG = LoggerFactory.getLogger(DslEvaluator)
 
 	List<ApplicationBuild> applicationBuilds = []
+	List<ReportWriter> reportWriters = []
 	private boolean withinApplications = false
+	private boolean withinReports = false
 	
 	void evaluate(Closure closure) {
 		closure.delegate = this
@@ -98,6 +111,19 @@ class DslEvaluator {
 		withinApplications = true
 		closure.call()
 		withinApplications = false
+	}
+	
+	def reports(Closure closure) {
+		withinReports = true
+		closure.call()
+		withinReports = false
+	}
+	
+	def report(String reportClassName, Closure closure) {
+		Class reportClass = Class.forName(reportClassName)
+		reportWriters << reportClass.newInstance()
+		
+		// TODO Process closure to set ReportWriter properties
 	}
 	
 	def methodMissing(String name, def args) {
