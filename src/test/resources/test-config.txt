@@ -1,4 +1,4 @@
-// Sample Needy Application Build Set configuration file
+// Sample Needy configuration file
 
 needy {
 

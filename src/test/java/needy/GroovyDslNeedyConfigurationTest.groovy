@@ -19,7 +19,7 @@ import org.junit.Test
 
 class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 
-	private static final TEST_BUILD_SET_FILE = "src/test/resources/test-build-set.txt"
+	private static final TEST_CONFIG_FILE = "src/test/resources/test-config.txt"
 	
 	@Test
 	void test_fromString_NullOrEmptyString() {
@@ -40,8 +40,8 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 
 	@Test
 	void test_fromFile_ReadsInFileText() {
-		def buildSet = GroovyDslNeedyConfiguration.fromFile(TEST_BUILD_SET_FILE)
-		assert buildSet.getText() == new File(TEST_BUILD_SET_FILE).text
+		def buildSet = GroovyDslNeedyConfiguration.fromFile(TEST_CONFIG_FILE)
+		assert buildSet.getText() == new File(TEST_CONFIG_FILE).text
 	}
 
 	@Test
