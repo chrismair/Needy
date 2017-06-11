@@ -95,6 +95,20 @@ class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
+	void test_parse_VariablesUsedWithinDependencySpecification() {
+		final SOURCE = """dependencies {
+			String hibernateVersion = "3.1"
+			String junitName = "junit"
+			compile "org.hibernate:hibernate-core:\$hibernateVersion"
+			testCompile group: 'junit', name: junitName, version: '4.8.1'
+		}"""
+		assert parser.parse(SOURCE) == [
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
+		]
+	}
+
+	@Test
 	void test_parse_FullGradleBuildFile() {
 		final SOURCE = """
 			plugins {

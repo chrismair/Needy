@@ -106,7 +106,7 @@ class GroovyDslGradleDependencyParser_DslEvaluator {
 		}
 		else {
 			int index = 0
-			while (index < args.length && args[index] instanceof String) {
+			while (index < args.length && args[index] instanceof CharSequence) {
 				String s = args[index]
 				LOG.info "methodMissing: name=$name value=${s}"
 				addDependencyFromString(s, name)
