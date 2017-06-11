@@ -28,9 +28,10 @@ class Needy {
 	protected Closure createNeedyConfiguration = { filename -> GroovyDslNeedyConfiguration.fromFile(filename) }
 
 
-	static main(String[] args) {
+	static void main(String[] args) {
 		LOG.info("Needy command-line")
-		def needy = new Needy() 
+		def needy = new Needy()
+		needy.execute(args) 
 	}
 
 	protected void execute(String[] args) {
