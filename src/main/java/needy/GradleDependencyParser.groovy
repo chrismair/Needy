@@ -122,6 +122,7 @@ class GradleDependencyParser_DslEvaluator {
 	
 	private void addDependencyFromString(String s, String name) {
 		assert s.size() > 0, "String format dependency error - empty string"
+		s = removeUnknownProperties(s)
 		def strings = s.tokenize(':')
 
 		def group = (strings.size() > 2) ? strings[0] : null
@@ -130,6 +131,10 @@ class GradleDependencyParser_DslEvaluator {
 		version = scrubVersion(version)
 	
 		dependencies << new Dependency([applicationName:applicationName, group:group, name:artifactName, version:version, configuration:name])
+	}
+	
+	private String removeUnknownProperties(String s) {
+		return s.replace("[:]", "?")
 	}
 	
 	private String scrubVersion(String version) {

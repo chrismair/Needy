@@ -109,6 +109,16 @@ class GradleDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
+	void test_parse_UnknownVariableUsedWithinDependencySpecification() {
+		final SOURCE = """dependencies {
+			compile "org.hibernate:hibernate-core:\$hibernateVersion"
+		}"""
+		assert parser.parse(SOURCE) == [
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"?")
+		]
+	}
+
+	@Test
 	void test_parse_FullGradleBuildFile() {
 		final SOURCE = """
 			plugins {
@@ -117,13 +127,15 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			
 			sourceCompatibility = '1.6'
 			targetCompatibility = '1.6'
+
+			def hibernateVersion = "3.1"
 			
 			repositories {
 			     maven { url "http://repo.maven.apache.org/maven2" }
 			}
 
 			dependencies {
-				compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
+				compile group: 'org.hibernate', name: 'hibernate-core', version: hibernateVersion
 			}
 
 			test {
