@@ -19,13 +19,13 @@ import org.codehaus.groovy.control.MultipleCompilationErrorsException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class GroovyDslGradleDependencyParser implements DependencyParser {
+class GradleDependencyParser implements DependencyParser {
 
-	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslGradleDependencyParser)
+	private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser)
 
 	final String applicationName
 	
-	GroovyDslGradleDependencyParser(String applicationName) {
+	GradleDependencyParser(String applicationName) {
 		this.applicationName = applicationName
 	}
 	
@@ -34,7 +34,7 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 			throw new IllegalArgumentException("Parameter closure was null")
 		}
 
-		GroovyDslGradleDependencyParser_DslEvaluator dslEvaluator = new GroovyDslGradleDependencyParser_DslEvaluator(applicationName)
+		GradleDependencyParser_DslEvaluator dslEvaluator = new GradleDependencyParser_DslEvaluator(applicationName)
 		
 		GroovyShell shell = createGroovyShell(dslEvaluator)
 		try {
@@ -50,7 +50,7 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 		return dependencies
 	}
 
-	private GroovyShell createGroovyShell(GroovyDslGradleDependencyParser_DslEvaluator dslEvaluator) {
+	private GroovyShell createGroovyShell(GradleDependencyParser_DslEvaluator dslEvaluator) {
 		def callDependencies = { Closure closure ->
 			dslEvaluator.evaluate(closure)
 		}
@@ -65,15 +65,15 @@ class GroovyDslGradleDependencyParser implements DependencyParser {
 	
 }
 
-class GroovyDslGradleDependencyParser_DslEvaluator {
+class GradleDependencyParser_DslEvaluator {
 
-	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslGradleDependencyParser_DslEvaluator)
+	private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser_DslEvaluator)
 	private static final IGNORED_METHOD_NAMES = ['project', 'files', 'fileTree']
 	
 	final List<Dependency> dependencies = []
 	final String applicationName
 	
-	GroovyDslGradleDependencyParser_DslEvaluator(String applicationName) {
+	GradleDependencyParser_DslEvaluator(String applicationName) {
 		this.applicationName = applicationName
 	}
 	

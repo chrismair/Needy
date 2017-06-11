@@ -18,13 +18,13 @@ package needy;
 import org.junit.Test
 
 import needy.Dependency
-import needy.GroovyDslGradleDependencyParser
+import needy.GradleDependencyParser
 
-class GroovyDslGradleDependencyParserTest extends AbstractTestCase {
+class GradleDependencyParserTest extends AbstractTestCase {
 
 	private static final String APPLICATION_NAME = "MyApp1"
 	
-	private parser = new GroovyDslGradleDependencyParser(APPLICATION_NAME)
+	private parser = new GradleDependencyParser(APPLICATION_NAME)
 	
 	@Test
 	void test_ImplementsDependencyParser() {

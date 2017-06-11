@@ -36,7 +36,7 @@ class NeedyRunner {
 		
 		applicationBuilds.forEach{ ApplicationBuild applicationBuild ->
 			LOG.info("Processing application [${applicationBuild.name}]")
-			DependencyParser dependencyParser = new GroovyDslGradleDependencyParser(applicationBuild.name)
+			DependencyParser dependencyParser = new GradleDependencyParser(applicationBuild.name)
 			applicationBuild.buildScripts.each { BuildScript buildScript ->
 				String buildFileText = buildScript.getText()
 				List<Dependency> buildFileDependencies = dependencyParser.parse(buildFileText)
