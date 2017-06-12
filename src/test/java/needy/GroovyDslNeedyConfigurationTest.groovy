@@ -107,6 +107,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 
 				reports {
 					report("needy.ByArtifactTextReportWriter") {
+						outputFile = "xxx"
 					}
 				}
 			}
@@ -115,6 +116,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
 		assert needyConfiguration.getReportWriters().size() == 1
 		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
+		assert needyConfiguration.getReportWriters()[0].outputFile == "xxx"
 	}
 	
 	@Test

@@ -121,9 +121,12 @@ class DslEvaluator {
 	
 	def report(String reportClassName, Closure closure) {
 		Class reportClass = Class.forName(reportClassName)
-		reportWriters << reportClass.newInstance()
+		ReportWriter reportWriter = reportClass.newInstance() 
+		reportWriters << reportWriter
 		
-		// TODO Process closure to set ReportWriter properties
+		closure.delegate = reportWriter
+		closure.resolveStrategy = Closure.DELEGATE_FIRST
+		closure.call()
 	}
 	
 	def methodMissing(String name, def args) {
