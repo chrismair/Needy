@@ -27,6 +27,20 @@ class NeedyRunnerTest extends AbstractTestCase {
 			}
 		}"""
 
+	private static final String CONFIG_TEXT_WITH_REPORTS = """
+		needy {
+			applications {
+				Sample1("file:src/test/resources/sample1-build.gradle")
+				Sample_Two("file:src/test/resources/sample2-build.gradle")
+			}
+			reports {
+				report("needy.StubReportWriter") { }
+				report("needy.StubReportWriter") {
+					outputFile = "report.txt"
+				}
+			}
+		}"""
+
 	private static final DEPENDENCIES = [
 		new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
 		new Dependency(applicationName:"Sample1", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
@@ -58,22 +72,18 @@ class NeedyRunnerTest extends AbstractTestCase {
 	
 	@Test
 	void test_execute_ReportWriters() {
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(CONFIG_TEXT)
+		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(CONFIG_TEXT_WITH_REPORTS)
 		needyRunner.needyConfiguration = needyConfiguration
-		def called = [:]
-		def reportWriter1 = [writeReport:{ dependencies -> 
-			assert dependencies == DEPENDENCIES
-			called.reportWriter1 = true }] as ReportWriter
-		def reportWriter2 = [writeReport:{ dependencies -> 
-			assert dependencies == DEPENDENCIES
-			called.reportWriter2 = true }] as ReportWriter
-		
-		needyRunner.reportWriters = [reportWriter1, reportWriter2]
 		def result = needyRunner.execute()
 		
 		assert result == DEPENDENCIES
-		assert called.reportWriter1
-		assert called.reportWriter2
+		def reportWriters = needyConfiguration.reportWriters
+		assert reportWriters.size() == 2
+		assert reportWriters[0] instanceof StubReportWriter
+		assert reportWriters[0].dependencies == DEPENDENCIES
+		assert reportWriters[1] instanceof StubReportWriter
+		assert reportWriters[1].outputFile == "report.txt"
+		assert reportWriters[1].dependencies == DEPENDENCIES
 	}
 	
 }

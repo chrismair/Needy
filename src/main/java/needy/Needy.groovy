@@ -35,12 +35,9 @@ class Needy {
 	}
 
 	protected void execute(String[] args) {
-		def needyRunner = createNeedyRunner()
 		def needyConfiguration = createNeedyConfiguration(DEFAULT_CONFIG_FILE)
-		def reportWriters = [new ByArtifactTextReportWriter()]
-		
+		def needyRunner = createNeedyRunner()
 		needyRunner.setNeedyConfiguration(needyConfiguration)
-		needyRunner.setReportWriters(reportWriters)
 		needyRunner.execute()
 	}
 	
