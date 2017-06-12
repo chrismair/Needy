@@ -129,6 +129,12 @@ class DslEvaluator {
 		closure.call()
 	}
 	
+	def report(String reportClassName) {
+		Class reportClass = Class.forName(reportClassName)
+		ReportWriter reportWriter = reportClass.newInstance() 
+		reportWriters << reportWriter
+	}
+	
 	def methodMissing(String name, def args) {
 		if (!withinApplications) {
 			throw new MissingMethodException(name, getClass(), args)

@@ -98,7 +98,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_SingleApplication_SingleReport() {
+	void test_SingleReport() {
 		final TEXT = """
 			needy {
 				applications {
@@ -117,6 +117,30 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 		assert needyConfiguration.getReportWriters().size() == 1
 		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
 		assert needyConfiguration.getReportWriters()[0].outputFile == "xxx"
+	}
+	
+	@Test
+	void test_MultipleReports() {
+		final TEXT = """
+			needy {
+				applications {
+					Fidget("http://svn/Fidget/build.gradle")
+				}
+
+				reports {
+					report("needy.ByArtifactTextReportWriter") {
+						outputFile = "xxx"
+					}
+					report("needy.StubReportWriter")
+				}
+			}
+		"""
+		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(TEXT)
+		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
+		assert needyConfiguration.getReportWriters().size() == 2
+		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
+		assert needyConfiguration.getReportWriters()[0].outputFile == "xxx"
+		assert needyConfiguration.getReportWriters()[1] instanceof StubReportWriter
 	}
 	
 	@Test
