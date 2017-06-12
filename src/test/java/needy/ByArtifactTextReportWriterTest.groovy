@@ -20,7 +20,24 @@ import org.junit.Test
 class ByArtifactTextReportWriterTest extends AbstractTestCase {
 
 	private static final String TEXT = "abc123"
-	
+	private static final String OUTPUT_FILE = "src/test/resources/temp-report.txt"
+	private static final List<Dependency> DEPENDENCIES = [
+		new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
+		new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+		new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
+		new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
+		new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
+		new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
+	]
+	private static final String EXPECTED_REPORT_TEXT = """
+Needy
+
+"log4j:log4j:1.2.14" -- [Sample1, Sample_Two, Third]
+"log4j-extra:stuff:1.0" -- [Third]
+"org.hibernate:hibernate-core:3.1" -- [Sample1]
+"org.other:service:2.0" -- [Third]
+		""".trim()
+
 	private ByArtifactTextReportWriter reportWriter = new ByArtifactTextReportWriter()
 	
 	@Test
@@ -29,29 +46,30 @@ class ByArtifactTextReportWriterTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_writerReport() {
-		def dependencies = [
-            new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
-			new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-			new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
-			new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
-			new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
-			new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
-		]
-		
+	void test_writerReport_WritesToStdOut() {
 		def output = captureSystemOut {
-			reportWriter.writeReport(dependencies)
+			reportWriter.writeReport(DEPENDENCIES)
 		}
 		log "output=\n$output"
 
-		assert output.trim() == """
-Needy
+		assert output.trim() == EXPECTED_REPORT_TEXT
+	}
+	
+	@Test
+	void test_writerReport_OutputFile_WritesToFile() {
+		reportWriter.outputFile = OUTPUT_FILE
+		reportWriter.writeReport(DEPENDENCIES)
 
-"log4j:log4j:1.2.14" -- [Sample1, Sample_Two, Third]
-"log4j-extra:stuff:1.0" -- [Third]
-"org.hibernate:hibernate-core:3.1" -- [Sample1]
-"org.other:service:2.0" -- [Third]
-		""".trim()
+		def file = new File(OUTPUT_FILE)
+		file.deleteOnExit()
+		
+		assert file.text.trim() == EXPECTED_REPORT_TEXT
+	}
+	
+	@Test
+	void test_writerReport_OutputFile_CannotCreateOutputFile() {
+		reportWriter.outputFile = "noSuchDir/orSubDir/file.txt"
+		shouldFail(FileNotFoundException) { reportWriter.writeReport(DEPENDENCIES) }
 	}
 	
 }

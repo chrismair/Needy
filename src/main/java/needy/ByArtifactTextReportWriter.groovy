@@ -17,17 +17,30 @@ package needy
 
 class ByArtifactTextReportWriter implements ReportWriter {
 
+	String outputFile
+	
 	@Override
 	void writeReport(List<Dependency> dependencies) {
 		assert dependencies != null
 	
 		Map sortedMap = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
 		
-		println "Needy\n"
-		sortedMap.each { k, v ->
-			println(/"$k" -- $v/)
+		def printWriter = createPrintWriter()
+		
+		printWriter.withWriter { w -> 
+			w.println "Needy\n"
+			sortedMap.each { k, v ->
+				w.println(/"$k" -- $v/)
+			}
 		}
-
+	}
+	
+	private PrintWriter createPrintWriter() {
+		if (outputFile) {
+			def file = new File(outputFile)
+			return file.newPrintWriter()
+		}
+		return System.out.newPrintWriter()
 	}
 	
 }
