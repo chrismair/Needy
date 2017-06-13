@@ -55,7 +55,7 @@ class GradleDependencyParser implements DependencyParser {
 			dslEvaluator.evaluate(closure)
 		}
 		def doNothing = { arg1 = null, arg2 = null, arg3 = null ->	return null /* accept any args */ } 
-		Map bindingMap = [dependencies:callDependencies].withDefault { name -> 
+		Map bindingMap = [dependencies:callDependencies, ext:[:]].withDefault { name -> 
 			return doNothing 
 		}
 		Binding binding = new Binding(bindingMap)
