@@ -128,6 +128,8 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			sourceCompatibility = '1.6'
 			targetCompatibility = '1.6'
 
+			ext.includeOtherStuff = true
+
 			def hibernateVersion = "3.1"
 			
 			repositories {
@@ -137,6 +139,8 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			dependencies {
 				compile group: 'org.hibernate', name: 'hibernate-core', version: hibernateVersion
 			}
+
+			test.maxParallelForks = 2
 
 			test {
 			    testLogging {

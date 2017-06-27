@@ -50,13 +50,22 @@ class GradleDependencyParser implements DependencyParser {
 		return dependencies
 	}
 
+	def methodMissing(String name, args) {
+		LOG.info("MAIN methodMissing: $name") 
+	}
+	
+	def propertyMissing(String name) {
+		LOG.info("MAIN propertyMissing: $name") 
+		return [:] 
+	}
+	
 	private GroovyShell createGroovyShell(GradleDependencyParser_DslEvaluator dslEvaluator) {
 		def callDependencies = { Closure closure ->
 			dslEvaluator.evaluate(closure)
 		}
-		def doNothing = { arg1 = null, arg2 = null, arg3 = null ->	return null /* accept any args */ } 
-		Map bindingMap = [dependencies:callDependencies, ext:[:]].withDefault { name -> 
-			return doNothing 
+		Map bindingMap = [dependencies:callDependencies, ext:[:]].withDefault { name ->
+			println "doNothing: $name" 
+			return DoNothing.INSTANCE 
 		}
 		Binding binding = new Binding(bindingMap)
 
@@ -144,4 +153,18 @@ class GradleDependencyParser_DslEvaluator {
 		return version
 	}
 	
+}
+
+class DoNothing extends Expando {
+	
+	static final INSTANCE = new DoNothing()
+	
+	def methodMissing(String name, args) {
+		// do nothing
+	}
+	
+	def propertyMissing(String name) {
+		return INSTANCE
+	}
+
 }
