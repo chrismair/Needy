@@ -247,7 +247,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			    //   * Remove groovy-all jar from the build path (because Eclipse includes its own Groovy support)
 			    //   * Move the servlet-api:3.0.1 above GROOVY_SUPPORT in the build path.
 			}
-			 
+
 			// Code Generation Scripts ---------------------------------
 			 
 			buildscript {
@@ -285,6 +285,21 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			}
 		'''
 		assert parser.parse(SOURCE).size() == 25
+	}
+
+	@Test
+	void test_parse_UseOfGradleApi() {
+		final SOURCE = """
+			dependencies {
+				compile "org.other:service:1.0:jdk15@jar"
+			}
+	
+			boolean templateFileExists() {
+			    FileCollection templateFiles = files(sourceSets.test.resources).filter { file -> file.name.toLowerCase().contains("jrxml") }
+				return templateFiles
+			}
+		"""
+		assert parser.parse(SOURCE).size() == 1
 	}
 
 	// Tests for other dependency options and formats

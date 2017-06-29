@@ -23,6 +23,10 @@ class GradleDependencyParser implements DependencyParser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser)
 
+	private static final String STANDARD_GRADLE_API_IMPORTS = """
+		import org.gradle.api.file.*
+	"""
+	
 	final String applicationName
 	
 	GradleDependencyParser(String applicationName) {
@@ -38,7 +42,8 @@ class GradleDependencyParser implements DependencyParser {
 		
 		GroovyShell shell = createGroovyShell(dslEvaluator)
 		try {
-			shell.evaluate(source)
+			String normalizedSource = STANDARD_GRADLE_API_IMPORTS + source
+			shell.evaluate(normalizedSource)
 		} 
 		catch (MultipleCompilationErrorsException compileError) {
 			LOG.error("An error occurred compiling: [$source]", compileError)
