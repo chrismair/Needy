@@ -165,7 +165,7 @@ class DoNothing extends Expando {
 	static final INSTANCE = new DoNothing()
 	
 	def methodMissing(String name, args) {
-		// do nothing
+		return INSTANCE
 	}
 	
 	def propertyMissing(String name) {

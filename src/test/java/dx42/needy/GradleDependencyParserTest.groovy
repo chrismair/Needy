@@ -248,6 +248,24 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			    //   * Move the servlet-api:3.0.1 above GROOVY_SUPPORT in the build path.
 			}
 
+			task createVersionFile doLast {
+			    buildExtraDir.mkdirs()
+			    versionFile.text = "abc"
+			}
+
+			jar.dependsOn createVersionFile
+			 
+			javadoc {
+			    title = 'MyProject'
+			}
+			 
+			tasks.withType(FindBugs) {
+			    reports {
+			        xml.enabled = false
+			        html.enabled = true
+			    }
+			}
+
 			// Code Generation Scripts ---------------------------------
 			 
 			buildscript {
