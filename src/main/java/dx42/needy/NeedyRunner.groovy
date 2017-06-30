@@ -20,6 +20,8 @@ import java.util.List
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import dx42.needy.report.ReportWriter
+
 class NeedyRunner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(NeedyRunner)

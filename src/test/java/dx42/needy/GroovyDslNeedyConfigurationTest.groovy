@@ -17,6 +17,9 @@ package dx42.needy;
 
 import org.junit.Test
 
+import dx42.needy.report.ByArtifactTextReportWriter
+import dx42.needy.report.StubReportWriter
+
 class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 
 	private static final TEST_CONFIG_FILE = "src/test/resources/test-config.txt"
@@ -106,7 +109,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 
 				reports {
-					report("dx42.needy.ByArtifactTextReportWriter") {
+					report("dx42.needy.report.ByArtifactTextReportWriter") {
 						outputFile = "xxx"
 					}
 				}
@@ -128,10 +131,10 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 
 				reports {
-					report("dx42.needy.ByArtifactTextReportWriter") {
+					report("dx42.needy.report.ByArtifactTextReportWriter") {
 						outputFile = "xxx"
 					}
-					report("dx42.needy.StubReportWriter")
+					report("dx42.needy.report.StubReportWriter")
 				}
 			}
 		"""

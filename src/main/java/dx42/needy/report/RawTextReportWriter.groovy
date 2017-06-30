@@ -13,30 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dx42.needy
+package dx42.needy.report
 
 import java.util.List
-import java.util.Map
-import java.util.Set
 
-class ReportUtil {
+import dx42.needy.Dependency
 
-	static Map<String, Set<String>> buildMapOfArtifactNameToApplicationNames(List<Dependency> dependencies) {
-		def comparator = { String k1, String k2 ->
-			def c1 =  k1.replace(":", " ")
-			def c2 =  k2.replace(":", " ")
-			return c1.compareTo(c2)
-		} as Comparator
-		Map<String, Set<String>> map = new TreeMap<>(comparator)
-		
+class RawTextReportWriter implements ReportWriter {
+
+	@Override
+	void writeReport(List<Dependency> dependencies) {
+		assert dependencies != null
+	
 		dependencies.each { dependency ->
-			String key = dependency.artifact.toString()
-			if (!map.containsKey(key)) {
-				map[key] = new TreeSet<String>()
-			}
-			map[key] << dependency.applicationName
+			println(dependency)
 		}
-		return map
+
 	}
 
 }

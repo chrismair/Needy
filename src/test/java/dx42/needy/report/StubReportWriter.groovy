@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dx42.needy
+package dx42.needy.report
+
+import dx42.needy.Dependency
 
 class StubReportWriter implements ReportWriter {
 

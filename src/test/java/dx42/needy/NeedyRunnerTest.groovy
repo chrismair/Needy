@@ -17,6 +17,8 @@ package dx42.needy
 
 import org.junit.Test
 
+import dx42.needy.report.StubReportWriter
+
 class NeedyRunnerTest extends AbstractTestCase {
 
 	private static final String CONFIG_TEXT = """
@@ -34,8 +36,8 @@ class NeedyRunnerTest extends AbstractTestCase {
 				Sample_Two("file:src/test/resources/sample2-build.gradle")
 			}
 			reports {
-				report("dx42.needy.StubReportWriter") { }
-				report("dx42.needy.StubReportWriter") {
+				report("dx42.needy.report.StubReportWriter") { }
+				report("dx42.needy.report.StubReportWriter") {
 					outputFile = "report.txt"
 				}
 			}
