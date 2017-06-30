@@ -17,18 +17,26 @@ package dx42.needy.report
 
 import dx42.needy.Dependency
 
-class ByArtifactTextReportWriter extends AbstractReportWriter {
+abstract class AbstractReportWriter implements ReportWriter {
 
+	String outputFile
+	
+	abstract void writeReport(Writer writer, List<Dependency> dependencies) 
+	
 	@Override
-	void writeReport(Writer writer, List<Dependency> dependencies) {
-		Map sortedMap = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
-
-		writer.withWriter { w ->
-			w.println "Needy\n"
-			sortedMap.each { k, v ->
-				w.println(/"$k" -- $v/)
-			}
+	void writeReport(List<Dependency> dependencies) {
+		assert dependencies != null
+	
+		def printWriter = createPrintWriter()
+		writeReport(printWriter, dependencies)
+	}
+	
+	protected PrintWriter createPrintWriter() {
+		if (outputFile) {
+			def file = new File(outputFile)
+			return file.newPrintWriter()
 		}
+		return System.out.newPrintWriter()
 	}
 	
 }
