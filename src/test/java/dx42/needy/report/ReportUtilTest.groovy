@@ -18,10 +18,14 @@ package dx42.needy.report
 import org.junit.Test
 
 import dx42.needy.AbstractTestCase
+import dx42.needy.Artifact
 import dx42.needy.Dependency
 
 class ReportUtilTest extends AbstractTestCase {
 
+	private static final String FILE_ON_CLASSPATH = "htmlreport.css"
+	private static final String FILE_PATH = "src/main/resources/$FILE_ON_CLASSPATH"
+	
 	@Test
 	void test_buildMapOfArtifactNameToApplicationNames_EmptyDependencies() {
 		def dependencies = []
@@ -37,7 +41,7 @@ class ReportUtilTest extends AbstractTestCase {
 		]
 
 		def map = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
-		assert map == ["org.other:service:2.0": ["Third"] as SortedSet]
+		assert map == [(new Artifact(group:"org.other", name:"service", version:"2.0")): ["Third"] as SortedSet]
 	}
 	
 	@Test
@@ -52,15 +56,33 @@ class ReportUtilTest extends AbstractTestCase {
 		]
 
 		def map = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
-		
+
+		def a1 = new Artifact(group:"log4j", name:"log4j", version:"1.2.14")
+		def a2 = new Artifact(group:"log4j-extra", name:"stuff", version:"1.0") 
+		def a3 = new Artifact(group:"org.hibernate", name:"hibernate-core", version:"3.1")
+		def a4 = new Artifact(group:"org.other", name:"service", version:"2.0")
+				
 		// Verify sort order of keys
-		assert map.keySet() == ["log4j:log4j:1.2.14", "log4j-extra:stuff:1.0", "org.hibernate:hibernate-core:3.1", "org.other:service:2.0"] as Set
+		assert map.keySet() == [a1, a2, a3, a4] as Set
 		
 		assert map == [
-			"log4j:log4j:1.2.14": ["Sample1", "Sample_Two", "Third"] as SortedSet,
-			"log4j-extra:stuff:1.0": ["Third"] as SortedSet,
-			"org.hibernate:hibernate-core:3.1": ["Sample1"] as SortedSet,
-			"org.other:service:2.0": ["Third"] as SortedSet]
+			(a1): ["Sample1", "Sample_Two", "Third"] as SortedSet,
+			(a2): ["Third"] as SortedSet,
+			(a3): ["Sample1"] as SortedSet,
+			(a4): ["Third"] as SortedSet]
+	}
+	
+	@Test
+	void test_getClasspathFileInputStream() {
+		def fileText = new File(FILE_PATH).text
+		def inputStream = ReportUtil.getClasspathFileInputStream(FILE_ON_CLASSPATH)
+		assert inputStream instanceof InputStream
+		assert inputStream.text == fileText
+	}
+	
+	@Test
+	void test_getClasspathFileInputStream_FileNotFound() {
+		shouldFail(FileNotFoundException) { ReportUtil.getClasspathFileInputStream("BadDir/NotFound") }
 	}
 	
 }

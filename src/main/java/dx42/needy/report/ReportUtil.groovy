@@ -15,30 +15,36 @@
  */
 package dx42.needy.report
 
-import java.util.List
-import java.util.Map
-import java.util.Set
-
 import dx42.needy.Dependency
+import dx42.needy.Artifact
 
 class ReportUtil {
 
-	static Map<String, Set<String>> buildMapOfArtifactNameToApplicationNames(List<Dependency> dependencies) {
-		def comparator = { String k1, String k2 ->
-			def c1 =  k1.replace(":", " ")
-			def c2 =  k2.replace(":", " ")
+	static Map<Artifact, Set<String>> buildMapOfArtifactNameToApplicationNames(List<Dependency> dependencies) {
+		def comparator = { Artifact a1, Artifact a2 ->
+			def c1 =  a1.toString().replace(":", " ")
+			def c2 =  a2.toString().replace(":", " ")
 			return c1.compareTo(c2)
 		} as Comparator
-		Map<String, Set<String>> map = new TreeMap<>(comparator)
+		Map<Artifact, Set<String>> map = new TreeMap<>(comparator)
 		
 		dependencies.each { dependency ->
-			String key = dependency.artifact.toString()
+			Artifact key = dependency.artifact
+//			String key = dependency.artifact.toString()
 			if (!map.containsKey(key)) {
 				map[key] = new TreeSet<String>()
 			}
 			map[key] << dependency.applicationName
 		}
 		return map
+	}
+
+	static InputStream getClasspathFileInputStream(String path) throws IOException {
+		def inputStream = ReportUtil.classLoader.getResourceAsStream(path)
+		if (!inputStream) {
+			throw new FileNotFoundException("File [$path] does not exist or is not accessible")
+		}
+		inputStream
 	}
 
 }
