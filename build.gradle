@@ -19,13 +19,15 @@ sourceSets {
 repositories {
 	//maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 	maven { url "http://repo.maven.apache.org/maven2" }
+	jcenter()
 }
 
 dependencies {
    
-	//compile "org.codehaus.groovy:groovy-all:2.3.3"
+	compile "org.codehaus.groovy:groovy-all:2.3.3"
 	compile 'ch.qos.logback:logback-classic:1.2.3'
-	compile gradleApi()
+	//compile gradleApi()
+	compile 'org.gradle:gradle-core:3.2'
    
 	testCompile 'junit:junit:4.12'
 	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0'
