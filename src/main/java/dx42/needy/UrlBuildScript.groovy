@@ -19,18 +19,18 @@ class UrlBuildScript implements BuildScript {
 
 	final URL url
 	
-	public UrlBuildScript(String urlString) {
+	UrlBuildScript(String urlString) {
 		assert urlString != null, "The urlString value must not be null"
 		url = new URL(urlString)
 	}
 	
 	@Override
-	public String getText() {
+	String getText() {
 		return url.text
 	}
 
 	@Override
-	public String toString() {
+	String toString() {
 		return "UrlBuildScript(url=$url)"
 	}
 	

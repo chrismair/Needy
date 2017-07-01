@@ -19,8 +19,7 @@ import org.junit.Test
 
 class NeedyTest extends AbstractTestCase {
 
-	private static NeedyConfiguration NEEDY_CONFIGURATION = [:] as NeedyConfiguration
-	private static final String TEST_CONFIG_FILE = new File('src/test/resource/needy-config.txt')
+	private static final NeedyConfiguration NEEDY_CONFIGURATION = [:] as NeedyConfiguration
 	
 	private Needy needy = new Needy()
 	

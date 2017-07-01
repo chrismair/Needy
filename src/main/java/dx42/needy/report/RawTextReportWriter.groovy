@@ -15,12 +15,11 @@
  */
 package dx42.needy.report
 
-import java.util.List
-
 import dx42.needy.Dependency
 
 class RawTextReportWriter implements ReportWriter {
 
+	@SuppressWarnings('Println')
 	@Override
 	void writeReport(List<Dependency> dependencies) {
 		assert dependencies != null

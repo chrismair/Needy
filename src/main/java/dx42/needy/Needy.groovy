@@ -34,6 +34,7 @@ class Needy {
 		needy.execute(args) 
 	}
 
+	@SuppressWarnings('UnusedMethodParameter')
 	protected void execute(String[] args) {
 		def needyConfiguration = createNeedyConfiguration(DEFAULT_CONFIG_FILE)
 		def needyRunner = createNeedyRunner()

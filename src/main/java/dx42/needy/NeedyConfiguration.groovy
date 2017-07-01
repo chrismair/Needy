@@ -15,8 +15,6 @@
  */
 package dx42.needy
 
-import java.util.List
-
 import dx42.needy.report.ReportWriter
 
 interface NeedyConfiguration {

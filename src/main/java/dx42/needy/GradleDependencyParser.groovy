@@ -56,7 +56,7 @@ class GradleDependencyParser implements DependencyParser {
 	}
 
 	def methodMissing(String name, args) {
-		LOG.info("MAIN methodMissing: $name") 
+		LOG.info("MAIN methodMissing: $name; args=$args") 
 	}
 	
 	def propertyMissing(String name) {
@@ -69,7 +69,6 @@ class GradleDependencyParser implements DependencyParser {
 			dslEvaluator.evaluate(closure)
 		}
 		Map bindingMap = [dependencies:callDependencies, ext:[:]].withDefault { name ->
-			println "doNothing: $name" 
 			return DoNothing.INSTANCE 
 		}
 		Binding binding = new Binding(bindingMap)
@@ -160,6 +159,7 @@ class GradleDependencyParser_DslEvaluator {
 	
 }
 
+@SuppressWarnings('UnusedMethodParameter')
 class DoNothing extends Expando {
 	
 	static final INSTANCE = new DoNothing()

@@ -16,7 +16,6 @@
 package dx42.needy
 
 import groovy.transform.Immutable
-import groovy.transform.ToString
 
 @Immutable
 class Artifact {

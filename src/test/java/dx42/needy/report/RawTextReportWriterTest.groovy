@@ -22,8 +22,6 @@ import dx42.needy.Dependency
 
 class RawTextReportWriterTest extends AbstractTestCase {
 
-	private static final String TEXT = "abc123"
-	
 	private RawTextReportWriter reportWriter = new RawTextReportWriter()
 	
 	@Test

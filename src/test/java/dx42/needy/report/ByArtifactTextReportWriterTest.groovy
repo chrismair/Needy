@@ -22,7 +22,6 @@ import dx42.needy.Dependency
 
 class ByArtifactTextReportWriterTest extends AbstractTestCase {
 
-	private static final String TEXT = "abc123"
 	private static final String OUTPUT_FILE = "src/test/resources/temp-report.txt"
 	private static final List<Dependency> DEPENDENCIES = [
 		new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),

@@ -1,0 +1,63 @@
+import org.codenarc.rule.generic.RequiredStringRule
+
+final TEST_FILES = ".*(Test|Tests|TestCase)\\.groovy"
+
+ruleset {
+    ruleset('rulesets/basic.xml')
+
+    ruleset('rulesets/braces.xml')
+
+	// Dry rules
+    DuplicateMapLiteral(doNotApplyToClassNames:'*ReportWriter')
+    
+    ruleset('rulesets/exceptions.xml')
+
+    ruleset('rulesets/groovyism.xml') {
+    	exclude 'ExplicitCallToCompareToMethod'
+    	exclude 'ExplicitTreeSetInstantiation'
+        GStringExpressionWithinString(doNotApplyToClassNames:'*Test')
+    }
+
+    ruleset('rulesets/imports.xml') {
+        exclude 'NoWildcardImports'
+    }
+
+    ruleset('rulesets/junit.xml') {
+        exclude 'JUnitStyleAssertions'
+        exclude 'JUnitTestMethodWithoutAssert'
+    }
+    ruleset('rulesets/logging.xml')
+
+    ruleset('rulesets/naming.xml') {
+        exclude 'FactoryMethodName'
+    }
+
+	// Size rules
+	ClassSize
+	CyclomaticComplexity
+	MethodCount
+	MethodSize(doNotApplyToClassNames:'*Test')
+	NestedBlockDepth
+	ParameterCount
+
+    ruleset('rulesets/unnecessary.xml') {
+        exclude 'UnnecessaryGString'
+        exclude 'UnnecessaryGetter'
+        exclude 'UnnecessaryReturnKeyword'
+        exclude 'UnnecessarySubstring'
+    }
+
+    ruleset('rulesets/unused.xml')
+
+    //------------------------------------------------------------------------------------
+    // Custom rules
+    //------------------------------------------------------------------------------------
+
+    // Ensure that each source file contains the Apache License header
+    rule(RequiredStringRule) {
+        name = 'ApacheLicenseRequired'
+        string = 'Licensed under the Apache License, Version 2.0 (the "License");'
+        violationMessage = 'The Apache License 2.0 comment is missing from the source file'
+        description = 'Checks that all source files contain the Apache License 2.0 comment'
+    }
+}

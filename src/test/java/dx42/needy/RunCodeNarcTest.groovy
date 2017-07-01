@@ -15,18 +15,31 @@
  */
 package dx42.needy
 
-class StringBuildScript implements BuildScript {
+import org.junit.Test
 
-	private final String text
-	
-	StringBuildScript(String text) {
-		assert text != null, "The text value must not be null"
-		this.text = text
+class RunCodeNarcTest extends AbstractTestCase {
+
+	private static final GROOVY_FILES = '**/*.groovy'
+	private static final RULESET_FILE = "codenarc.ruleset"
+			
+	@Test
+	void runCodeNarc() {
+		def ant = new AntBuilder()
+		
+		ant.taskdef(name:'codenarc', classname:'org.codenarc.ant.CodeNarcTask')
+
+		ant.codenarc(ruleSetFiles:RULESET_FILE,
+		   maxPriority1Violations:0, maxPriority2Violations:0) {
+
+		   fileset(dir:'src/main/java') {
+			   include(name:GROOVY_FILES)
+		   }
+		   fileset(dir:'src/test/java') {
+			   include(name:GROOVY_FILES)
+		   }
+
+		   report(type:'ide')
+		}
 	}
 	
-	@Override
-	String getText() {
-		return text
-	}
-
 }

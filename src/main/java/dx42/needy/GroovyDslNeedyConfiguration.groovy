@@ -120,7 +120,7 @@ class DslEvaluator {
 	}
 	
 	def report(String reportClassName, Closure closure) {
-		Class reportClass = Class.forName(reportClassName)
+		Class reportClass = getClass().classLoader.loadClass(reportClassName)
 		ReportWriter reportWriter = reportClass.newInstance() 
 		reportWriters << reportWriter
 		
@@ -130,7 +130,7 @@ class DslEvaluator {
 	}
 	
 	def report(String reportClassName) {
-		Class reportClass = Class.forName(reportClassName)
+		Class reportClass = getClass().classLoader.loadClass(reportClassName)
 		ReportWriter reportWriter = reportClass.newInstance() 
 		reportWriters << reportWriter
 	}
@@ -151,6 +151,8 @@ class DslEvaluator {
 			}
 			applicationBuilds << new ApplicationBuild(name, urlBuildScripts)
 		}
-		else throw new MissingMethodException(name, getClass(), args)
+		else {
+			throw new MissingMethodException(name, getClass(), args)
+		}
 	}
 }

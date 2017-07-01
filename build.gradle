@@ -28,6 +28,7 @@ dependencies {
 	compile gradleApi()
    
 	testCompile 'junit:junit:4.12'
+	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0'
 
 }
 

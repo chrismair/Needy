@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
 
 class AbstractTestCase {
 
-	@SuppressWarnings('FieldName')
+	@SuppressWarnings(['FieldName', 'LoggerWithWrongModifiers'])
 	protected final LOG = LoggerFactory.getLogger(getClass())
 
 	@SuppressWarnings('PublicInstanceField')
@@ -35,6 +35,7 @@ class AbstractTestCase {
         log("----------[ ${getClass().getSimpleName()}.${getName()} ]----------")
 	}
 	
+	@SuppressWarnings('ConfusingMethodName')
 	protected void log(message) {
 		LOG.info message.toString()
 	}

@@ -23,7 +23,6 @@ import org.junit.Before
 
 class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 
-	private static final String TEXT = "abc123"
 	private static final String OUTPUT_FILE = "src/test/resources/temp-html-report.html"
 	private static final List<Dependency> DEPENDENCIES = [
 		new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
