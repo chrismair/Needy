@@ -21,6 +21,11 @@ abstract class AbstractReportWriter implements ReportWriter {
 
 	String outputFile
 	
+	protected getFormattedTimestamp = {
+		def dateFormat = java.text.DateFormat.getDateTimeInstance()
+		dateFormat.format(new Date())
+	}
+	
 	abstract void writeReport(Writer writer, List<Dependency> dependencies) 
 	
 	@Override

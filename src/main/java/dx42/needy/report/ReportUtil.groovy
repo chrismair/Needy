@@ -20,7 +20,7 @@ import dx42.needy.Artifact
 
 class ReportUtil {
 
-	static Map<Artifact, Set<String>> buildMapOfArtifactNameToApplicationNames(List<Dependency> dependencies) {
+	static Map<Artifact, Set<String>> buildMapOfArtifactToApplicationNames(List<Dependency> dependencies) {
 		def comparator = { Artifact a1, Artifact a2 ->
 			def c1 =  a1.toString().replace(":", " ")
 			def c2 =  a2.toString().replace(":", " ")
@@ -30,7 +30,6 @@ class ReportUtil {
 		
 		dependencies.each { dependency ->
 			Artifact key = dependency.artifact
-//			String key = dependency.artifact.toString()
 			if (!map.containsKey(key)) {
 				map[key] = new TreeSet<String>()
 			}

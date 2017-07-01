@@ -21,7 +21,7 @@ class ByArtifactTextReportWriter extends AbstractReportWriter {
 
 	@Override
 	void writeReport(Writer writer, List<Dependency> dependencies) {
-		Map sortedMap = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
+		Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 
 		writer.withWriter { w ->
 			w.println "Needy\n"

@@ -16,6 +16,7 @@
 package dx42.needy
 
 import org.junit.After
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.rules.TestName
 import org.slf4j.LoggerFactory
@@ -71,6 +72,21 @@ class AbstractTestCase {
 			System.out = originalSystemOut
 		}
 		outputStream.toString()
+	}
+	
+	protected void assertSameXml(String actual, String expected) {
+		Assert.assertEquals(normalizeXml(expected), normalizeXml(actual))
+	}
+
+	/**
+	 * Normalize the XML string. Remove all whitespace between elements, and normalize line-endings.
+	 * @param xml - the input XML string to normalize
+	 * @return the normalized XML
+	 */
+	protected static String normalizeXml(String xml) {
+		assert xml != null
+		def resultXml = xml.replaceAll(/\>\s*\</, '><').trim()
+		return resultXml.replace('\r\n', '\n')
 	}
 
 }

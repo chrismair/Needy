@@ -27,25 +27,25 @@ class ReportUtilTest extends AbstractTestCase {
 	private static final String FILE_PATH = "src/main/resources/$FILE_ON_CLASSPATH"
 	
 	@Test
-	void test_buildMapOfArtifactNameToApplicationNames_EmptyDependencies() {
+	void test_buildMapOfArtifactToApplicationNames_EmptyDependencies() {
 		def dependencies = []
 
-		def map = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
+		def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 		assert map == [:]
 	}
 	
 	@Test
-	void test_buildMapOfArtifactNameToApplicationNames_SingleDependency() {
+	void test_buildMapOfArtifactToApplicationNames_SingleDependency() {
 		def dependencies = [
 			new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
 		]
 
-		def map = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
+		def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 		assert map == [(new Artifact(group:"org.other", name:"service", version:"2.0")): ["Third"] as SortedSet]
 	}
 	
 	@Test
-	void test_buildMapOfArtifactNameToApplicationNames() {
+	void test_buildMapOfArtifactToApplicationNames() {
 		def dependencies = [
 			new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
 			new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
@@ -55,7 +55,7 @@ class ReportUtilTest extends AbstractTestCase {
 			new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
 		]
 
-		def map = ReportUtil.buildMapOfArtifactNameToApplicationNames(dependencies)
+		def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 
 		def a1 = new Artifact(group:"log4j", name:"log4j", version:"1.2.14")
 		def a2 = new Artifact(group:"log4j-extra", name:"stuff", version:"1.0") 
