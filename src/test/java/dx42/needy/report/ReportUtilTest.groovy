@@ -48,7 +48,7 @@ class ReportUtilTest extends AbstractTestCase {
 	void test_buildMapOfArtifactToApplicationNames() {
 		def dependencies = [
 			new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
-			new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+			new Dependency(applicationName:"Sample1", group:"ORG.hibernate", name:"hibernate-core", version:"3.1"),
 			new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
 			new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
 			new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
@@ -59,11 +59,11 @@ class ReportUtilTest extends AbstractTestCase {
 
 		def a1 = new Artifact(group:"log4j", name:"log4j", version:"1.2.14")
 		def a2 = new Artifact(group:"log4j-extra", name:"stuff", version:"1.0") 
-		def a3 = new Artifact(group:"org.hibernate", name:"hibernate-core", version:"3.1")
+		def a3 = new Artifact(group:"ORG.hibernate", name:"hibernate-core", version:"3.1")
 		def a4 = new Artifact(group:"org.other", name:"service", version:"2.0")
 				
 		// Verify sort order of keys
-		assert map.keySet() == [a1, a2, a3, a4] as Set
+		assert map.keySet() as List == [a1, a2, a3, a4]
 		
 		assert map == [
 			(a1): ["Sample1", "Sample_Two", "Third"] as SortedSet,

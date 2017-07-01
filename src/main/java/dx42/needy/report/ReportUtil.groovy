@@ -20,13 +20,13 @@ import dx42.needy.Artifact
 
 class ReportUtil {
 
-	static Map<Artifact, Set<String>> buildMapOfArtifactToApplicationNames(List<Dependency> dependencies) {
+	static SortedMap<Artifact, Set<String>> buildMapOfArtifactToApplicationNames(List<Dependency> dependencies) {
 		def comparator = { Artifact a1, Artifact a2 ->
 			def c1 =  a1.toString().replace(":", " ")
 			def c2 =  a2.toString().replace(":", " ")
-			return c1.compareTo(c2)
+			return c1.compareToIgnoreCase(c2)
 		} as Comparator
-		Map<Artifact, Set<String>> map = new TreeMap<>(comparator)
+		SortedMap<Artifact, Set<String>> map = new TreeMap<>(comparator)
 		
 		dependencies.each { dependency ->
 			Artifact key = dependency.artifact
