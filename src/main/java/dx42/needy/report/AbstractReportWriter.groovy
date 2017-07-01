@@ -15,10 +15,15 @@
  */
 package dx42.needy.report
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import dx42.needy.Dependency
 
 abstract class AbstractReportWriter implements ReportWriter {
 
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractReportWriter)
+	
 	String outputFile
 	
 	protected getFormattedTimestamp = {
@@ -34,6 +39,10 @@ abstract class AbstractReportWriter implements ReportWriter {
 	
 		def printWriter = createPrintWriter()
 		writeReport(printWriter, dependencies)
+		
+		if (outputFile) {
+			LOG.info("Report written to [$outputFile]")
+		}
 	}
 	
 	protected PrintWriter createPrintWriter() {
