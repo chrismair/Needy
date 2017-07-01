@@ -50,6 +50,7 @@
   - This implementation is quite limited. 
   - It supports only relatively standard Gradle syntax.
   - It only handles declared dependencies  (not transitive dependencies).
+  - You must include jars on the classpath for all classes referenced within the build files being parsed.
   - TBD... 
   
 
