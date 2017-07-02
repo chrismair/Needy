@@ -23,7 +23,7 @@ import groovy.xml.StreamingMarkupBuilder
 
 class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 
-	private static final String STANDARD_TITLE = "Needy Report"
+	private static final String STANDARD_TITLE = "Needy Dependency Report"
 	private static final String CSS_FILE = 'htmlreport.css'
 	
 	String title = "Dependency Report"
@@ -64,7 +64,7 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 	protected buildBodySection(Map sortedMap) {
 		return {
 			body {
-				h1(title)
+				h1(STANDARD_TITLE)
 				out << buildReportMetadata()
 				out << buildDependencyTable(sortedMap)
 			}
