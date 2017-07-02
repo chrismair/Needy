@@ -69,12 +69,36 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 	}
 	
 	@Test
+	void test_getApplicationBuilds_Application_MapSyntax_UnknownKey() {
+		final TEXT = """
+			needy {
+				applications {
+					Wallace([url:"http://svn/Wallace/custom-build.gradle", unknown:'123'])
+				}
+			}
+		"""
+		shouldFailWithMessage("unknown") { GroovyDslNeedyConfiguration.fromString(TEXT) }
+	}
+	
+	@Test
+	void test_getApplicationBuilds_Application_MapSyntax_MisingUrl() {
+		final TEXT = """
+			needy {
+				applications {
+					Wallace([description:'blah'])
+				}
+			}
+		"""
+		shouldFailWithMessage("url") { GroovyDslNeedyConfiguration.fromString(TEXT) }
+	}
+	
+	@Test
 	void test_getApplicationBuilds_MultipleApplications() {
 		final TEXT = """
 			needy {
 				applications {
 					Fidget("http://svn/Fidget/build.gradle")
-					Wallace("http://svn/Wallace/custom-build.gradle")
+					Wallace([url:"http://svn/Wallace/custom-build.gradle", description:"wallace"])
 				}
 			}
 		"""

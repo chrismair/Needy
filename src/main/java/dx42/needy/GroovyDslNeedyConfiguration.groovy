@@ -139,7 +139,17 @@ class DslEvaluator {
 		if (!withinApplications) {
 			throw new MissingMethodException(name, getClass(), args)
 		}
-		if (args[0] instanceof String) {
+		if (args[0] instanceof Map) {
+			LOG.info "methodMissing (Map): name=$name map=${args[0]}"
+			final MAP_KEYS = ['url', 'description']
+			args[0].each { k, v -> 
+				assert k in MAP_KEYS, "Map key [$k] is not one of allowed keys: $MAP_KEYS" 
+			}
+			String url = args[0].url
+			assert url, "The url is missing"
+			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(url)])
+		}
+		else if (args[0] instanceof String) {
 			LOG.info "methodMissing (String): name=$name value=${args[0]}"
 			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(args[0])])
 		}
