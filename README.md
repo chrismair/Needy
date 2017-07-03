@@ -50,7 +50,8 @@
   - This implementation is quite limited. 
   - It supports only relatively standard Gradle syntax.
   - It only handles declared dependencies  (not transitive dependencies).
-  - You must include jars on the classpath for all classes referenced within the build files being parsed.
+  - The report does not include dependencies (jars) embedded within the project
+  - When running Needy, you must include jars on the classpath for all classes referenced within the build files being parsed, e.g. the Gradle API or application-specific classes.
   - TBD... 
   
 

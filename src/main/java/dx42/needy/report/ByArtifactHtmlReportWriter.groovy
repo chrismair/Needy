@@ -16,9 +16,10 @@
  */
 package dx42.needy.report
 
-import static ReportUtil.*
+import static dx42.needy.report.ReportUtil.*
 
 import dx42.needy.Dependency
+import dx42.needy.NeedyVersion
 import groovy.xml.StreamingMarkupBuilder
 
 class ByArtifactHtmlReportWriter extends AbstractReportWriter {
@@ -86,7 +87,7 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 					}
 					tr {
 						td(class: 'em', "Generated With:")
-						td { a("Needy", href:"https://github.com/dx42/Needy") }
+						td { a("Needy v" + NeedyVersion.version, href:"https://github.com/dx42/Needy") }
 					}
 				}
 			}
