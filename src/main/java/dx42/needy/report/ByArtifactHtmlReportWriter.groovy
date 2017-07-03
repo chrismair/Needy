@@ -99,22 +99,25 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 				h2("Dependencies")
 				table {
 					tr(class:'tableHeader') {
+						th("#")
 						th("Group")
 						th("Name")
 						th("Version")
 						th("Applications")
 					}
+					int index = 1
 					sortedMap.each{ k, v ->
-						out << buildRow(k, v)
+						out << buildRow(k, v, index++)
 					} 
 				}
 			}
 		}
 	}
 
-	private buildRow(k, v) {
+	private buildRow(k, v, int index) {
 		return {
 			tr {
+				td(index)
 				td(k.group)
 				td(k.name)
 				td(k.version)
