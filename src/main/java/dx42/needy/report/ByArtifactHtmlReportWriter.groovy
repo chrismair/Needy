@@ -34,6 +34,7 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 
 		def builder = new StreamingMarkupBuilder()
 		def html = builder.bind {
+			mkp.yieldUnescaped('<!DOCTYPE html>')
 			html {
 				out << buildHeaderSection()
 				out << buildBodySection(sortedMap)
