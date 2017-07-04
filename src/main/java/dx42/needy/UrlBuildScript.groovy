@@ -15,23 +15,26 @@
  */
 package dx42.needy
 
+import groovy.transform.Immutable
+
+@Immutable
 class UrlBuildScript implements BuildScript {
 
-	final URL url
-	
-	UrlBuildScript(String urlString) {
-		assert urlString != null, "The urlString value must not be null"
-		url = new URL(urlString)
-	}
+	String url
 	
 	@Override
 	String getText() {
-		return url.text
+		return asURL().text
 	}
 
 	@Override
 	String toString() {
 		return "UrlBuildScript(url=$url)"
 	}
-	
+
+	protected URL asURL() {
+		assert url, "The url must not be null or empty"
+		return new URL(url)
+	}
+		
 }

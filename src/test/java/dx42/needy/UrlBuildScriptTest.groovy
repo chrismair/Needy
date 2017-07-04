@@ -23,8 +23,15 @@ class UrlBuildScriptTest extends AbstractTestCase {
 	private static final String TEST_FILE_URL = "file:" + TEST_FILE
 	
 	@Test
-	void test_Constructor_String_Null() {
-		shouldFailWithMessage('urlString') { new UrlBuildScript(null) }
+	void test_getText_NullUrl() {
+		def urlBuildScript = new UrlBuildScript(null)
+		shouldFailWithMessage("The url must not be null or empty") { urlBuildScript.getText() }
+	}
+	
+	@Test
+	void test_getText_EmptyUrl() {
+		def urlBuildScript = new UrlBuildScript("")
+		shouldFailWithMessage("The url must not be null or empty") { urlBuildScript.getText() }
 	}
 	
 	@Test
@@ -37,7 +44,7 @@ class UrlBuildScriptTest extends AbstractTestCase {
 	void test_getText() {
 		def buildScript = new UrlBuildScript(TEST_FILE_URL)
 		assert buildScript.getText() == new File(TEST_FILE).text
-		assert buildScript.getUrl() == new URL(TEST_FILE_URL)
+		assert buildScript.asURL() == new URL(TEST_FILE_URL)
 	}
 	
 	@Test
