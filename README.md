@@ -4,6 +4,29 @@
 
 ## Running
 
+### Run as a Gradle Task
+
+  Here is a sample Gradle script to run Needy. It assumes that a "config.needy" is in the current directory:
+  
+```
+	apply plugin: 'java'
+	 
+	repositories {
+	    jcenter()
+	    maven { url  "https://dl.bintray.com/chrismair/dx42" }
+	}
+	 
+	dependencies {
+	    compile 'dx42:needy:0.2' 
+	    compile 'ch.qos.logback:logback-classic:1.2.3'
+	}
+	 
+	task execute(type:JavaExec) {
+	    main = "dx42.needy.Needy"
+	    classpath = sourceSets.main.runtimeClasspath
+	}
+```
+
 ### Run as a Linux Script
 
   Here is a sample Linux script to execute Needy, assuming that a "config.needy" and the required jars are in the current directory:
@@ -18,10 +41,6 @@
 	java  -classpath $classpath dx42.needy.Needy
 ```
 
-### Run as a Gradle Task
-
-  TBD
-
 
 ## Configuration
 
@@ -31,15 +50,16 @@
 	needy {
 		
 		applications {
-			Needy("file:/home/workspaces/someproject/build.gradle")
-			CodeNarc("https://rawgit.com/CodeNarc/CodeNarc/master/build.gradle")
+			Needy(url:"file:/home/workspaces/someproject/build.gradle")					// "Needy" application
+			CodeNarc(url:"https://rawgit.com/CodeNarc/CodeNarc/master/build.gradle")	// "CodeNarc" application
 		}
 	
 		reports {
-			report("dx42.needy.report.ByArtifactTextReportWriter") { }
+			report("dx42.needy.report.ByArtifactTextReportWriter") { }					// Text report; will write to stdout
 			
-			report("dx42.needy.report.ByArtifactHtmlReportWriter") {
+			report("dx42.needy.report.ByArtifactHtmlReportWriter") {					// HTML report
 				outputFile = "Needy-Report.html"
+				title = "My Sample Projects"
 			}
 		}
 	}

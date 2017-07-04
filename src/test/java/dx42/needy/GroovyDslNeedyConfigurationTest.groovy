@@ -98,7 +98,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 			needy {
 				applications {
 					Fidget("http://svn/Fidget/build.gradle")
-					Wallace([url:"http://svn/Wallace/custom-build.gradle", description:"wallace"])
+					Wallace(url:"http://svn/Wallace/custom-build.gradle", description:"wallace")
 				}
 			}
 		"""
