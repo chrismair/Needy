@@ -2,7 +2,15 @@
 
 plugins {
 	id 'groovy'
+	id "com.jfrog.bintray" version "1.7.3"
 }
+
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+
+version = "0.2"
+group = 'dx42'
 
 
 sourceSets {
@@ -30,6 +38,42 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.gradle:gradle-core:3.2'	// because the Gradle API is used within some sample Gradle build.gradle files
 	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0'
-
 }
 
+//------------------------------------------------------------------------------
+// Bintray
+//------------------------------------------------------------------------------
+
+bintray {
+	user = bintrayUser
+	key = bintrayApiKey
+	publications = ['MyPublication']
+	configurations = ['archives']
+	publish = true
+	
+	pkg {
+		repo = 'dx42'
+		name = 'needy'
+		licenses = ['Apache-2.0']
+		vcsUrl = 'https://github.com/dx42/Needy.git'
+		
+		version {
+			name = project.version
+			desc = 'Needy jar ' + project.version
+			released  = new Date()
+			vcsTag = project.version
+			//attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+		}
+	}
+}
+
+publishing {
+	publications {
+		MyPublication(MavenPublication) {
+			from components.java
+			groupId project.group
+			artifactId 'needy'
+			version project.version
+		}
+	}
+}
