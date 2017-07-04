@@ -20,36 +20,36 @@ import org.junit.Test
 import dx42.needy.report.ByArtifactTextReportWriter
 import dx42.needy.report.StubReportWriter
 
-class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
+class DslNeedyConfigurationTest extends AbstractTestCase {
 
 	private static final TEST_CONFIG_FILE = "src/test/resources/test-config.txt"
 	
 	@Test
 	void test_fromString_NullOrEmptyString() {
-		shouldFailWithMessage("text") { GroovyDslNeedyConfiguration.fromString(null) }
-		shouldFailWithMessage("text") { GroovyDslNeedyConfiguration.fromString("") }
+		shouldFailWithMessage("text") { DslNeedyConfiguration.fromString(null) }
+		shouldFailWithMessage("text") { DslNeedyConfiguration.fromString("") }
 	}
 
 	@Test
 	void test_fromFile_NullOrEmptyFilename() {
-		shouldFailWithMessage("file") { GroovyDslNeedyConfiguration.fromFile(null) }
-		shouldFailWithMessage("file") { GroovyDslNeedyConfiguration.fromFile("") }
+		shouldFailWithMessage("file") { DslNeedyConfiguration.fromFile(null) }
+		shouldFailWithMessage("file") { DslNeedyConfiguration.fromFile("") }
 	}
 
 	@Test
 	void test_fromFile_FileDoesNotExist() {
-		shouldFail(IOException) { GroovyDslNeedyConfiguration.fromFile("NoSuchFile.txt") }
+		shouldFail(IOException) { DslNeedyConfiguration.fromFile("NoSuchFile.txt") }
 	}
 
 	@Test
 	void test_fromFile_ReadsInFileText() {
-		def buildSet = GroovyDslNeedyConfiguration.fromFile(TEST_CONFIG_FILE)
+		def buildSet = DslNeedyConfiguration.fromFile(TEST_CONFIG_FILE)
 		assert buildSet.getText() == new File(TEST_CONFIG_FILE).text
 	}
 
 	@Test
 	void test_EmptyNeedyClosure() {
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString("needy { }")
+		def needyConfiguration = DslNeedyConfiguration.fromString("needy { }")
 		assert needyConfiguration.getApplicationBuilds() == []
 		assert needyConfiguration.getReportWriters() == []
 	}
@@ -63,7 +63,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(TEXT)
+		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
@@ -77,7 +77,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		shouldFailWithMessage("unknown") { GroovyDslNeedyConfiguration.fromString(TEXT) }
+		shouldFailWithMessage("unknown") { DslNeedyConfiguration.fromString(TEXT) }
 	}
 	
 	@Test
@@ -89,7 +89,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		shouldFailWithMessage("url") { GroovyDslNeedyConfiguration.fromString(TEXT) }
+		shouldFailWithMessage("url") { DslNeedyConfiguration.fromString(TEXT) }
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(TEXT)
+		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [
 			[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]], 
 			[name:"Wallace", urls:["http://svn/Wallace/custom-build.gradle"]]]) 
@@ -118,7 +118,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(TEXT)
+		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [
 			[name:"Fidget", urls:["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"]]]) 
 		assert needyConfiguration.getReportWriters() == []
@@ -139,7 +139,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(TEXT)
+		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
 		assert needyConfiguration.getReportWriters().size() == 1
 		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
@@ -162,7 +162,7 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(TEXT)
+		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
 		assert needyConfiguration.getReportWriters().size() == 2
 		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
@@ -178,13 +178,13 @@ class GroovyDslNeedyConfigurationTest extends AbstractTestCase {
 				Fidget(["http://svn/Fidget/build.gradle", "http://svn/Fidget/build.gradle"])
 			}
 		"""
-		shouldFail(MissingMethodException) { GroovyDslNeedyConfiguration.fromString(TEXT) }
+		shouldFail(MissingMethodException) { DslNeedyConfiguration.fromString(TEXT) }
 	}
 	
 	@Test
 	void test_InvalidSyntaxOfNeedyConfigFile() {
 		final TEXT = "%^&*()GHJ"
-		shouldFail(IllegalStateException) { GroovyDslNeedyConfiguration.fromString(TEXT) }
+		shouldFail(IllegalStateException) { DslNeedyConfiguration.fromString(TEXT) }
 	}
 	
 	//--------------------------------------------------------------------------

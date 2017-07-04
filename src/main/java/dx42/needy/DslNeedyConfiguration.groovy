@@ -22,26 +22,26 @@ import dx42.needy.report.ReportWriter
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
-class GroovyDslNeedyConfiguration implements NeedyConfiguration {
+class DslNeedyConfiguration implements NeedyConfiguration {
 
-	private static final Logger LOG = LoggerFactory.getLogger(GroovyDslNeedyConfiguration)
+	private static final Logger LOG = LoggerFactory.getLogger(DslNeedyConfiguration)
 	
 	private String text
 	private List<ApplicationBuild> applicationBuilds
 	private List<ReportWriter> reportWriters
 	
-	static GroovyDslNeedyConfiguration fromFile(String file) {
+	static DslNeedyConfiguration fromFile(String file) {
 		assert file, "The file parameter must not be null or empty"
 		String text = new File(file).text
-		return new GroovyDslNeedyConfiguration(text)
+		return new DslNeedyConfiguration(text)
 	}
 	
-	static GroovyDslNeedyConfiguration fromString(String text) {
+	static DslNeedyConfiguration fromString(String text) {
 		assert text, "The text parameter must not be null or empty"
-		return new GroovyDslNeedyConfiguration(text)
+		return new DslNeedyConfiguration(text)
 	}
 	
-	private GroovyDslNeedyConfiguration(String text) {
+	private DslNeedyConfiguration(String text) {
 		this.text = text
 		parse(text)
 	}

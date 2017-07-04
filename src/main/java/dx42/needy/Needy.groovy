@@ -25,7 +25,7 @@ class Needy {
 
 	// Abstract creation of instance dependencies to allow substitution of test spy for unit tests
 	protected Closure createNeedyRunner = { new NeedyRunner() }
-	protected Closure createNeedyConfiguration = { filename -> GroovyDslNeedyConfiguration.fromFile(filename) }
+	protected Closure createNeedyConfiguration = { filename -> DslNeedyConfiguration.fromFile(filename) }
 
 
 	static void main(String[] args) {

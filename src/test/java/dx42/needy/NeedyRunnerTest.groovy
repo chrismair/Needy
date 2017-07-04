@@ -63,7 +63,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 	
 	@Test
 	void test_execute_NoReportWriters() {
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(CONFIG_TEXT)
+		def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		log(applicationBuilds)
 		needyRunner.needyConfiguration = needyConfiguration
@@ -74,7 +74,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 	
 	@Test
 	void test_execute_ReportWriters() {
-		def needyConfiguration = GroovyDslNeedyConfiguration.fromString(CONFIG_TEXT_WITH_REPORTS)
+		def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT_WITH_REPORTS)
 		needyRunner.needyConfiguration = needyConfiguration
 		def result = needyRunner.execute()
 		
