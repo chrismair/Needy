@@ -40,6 +40,11 @@ dependencies {
 	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0'
 }
 
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
 //------------------------------------------------------------------------------
 // Bintray
 //------------------------------------------------------------------------------
@@ -50,6 +55,7 @@ bintray {
 	publications = ['MyPublication']
 	configurations = ['archives']
 	publish = true
+	override = true
 	
 	pkg {
 		repo = 'dx42'
@@ -61,7 +67,7 @@ bintray {
 			name = project.version
 			desc = 'Needy jar ' + project.version
 			released  = new Date()
-			vcsTag = project.version
+			//vcsTag = project.version
 			//attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
 		}
 	}
@@ -74,6 +80,8 @@ publishing {
 			groupId project.group
 			artifactId 'needy'
 			version project.version
+			
+			artifact sourcesJar
 		}
 	}
 }
