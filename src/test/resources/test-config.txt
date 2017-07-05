@@ -3,13 +3,13 @@
 needy {
 
 	applications {
-		NowTrack('http://svn/NowTrack/build.gradle')
+		NowTrack(url:'http://svn/NowTrack/build.gradle')
 		// or
 		//Architecture(url:'http://svn/Architecture/build.gradle', type:'Gradle')
 	 
-		// What about multiple build files per application/group?
+		// Multiple build files per application
 		Web_Services([
-			"http://svn/AccountWebServices/build.gradle",
-			"http://svn/WystarWebServices/build.gradle"])
+			[url:"http://svn/AccountWebServices/build.gradle", type:"gradle", description:"AWS"],
+			[url:"http://svn/OtherWebServices/build.gradle", type:"gradle"]])
 	}		
 }

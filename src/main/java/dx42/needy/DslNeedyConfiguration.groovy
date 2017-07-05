@@ -145,19 +145,14 @@ class DslEvaluator {
 			args[0].each { k, v -> 
 				assert k in MAP_KEYS, "Map key [$k] is not one of allowed keys: $MAP_KEYS" 
 			}
-			String url = args[0].url
-			assert url, "The url is missing"
-			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(url:url)])
+			applicationBuilds << new ApplicationBuild(name, [createBuildScriptFromMap(args[0])])
 		}
-		else if (args[0] instanceof String) {
-			LOG.info "methodMissing (String): name=$name value=${args[0]}"
-			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(url:args[0])])
-		}
-		else if (args[0] instanceof List) {
+		else if (args[0] instanceof List) {		// List of Maps
 			List list = args[0]
 			LOG.info "methodMissing (List): name=$name value=${list}"
-			def urlBuildScripts = list.collect { String url -> 
-				new UrlBuildScript(url:url)
+			assert list.every { element -> element instanceof Map }, "Each element of the List must be a Map"
+			def urlBuildScripts = list.collect { Map map -> 
+				createBuildScriptFromMap(map)
 			}
 			applicationBuilds << new ApplicationBuild(name, urlBuildScripts)
 		}
@@ -165,4 +160,11 @@ class DslEvaluator {
 			throw new MissingMethodException(name, getClass(), args)
 		}
 	}
+	
+	private UrlBuildScript createBuildScriptFromMap(Map map) {
+		String url = map.url
+		assert url, "The url is missing"
+		return new UrlBuildScript(url:url)
+	}
+	
 }

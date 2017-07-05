@@ -24,16 +24,16 @@ class NeedyRunnerTest extends AbstractTestCase {
 	private static final String CONFIG_TEXT = """
 		needy {
 			applications {
-				Sample1("file:src/test/resources/sample1-build.gradle")
-				Sample_Two("file:src/test/resources/sample2-build.gradle")
+				Sample1(url:"file:src/test/resources/sample1-build.gradle")
+				Sample_Two(url:"file:src/test/resources/sample2-build.gradle")
 			}
 		}"""
 
 	private static final String CONFIG_TEXT_WITH_REPORTS = """
 		needy {
 			applications {
-				Sample1("file:src/test/resources/sample1-build.gradle")
-				Sample_Two("file:src/test/resources/sample2-build.gradle")
+				Sample1(url:"file:src/test/resources/sample1-build.gradle")
+				Sample_Two(url:"file:src/test/resources/sample2-build.gradle")
 			}
 			reports {
 				report("dx42.needy.report.StubReportWriter") { }

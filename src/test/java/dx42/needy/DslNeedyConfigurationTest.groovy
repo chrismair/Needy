@@ -59,7 +59,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		final TEXT = """
 			needy {
 				applications {
-					Fidget("http://svn/Fidget/build.gradle")
+					Fidget(url:"http://svn/Fidget/build.gradle")
 				}
 			}
 		"""
@@ -68,7 +68,19 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
-	
+
+	@Test
+	void test_getApplicationBuilds_Application_String_InvalidSyntax() {
+		final TEXT = """
+			needy {
+				applications {
+					Wallace('blah')
+				}
+			}
+		"""
+		shouldFailWithMessage("Wallace") { DslNeedyConfiguration.fromString(TEXT) }
+	}
+
 	@Test
 	void test_getApplicationBuilds_Application_MapSyntax_UnknownKey() {
 		final TEXT = """
@@ -98,7 +110,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		final TEXT = """
 			needy {
 				applications {
-					Fidget("http://svn/Fidget/build.gradle")
+					Fidget(url:"http://svn/Fidget/build.gradle")
 					Wallace(url:"http://svn/Wallace/custom-build.gradle", description:"wallace")
 				}
 			}
@@ -115,7 +127,9 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		final TEXT = """
 			needy {
 				applications {
-					Fidget(["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"])
+					Fidget([
+						[url:"http://svn/Fidget/build.gradle"], 
+						[url:"http://svn/Fidget2/build2.gradle"]])
 				}
 			}
 		"""
@@ -126,11 +140,27 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 	}
 	
 	@Test
+	void test_getApplicationBuilds_Application_ListSyntax_Invalid() {
+		final TEXT = """
+			needy {
+				applications {
+					Fidget([
+						[url:"http://svn/Fidget/build.gradle"], 
+						"Not a Map"])
+				}
+			}
+		"""
+		shouldFailWithMessage("Each element of the List must be a Map") { DslNeedyConfiguration.fromString(TEXT) }
+	}
+	
+	// Tests for Reports
+	
+	@Test
 	void test_SingleReport() {
 		final TEXT = """
 			needy {
 				applications {
-					Fidget("http://svn/Fidget/build.gradle")
+					Fidget(url:"http://svn/Fidget/build.gradle")
 				}
 
 				reports {
@@ -153,7 +183,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		final TEXT = """
 			needy {
 				applications {
-					Fidget("http://svn/Fidget/build.gradle")
+					Fidget(url:"http://svn/Fidget/build.gradle")
 				}
 
 				reports {
