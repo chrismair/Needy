@@ -147,17 +147,17 @@ class DslEvaluator {
 			}
 			String url = args[0].url
 			assert url, "The url is missing"
-			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(url)])
+			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(url:url)])
 		}
 		else if (args[0] instanceof String) {
 			LOG.info "methodMissing (String): name=$name value=${args[0]}"
-			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(args[0])])
+			applicationBuilds << new ApplicationBuild(name, [new UrlBuildScript(url:args[0])])
 		}
 		else if (args[0] instanceof List) {
 			List list = args[0]
 			LOG.info "methodMissing (List): name=$name value=${list}"
 			def urlBuildScripts = list.collect { String url -> 
-				new UrlBuildScript(url)
+				new UrlBuildScript(url:url)
 			}
 			applicationBuilds << new ApplicationBuild(name, urlBuildScripts)
 		}

@@ -21,6 +21,9 @@ import groovy.transform.Immutable
 class UrlBuildScript implements BuildScript {
 
 	String url
+	String type
+	String description
+	String componentId
 	
 	@Override
 	String getText() {

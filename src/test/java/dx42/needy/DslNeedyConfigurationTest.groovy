@@ -64,7 +64,8 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
-		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
 	
@@ -103,9 +104,9 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
-		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [
-			[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]], 
-			[name:"Wallace", urls:["http://svn/Wallace/custom-build.gradle"]]]) 
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
+		assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle"]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
 	
@@ -119,8 +120,8 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
-		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [
-			[name:"Fidget", urls:["http://svn/Fidget/build.gradle", "http://svn/Fidget2/build2.gradle"]]]) 
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/build2.gradle"]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
 	
@@ -140,7 +141,8 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
-		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
 		assert needyConfiguration.getReportWriters().size() == 1
 		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
 		assert needyConfiguration.getReportWriters()[0].outputFile == "xxx"
@@ -163,7 +165,8 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
-		assertApplicationBuilds(needyConfiguration.getApplicationBuilds(), [[name:"Fidget", urls:["http://svn/Fidget/build.gradle"]]]) 
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
 		assert needyConfiguration.getReportWriters().size() == 2
 		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
 		assert needyConfiguration.getReportWriters()[0].outputFile == "xxx"
@@ -191,18 +194,12 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 	// Helper methods
 	//--------------------------------------------------------------------------
 		
-	private void assertApplicationBuilds(List<ApplicationBuild> actual, List<Map> expected) {
-		expected.eachWithIndex { Map expectedMap, int index ->
-			assertApplicationBuild(actual[index], expectedMap)
-		}
-	}
-	
-	private void assertApplicationBuild(ApplicationBuild actual, Map expected) {
-		assert actual.name == expected.name
-		assert actual.buildScripts.size() == expected.urls.size() 
+	private void assertApplicationBuild(ApplicationBuild actual, String name, List<Map> expectedBuildScripts) {
+		assert actual.name == name
+		assert actual.buildScripts.size() == expectedBuildScripts.size() 
 		assert actual.buildScripts.every { buildScript -> buildScript instanceof UrlBuildScript }
-		expected.urls.eachWithIndex { String expectedUrl, int index ->
-			assert actual.buildScripts[index].url.toString() == expectedUrl
+		expectedBuildScripts.eachWithIndex { Map expectedBuildScript, int index ->
+			assert actual.buildScripts[index].url.toString() == expectedBuildScript.url
 		}
 	}
 
