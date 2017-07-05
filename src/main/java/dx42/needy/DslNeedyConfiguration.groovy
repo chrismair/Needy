@@ -141,7 +141,7 @@ class DslEvaluator {
 		}
 		if (args[0] instanceof Map) {
 			LOG.info "methodMissing (Map): name=$name map=${args[0]}"
-			final MAP_KEYS = ['url', 'description']
+			final MAP_KEYS = ['url', 'description', 'type', 'componentId']
 			args[0].each { k, v -> 
 				assert k in MAP_KEYS, "Map key [$k] is not one of allowed keys: $MAP_KEYS" 
 			}

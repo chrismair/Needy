@@ -111,7 +111,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			needy {
 				applications {
 					Fidget(url:"http://svn/Fidget/build.gradle")
-					Wallace(url:"http://svn/Wallace/custom-build.gradle", description:"wallace")
+					Wallace(url:"http://svn/Wallace/custom-build.gradle", description:"wallace", type:"gradle", componentId:"wallace")
 				}
 			}
 		"""
