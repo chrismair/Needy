@@ -10,7 +10,7 @@ apply plugin: 'maven-publish'
 
 
 version = "0.2"
-group = 'dx42'
+group = 'org.dx42'
 
 
 sourceSets {
