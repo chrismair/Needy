@@ -13,16 +13,15 @@
 	 
 	repositories {
 	    jcenter()
-	    maven { url  "https://dl.bintray.com/chrismair/dx42" }
 	}
 	 
 	dependencies {
-	    compile 'dx42:needy:0.2' 
+	    compile 'org.dx42:needy:0.2' 
 	    compile 'ch.qos.logback:logback-classic:1.2.3'
 	}
 	 
 	task execute(type:JavaExec) {
-	    main = "dx42.needy.Needy"
+	    main = "org.dx42.needy.Needy"
 	    classpath = sourceSets.main.runtimeClasspath
 	}
 ```
@@ -38,7 +37,7 @@
 	logbackCoreJar="./logback-core-1.2.3.jar"
 	slf4jJar="./slf4j-api-1.7.25.jar"
 	classpath="$needyJar:$groovyJar:$logbackJar:$logbackCoreJar:$slf4jJar"
-	java  -classpath $classpath dx42.needy.Needy
+	java  -classpath $classpath org.dx42.needy.Needy
 ```
 
 
@@ -55,9 +54,9 @@
 		}
 	
 		reports {
-			report("dx42.needy.report.ByArtifactTextReportWriter") { }					// Text report; will write to stdout
+			report("org.dx42.needy.report.ByArtifactTextReportWriter") { }		// Text report; will write to stdout
 			
-			report("dx42.needy.report.ByArtifactHtmlReportWriter") {					// HTML report
+			report("org.dx42.needy.report.ByArtifactHtmlReportWriter") {		// HTML report
 				outputFile = "Needy-Report.html"
 				title = "My Sample Projects"
 			}
