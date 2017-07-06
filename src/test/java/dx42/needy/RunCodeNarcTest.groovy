@@ -29,7 +29,7 @@ class RunCodeNarcTest extends AbstractTestCase {
 		ant.taskdef(name:'codenarc', classname:'org.codenarc.ant.CodeNarcTask')
 
 		ant.codenarc(ruleSetFiles:RULESET_FILE,
-		   maxPriority1Violations:0, maxPriority2Violations:0) {
+		   maxPriority1Violations:0, maxPriority2Violations:0, maxPriority3Violations:0) {
 
 		   fileset(dir:'src/main/java') {
 			   include(name:GROOVY_FILES)

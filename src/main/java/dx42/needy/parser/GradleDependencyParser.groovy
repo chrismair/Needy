@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dx42.needy
+package dx42.needy.parser
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import dx42.needy.Dependency
 
 class GradleDependencyParser implements DependencyParser {
 

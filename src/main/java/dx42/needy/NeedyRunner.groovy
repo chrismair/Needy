@@ -18,6 +18,8 @@ package dx42.needy
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import dx42.needy.parser.DependencyParser
+import dx42.needy.parser.GradleDependencyParser
 import dx42.needy.report.ReportWriter
 
 class NeedyRunner {
