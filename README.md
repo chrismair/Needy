@@ -16,7 +16,7 @@
 	}
 	 
 	dependencies {
-	    compile 'org.dx42:needy:0.2' 
+	    compile 'org.dx42:needy:0.3' 
 	    compile 'ch.qos.logback:logback-classic:1.2.3'
 	}
 	 
