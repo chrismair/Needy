@@ -48,6 +48,7 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 		return {
 			head {
 				title(STANDARD_TITLE + ": " + title)
+				mkp.yieldUnescaped('<meta http-equiv="Content-Type" content="text/html">')
 				out << buildCSS()
 			}
 		}
