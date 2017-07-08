@@ -26,10 +26,7 @@ abstract class AbstractReportWriter implements ReportWriter {
 	
 	String outputFile
 	
-	protected getFormattedTimestamp = {
-		def dateFormat = java.text.DateFormat.getDateTimeInstance()
-		dateFormat.format(new Date())
-	}
+	protected Closure getDate = { new Date() }
 	
 	abstract void writeReport(Writer writer, List<Dependency> dependencies) 
 	
@@ -43,6 +40,11 @@ abstract class AbstractReportWriter implements ReportWriter {
 		if (outputFile) {
 			LOG.info("Report written to [$outputFile]")
 		}
+	}
+	
+	protected getFormattedTimestamp = {
+		def dateFormat = java.text.DateFormat.getDateTimeInstance()
+		dateFormat.format(getDate())
 	}
 	
 	protected PrintWriter createPrintWriter() {

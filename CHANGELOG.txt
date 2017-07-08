@@ -5,9 +5,7 @@ https://github.com/dx42/Needy
 
 Changes in version 0.3 (Jul 2017)
 --------------------------------------
-- New CHANGELOG.txt
 - ByArtifactHtmlReportWriter: Add <meta http-equiv="Content-Type" content="text/html">; Make report title bigger
-- New CreateSampleReport with main() to create a sample report.
 
 
 Changes in version 0.3 (Jul 2017)
