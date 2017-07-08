@@ -89,7 +89,7 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 	
 	@Test
 	void test_writeReport_OutputFile_CannotCreateOutputFile() {
-		reportWriter.outputFile = "noSuchDir/orSubDir/file.txt"
+		reportWriter.outputFile = "///noSuchDir/orSubDir/file.txt"
 		shouldFail(FileNotFoundException) { reportWriter.writeReport(DEPENDENCIES) }
 	}
 

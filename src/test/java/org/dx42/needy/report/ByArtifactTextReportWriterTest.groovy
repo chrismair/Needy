@@ -69,8 +69,8 @@ Needy
 	}
 	
 	@Test
-	void test_writerReport_OutputFile_CannotCreateOutputFile() {
-		reportWriter.outputFile = "noSuchDir/orSubDir/file.txt"
+	void test_writerReport_OutputFilee_CannotCreateOutputFile() {
+		reportWriter.outputFile = "///noSuchDir/orSubDir/file.txt"
 		shouldFail(FileNotFoundException) { reportWriter.writeReport(DEPENDENCIES) }
 	}
 	

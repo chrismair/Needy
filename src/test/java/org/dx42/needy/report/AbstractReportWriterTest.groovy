@@ -53,6 +53,17 @@ class AbstractReportWriterTest extends AbstractTestCase {
 	}
 
 	@Test
+	void test_writeReport_CreateParentDirectoriesIfNecessary() {
+		def parentDir = "src/test/resources/doesNotExist"
+		def reportFile = parentDir + "/tmpfile.txt"
+		reportWriter.outputFile = reportFile
+		new File(parentDir).deleteOnExit()
+		new File(reportFile).deleteOnExit()
+		reportWriter.writeReport(DEPENDENCIES)
+		assert dependencies == DEPENDENCIES
+	}
+
+	@Test
 	void test_writeReport_NullDependencies() {
 		shouldFailWithMessage('dependencies') { reportWriter.writeReport(null) }
 	}

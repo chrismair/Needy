@@ -49,6 +49,7 @@ abstract class AbstractReportWriter implements ReportWriter {
 	
 	protected PrintWriter createPrintWriter() {
 		if (outputFile) {
+			new File(outputFile).getParentFile()?.mkdirs()
 			def file = new File(outputFile)
 			return file.newPrintWriter()
 		}
