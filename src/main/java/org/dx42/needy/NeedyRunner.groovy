@@ -19,7 +19,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import org.dx42.needy.parser.DependencyParser
-import org.dx42.needy.parser.GradleDependencyParser
+import org.dx42.needy.parser.DependencyParserFactory
 import org.dx42.needy.report.ReportWriter
 
 class NeedyRunner {
@@ -27,6 +27,7 @@ class NeedyRunner {
 	private static final Logger LOG = LoggerFactory.getLogger(NeedyRunner)
 	
 	NeedyConfiguration needyConfiguration
+	DependencyParserFactory dependencyParserFactory = new DependencyParserFactory() 
 	
 	List<Dependency>  execute() {
 		assert needyConfiguration
@@ -37,8 +38,8 @@ class NeedyRunner {
 		
 		applicationBuilds.forEach{ ApplicationBuild applicationBuild ->
 			LOG.info("Processing application [${applicationBuild.name}]")
-			DependencyParser dependencyParser = new GradleDependencyParser(applicationBuild.name)
 			applicationBuild.buildScripts.each { BuildScript buildScript ->
+				DependencyParser dependencyParser = dependencyParserFactory.getDependencyParser(applicationBuild.name, "gradle")
 				String buildFileText = buildScript.getText()
 				List<Dependency> buildFileDependencies = dependencyParser.parse(buildFileText)
 				allDependencies.addAll(buildFileDependencies)
