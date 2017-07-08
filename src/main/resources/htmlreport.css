@@ -53,6 +53,13 @@ a {
     margin-bottom: 20px;
 }
 
+.reportTitle {
+    font-size: 140%;
+    font-style: italic;
+    font-weight: bold;
+    color: darkblue;
+}
+
 .reportInfo {
     font-size: 110%;
 }
