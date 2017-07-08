@@ -32,6 +32,11 @@ class GradleDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
+	void test_getApplicationName() {
+		assert parser.getApplicationName() == APPLICATION_NAME
+	}
+	
+	@Test
 	void test_parse_Null() {
 		shouldFail(IllegalArgumentException) { parser.parse(null) }
 	}

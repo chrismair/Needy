@@ -35,6 +35,7 @@ class GradleDependencyParser implements DependencyParser {
 		this.applicationName = applicationName
 	}
 	
+	@Override
 	List<Dependency> parse(String source) {
 		if (source == null) {
 			throw new IllegalArgumentException("Parameter closure was null")

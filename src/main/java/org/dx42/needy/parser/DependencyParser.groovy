@@ -21,4 +21,6 @@ interface DependencyParser {
 
 	List<Dependency> parse(String source)
 	
+	String getApplicationName()
+	
 }
