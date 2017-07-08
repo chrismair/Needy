@@ -80,7 +80,7 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 				table {
 					tr {
 						td(class: 'em', "Report Title:")
-						td(title)
+						td(class: 'reportTitle', title)
 					}
 					tr {
 						td(class: 'em', "Timestamp:")
