@@ -18,5 +18,8 @@ package org.dx42.needy
 interface BuildScript {
 
 	String getText()
+	String getType()
+	String getDescription()
+	String getComponentId()
 	
 }

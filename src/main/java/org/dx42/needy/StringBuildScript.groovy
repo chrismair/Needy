@@ -18,7 +18,10 @@ package org.dx42.needy
 class StringBuildScript implements BuildScript {
 
 	private final String text
-	
+	String type
+	String description
+	String componentId
+
 	StringBuildScript(String text) {
 		assert text != null, "The text value must not be null"
 		this.text = text

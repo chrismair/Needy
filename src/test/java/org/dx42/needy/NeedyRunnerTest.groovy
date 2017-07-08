@@ -25,7 +25,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 		needy {
 			applications {
 				Sample1(url:"file:src/test/resources/sample1-build.gradle")
-				Sample_Two(url:"file:src/test/resources/sample2-build.gradle")
+				Sample_Two(url:"file:src/test/resources/sample2-build.gradle", type:"gradle", description:"sample", componentId:"c1")
 			}
 		}"""
 
