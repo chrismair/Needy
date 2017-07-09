@@ -39,9 +39,9 @@ class NeedyRunner {
 		applicationBuilds.forEach{ ApplicationBuild applicationBuild ->
 			LOG.info("Processing application [${applicationBuild.name}]")
 			applicationBuild.buildScripts.each { BuildScript buildScript ->
-				DependencyParser dependencyParser = dependencyParserFactory.getDependencyParser(applicationBuild.name, buildScript.type)
+				DependencyParser dependencyParser = dependencyParserFactory.getDependencyParser(buildScript.type)
 				String buildFileText = buildScript.getText()
-				List<Dependency> buildFileDependencies = dependencyParser.parse(buildFileText)
+				List<Dependency> buildFileDependencies = dependencyParser.parse(applicationBuild.name, buildFileText)
 				allDependencies.addAll(buildFileDependencies)
 				
 				buildFileDependencies.each { dependency ->

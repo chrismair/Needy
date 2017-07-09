@@ -31,12 +31,11 @@ class DependencyParserFactory {
 	 * 		"gradle" 	==> GradleDependencyParser
 	 * 		null or "" 	==> GradleDependencyParser (the default)
 	 * </pre>
-	 * @param applicationName - the application name
 	 * @param type - the parser type; may be null or empty 
 	 */
-	DependencyParser getDependencyParser(String applicationName, String type) {
+	DependencyParser getDependencyParser(String type) {
 		if (!type || type.equalsIgnoreCase("gradle")) {
-			return new GradleDependencyParser(applicationName)
+			return new GradleDependencyParser()
 		}
 		throw new IllegalArgumentException("No such DependencyParser type [$type]")
 	}

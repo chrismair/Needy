@@ -8,7 +8,7 @@ Changes in version 0.3 (Jul 2017)
 - ByArtifactHtmlReportWriter: Add <meta http-equiv="Content-Type" content="text/html">; Make report title bigger
 - AbstractReportWriter: Create parent directories if necessary.
 - BuildScript: add getType(), getDescription() and getComponentId() methods to interface
-- DependencyParser: Add getApplicationName() to interface.
+- Change DependencyParser method to parse(String applicationName, String source).
 - NeedyRunner: use new DependencyParserFactory.
 
 

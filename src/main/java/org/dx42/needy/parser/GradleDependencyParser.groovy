@@ -28,14 +28,8 @@ class GradleDependencyParser implements DependencyParser {
 		import org.gradle.api.file.*
 	"""
 	
-	final String applicationName
-	
-	GradleDependencyParser(String applicationName) {
-		this.applicationName = applicationName
-	}
-	
 	@Override
-	List<Dependency> parse(String source) {
+	List<Dependency> parse(String applicationName, String source) {
 		if (source == null) {
 			throw new IllegalArgumentException("Parameter closure was null")
 		}

@@ -26,41 +26,27 @@ import org.junit.Test
  */
 class DependencyParserFactoryTest extends AbstractTestCase {
 
-	private static final String NAME = "App1"
-	
 	private DependencyParserFactory factory = new DependencyParserFactory()
 	
 	@Test
-	void test_getDependencyParser_NullType_ReturnsDefault() {
-		def dependencyParser = factory.getDependencyParser(NAME, null)
-		assert dependencyParser instanceof GradleDependencyParser
-		assert dependencyParser.getApplicationName() == NAME
-	}
-	
-	@Test
-	void test_getDependencyParser_EmptyType_ReturnsDefault() {
-		def dependencyParser = factory.getDependencyParser(NAME, "")
-		assert dependencyParser instanceof GradleDependencyParser
-		assert dependencyParser.getApplicationName() == NAME
+	void test_getDependencyParser_NullOrEmptyType_ReturnsDefault() {
+		assert factory.getDependencyParser(null) instanceof GradleDependencyParser
+		assert factory.getDependencyParser("") instanceof GradleDependencyParser
 	}
 	
 	@Test
 	void test_getDependencyParser_gradle() {
-		def dependencyParser = factory.getDependencyParser(NAME, "gradle")
-		assert dependencyParser instanceof GradleDependencyParser
-		assert dependencyParser.getApplicationName() == NAME
+		assert factory.getDependencyParser("gradle") instanceof GradleDependencyParser
 	}
 	
 	@Test
 	void test_getDependencyParser_gradle_CaseInsensitive() {
-		def dependencyParser = factory.getDependencyParser(NAME, "GRadLe")
-		assert dependencyParser instanceof GradleDependencyParser
-		assert dependencyParser.getApplicationName() == NAME
+		assert factory.getDependencyParser("GRadLe") instanceof GradleDependencyParser
 	}
 	
 	@Test
 	void test_getDependencyParser_UnknownType() {
-		shouldFailWithMessage(IllegalArgumentException, "unknown") { factory.getDependencyParser(NAME, "unknown") }
+		shouldFailWithMessage(IllegalArgumentException, "unknown") { factory.getDependencyParser("unknown") }
 	}
 	
 }
