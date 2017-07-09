@@ -16,10 +16,9 @@
 package org.dx42.needy.parser
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
+import org.dx42.needy.Dependency
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import org.dx42.needy.Dependency
 
 class GradleDependencyParser implements DependencyParser {
 
@@ -58,15 +57,6 @@ class GradleDependencyParser implements DependencyParser {
 		return dependencies
 	}
 
-	def methodMissing(String name, args) {
-		LOG.info("MAIN methodMissing: $name; args=$args") 
-	}
-	
-	def propertyMissing(String name) {
-		LOG.info("MAIN propertyMissing: $name") 
-		return [:] 
-	}
-	
 	private GroovyShell createGroovyShell(GradleDependencyParser_DslEvaluator dslEvaluator) {
 		def callDependencies = { Closure closure ->
 			dslEvaluator.evaluate(closure)
