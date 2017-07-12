@@ -41,11 +41,11 @@ class ParseUtil {
 		return new Dependency([applicationName:applicationName, group:group, name:artifactName, version:version, configuration:configurationName])
 	}
 	
-	protected static String removeUnknownProperties(String s) {
+	private static String removeUnknownProperties(String s) {
 		return s.replace("[:]", "?")
 	}
 	
-	protected static String scrubVersion(String version) {
+	private static String scrubVersion(String version) {
 		if (version?.contains('@')) {
 			return version.substring(0, version.indexOf('@'))
 		}
