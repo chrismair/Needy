@@ -21,6 +21,12 @@ import org.junit.Rule
 import org.junit.rules.TestName
 import org.slf4j.LoggerFactory
 
+/**
+ * Abstract superclass for tests
+ *
+ * @author Chris Mair
+ */
+@SuppressWarnings('Println')
 class AbstractTestCase {
 
 	@SuppressWarnings(['FieldName', 'LoggerWithWrongModifiers'])
@@ -32,12 +38,12 @@ class AbstractTestCase {
 	
 	@After
 	void afterAbstractTestCase() {
-        log("----------[ ${getClass().getSimpleName()}.${getName()} ]----------")
+        println("----------[ ${getClass().getSimpleName()}.${getName()} ]----------")
 	}
 	
 	@SuppressWarnings('ConfusingMethodName')
 	protected void log(message) {
-		LOG.info message.toString()
+		println "[${getClass().getSimpleName()}] " + message.toString()
 	}
 
 	protected String getName() {
