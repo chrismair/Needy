@@ -32,11 +32,11 @@ repositories {
 
 dependencies {
    
-	compile "org.codehaus.groovy:groovy-all:2.3.3"
+	//compile "org.codehaus.groovy:groovy-all:2.3.3"
 	compile 'ch.qos.logback:logback-classic:1.2.3'
 	
 	testCompile 'junit:junit:4.12'
-	gradleApi()									// because the Gradle API is used within some sample Gradle build.gradle files
+	testCompile gradleApi()									// because the Gradle API is used within some sample Gradle build.gradle files
 	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0'
 }
 
