@@ -20,6 +20,11 @@ import org.dx42.needy.Dependency
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+/**
+ * DependencyParser for Gradle Groovy-based DSL files
+ *
+ * @author Chris Mair
+ */
 class GradleDependencyParser implements DependencyParser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser)
@@ -100,7 +105,7 @@ class GradleDependencyParser_DslEvaluator {
 			LOG.info "methodMissing (List): name=$name value=${args[0]}"
 			for (List list: args) {
 				for (String s: list) {
-					addDependencyFromString(s, name)
+					dependencies << ParseUtil.createDependencyFromString(applicationName, name, s)
 				}
 			}
 		}
@@ -109,7 +114,7 @@ class GradleDependencyParser_DslEvaluator {
 			while (index < args.length && args[index] instanceof CharSequence) {
 				String s = args[index]
 				LOG.info "methodMissing: name=$name value=${s}"
-				addDependencyFromString(s, name)
+				dependencies << ParseUtil.createDependencyFromString(applicationName, name, s)
 				index++
 			}
 		}
@@ -118,30 +123,6 @@ class GradleDependencyParser_DslEvaluator {
 	def propertyMissing(String name) {
 		LOG.info("propertyMissing: $name") 
 		return [:] 
-	}
-	
-	private void addDependencyFromString(String s, String name) {
-		assert s.size() > 0, "String format dependency error - empty string"
-		s = removeUnknownProperties(s)
-		def strings = s.tokenize(':')
-
-		def group = (strings.size() > 2) ? strings[0] : null
-		def artifactName = (strings.size() < 3) ? strings[0] : strings[1]
-		def version = (strings.size() == 2) ? strings[1] : strings[2]
-		version = scrubVersion(version)
-	
-		dependencies << new Dependency([applicationName:applicationName, group:group, name:artifactName, version:version, configuration:name])
-	}
-	
-	private String removeUnknownProperties(String s) {
-		return s.replace("[:]", "?")
-	}
-	
-	private String scrubVersion(String version) {
-		if (version?.contains('@')) {
-			return version.substring(0, version.indexOf('@'))
-		}
-		return version
 	}
 	
 }
