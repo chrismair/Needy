@@ -1,0 +1,92 @@
+grails.servlet.version = "3.0"
+grails.project.plugins.dir = "./plugins"
+grails.project.class.dir = "./web-app/WEB-INF/classes"
+grails.project.test.class.dir = "./web-app/WEB-INF/classes"
+grails.project.test.reports.dir = "test/reports"
+grails.project.work.dir = "work"
+grails.project.war.file = "SampleGrails.war"
+grails.project.target.level = 1.8
+grails.project.source.level = 1.8
+ 
+// uncomment (and adjust settings) to fork the JVM to isolate classpaths
+grails.project.fork = false
+ 
+grails.project.dependency.resolver = "maven" //  ivy or maven
+ 
+// Gradle/Artifactory Config
+String artifactoryRepo, artifactoryUser, artifactoryPassword
+Properties props = new Properties()
+new File("$userHome/.gradle/gradle.properties").withReader {
+	props.load(it)
+}
+def gradleConfig = new ConfigSlurper(grailsSettings.grailsEnv).parse(props)
+String artifactoryResolveRepoKey = "artifactory_rep"
+if(gradleConfig.artifactory_contextUrl) {
+	artifactoryRepo = gradleConfig.artifactory_contextUrl + "/" + artifactoryResolveRepoKey
+	artifactoryUser = gradleConfig.artifactory_user
+	artifactoryPassword = gradleConfig.artifactory_password
+}else{
+	
+// TODO Uncomment
+//	throw new IOException("***** ERROR: USER_HOME/.gradle/gradle.properties not configured for Artifactory!! ******")
+}
+ 
+grails.project.dependency.resolution = {
+	System.setProperty("http.proxyHost", "");
+	System.setProperty("http.proxyPort", "");
+ 
+	// inherit Grails' default dependencies
+	inherits("global") {
+		// specify dependency exclusions here; for example, uncomment this to disable ehcache:
+		// excludes 'ehcache'
+		//excludes("validation-api")
+	}
+ 
+	log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+	checksums true // Whether to verify checksums on resolve
+	legacyResolve false // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
+ 
+	repositories {
+		inherits true // Whether to inherit repository definitions from plugins
+		mavenRepo (artifactoryRepo) {
+			authentication(username: artifactoryUser, password: artifactoryPassword)
+			updatePolicy "always"
+		}
+		grailsHome() // Resolves locally - Checks the local Grails distribution installation.
+		mavenLocal() // Resolves locally - Checks the local Maven Cache
+		grailsPlugins()  // Resolves locally - Checks the lib folder of every installed plugin in the current project.
+	}
+ 
+	dependencies {
+		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
+		runtime 'mydb:client:16.0.EBF26086'
+		runtime "acme:util:1.0"
+		build "commons-dbcp:commons-dbcp:1.4"
+		compile "acme:architecture:3.29.0"
+		compile 'commons-collections:commons-collections:3.2.2'
+		compile "javax.validation:validation-api:1.1.0.Final"
+		compile "org.springframework:spring-orm:$springVersion"
+		compile 'org.springframework:spring-aop:4.0.5.RELEASE'
+		compile 'org.springframework:spring-expression:4.0.5.RELEASE'
+		test 'org.hamcrest:hamcrest-core:1.3'
+		test 'org.hsqldb:hsqldb:2.3.2'
+	}
+ 
+	plugins {
+		build ":tomcat:7.0.55"
+		runtime(":hibernate4:4.3.5.5"){
+			excludes "release", "svn"
+		}
+		runtime ":jquery:1.11.1"
+		compile ':cache:1.1.8'
+		compile "org.grails.plugins:executor:0.3"
+		test ("org.grails.plugins:code-coverage:2.0.3-3"){
+			excludes "release", "svn"
+		}
+	}
+}
+ 
+grails.war.resources = { stagingDir ->
+	delete(file:"${stagingDir}/WEB-INF/lib/commons-collections-3.2.1.jar")
+	delete(file:"${stagingDir}/WEB-INF/lib/h2-1.3.176.jar")
+}
