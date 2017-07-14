@@ -24,18 +24,22 @@ package org.dx42.needy.parser
 class DependencyParserFactory {
 
 	/**
-	 * Return a DependencyParser object suitable for the specified type.
+	 * Return a DependencyParser object suitable for the specified (case-insensitive) type.
 	 * <p><pre>
 	 * 		Type 		==> DependencyParser class
 	 * 		------------------------------------------------
 	 * 		"gradle" 	==> GradleDependencyParser
+	 * 		"grails2" 	==> GrailsBuildConfigDependencyParser
 	 * 		null or "" 	==> GradleDependencyParser (the default)
 	 * </pre>
-	 * @param type - the parser type; may be null or empty 
+	 * @param type - the parser type; case-insensitive; may be null or empty 
 	 */
 	DependencyParser getDependencyParser(String type) {
 		if (!type || type.equalsIgnoreCase("gradle")) {
 			return new GradleDependencyParser()
+		}
+		if (type.equalsIgnoreCase("grails2")) {
+			return new GrailsBuildConfigDependencyParser()
 		}
 		throw new IllegalArgumentException("No such DependencyParser type [$type]")
 	}

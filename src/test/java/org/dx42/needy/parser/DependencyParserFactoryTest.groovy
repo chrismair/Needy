@@ -37,11 +37,13 @@ class DependencyParserFactoryTest extends AbstractTestCase {
 	@Test
 	void test_getDependencyParser_gradle() {
 		assert factory.getDependencyParser("gradle") instanceof GradleDependencyParser
+		assert factory.getDependencyParser("GRadLe") instanceof GradleDependencyParser
 	}
 	
 	@Test
-	void test_getDependencyParser_gradle_CaseInsensitive() {
-		assert factory.getDependencyParser("GRadLe") instanceof GradleDependencyParser
+	void test_getDependencyParser_grails2() {
+		assert factory.getDependencyParser("grails2") instanceof GrailsBuildConfigDependencyParser
+		assert factory.getDependencyParser("gRails2") instanceof GrailsBuildConfigDependencyParser
 	}
 	
 	@Test
