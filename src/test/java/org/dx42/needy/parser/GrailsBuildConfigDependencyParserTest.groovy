@@ -205,6 +205,21 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
+	void test_parse_OtherContents() {
+		final SOURCE = """
+			// Cobertura (see http://grails.org/plugin/code-coverage)
+			coverage {
+			    exclusions = ["BuildConfig*", "**/test/**", "org/**"]
+			}
+
+			grails.project.dependency.resolution = {
+				dependencies {
+				}
+			}"""
+		assert parser.parse(NAME, SOURCE) == []
+	}
+
+	@Test
 	void test_parse_FullGrailsBuildConfigFile() {
 		String source = new File('src/test/resources/sample1-grails-buildconfig.txt').text
 		def dependencies = parser.parse(NAME, source)
@@ -231,11 +246,20 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 		assert dependencies[1] == new Dependency(applicationName:"MyApp1", group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile") 
 	}
 
+	@Test
+	void test_parse_FullGrailsBuildConfigFile_3() {
+		String source = new File('src/test/resources/sample3-grails-buildconfig.txt').text
+		def dependencies = parser.parse(NAME, source)
+		assert dependencies.size() == 13
+	}
+
 	// Tests for invalid DSL syntax/format
 	
 	@Test
 	void test_parse_InvalidConfigurationName() {
-		shouldFail { parser.parse(NAME, "dependencies { custom 'log4j:log4:1.17' }") }
+		shouldFail { parser.parse(NAME, """grails.project.dependency.resolution = {
+			dependencies { custom 'log4j:log4:1.17' }
+		}""") }
 	}
 
 	@Test

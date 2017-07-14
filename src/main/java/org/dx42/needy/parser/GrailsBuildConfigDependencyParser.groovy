@@ -66,15 +66,17 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 	}
 	
 	private GroovyShell createGroovyShell(def grailsMap) {
+		def grailsSettingsMap = [:].withDefault(ParseUtil.ignoreEverything())
 		Map bindingMap = [
 			grails:grailsMap,
+			grailsSettings:grailsSettingsMap,
 			userHome:'/home/chris',							// TODO Remove and make this configurable
-			].withDefault(ParseUtil.ignoreEverything())
+			].withDefault { n -> return new DoNothing() }
 		Binding binding = new Binding(bindingMap)
 
 		return new GroovyShell(this.class.classLoader, binding)
 	}
-	
+
 }
 
 class GrailsBuildConfig_DslEvaluator {
