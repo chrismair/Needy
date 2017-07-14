@@ -36,7 +36,7 @@ class GradleDependencyParser implements DependencyParser {
 	@Override
 	List<Dependency> parse(String applicationName, String source) {
 		if (source == null) {
-			throw new IllegalArgumentException("Parameter closure was null")
+			throw new IllegalArgumentException("Parameter source was null")
 		}
 
 		GradleDependencyParser_DslEvaluator dslEvaluator = new GradleDependencyParser_DslEvaluator(applicationName)

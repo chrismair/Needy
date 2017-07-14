@@ -127,6 +127,23 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		final TEXT = """
 			needy {
 				applications {
+					Fidget(
+						[url:"http://svn/Fidget/build.gradle"], 
+						[url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"])
+				}
+			}
+		"""
+		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
+		def applicationBuilds = needyConfiguration.getApplicationBuilds()
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
+		assert needyConfiguration.getReportWriters() == []
+	}
+	
+	@Test
+	void test_getApplicationBuilds_MultipleUrlsPerApplication_ExplicitListOfMaps() {
+		final TEXT = """
+			needy {
+				applications {
 					Fidget([
 						[url:"http://svn/Fidget/build.gradle"], 
 						[url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]])

@@ -140,12 +140,18 @@ class DslEvaluator {
 			throw new MissingMethodException(name, getClass(), args)
 		}
 		if (args[0] instanceof Map) {
-			LOG.info "methodMissing (Map): name=$name map=${args[0]}"
+			LOG.info "methodMissing (Map): name=$name args=$args"
 			final MAP_KEYS = ['url', 'description', 'type', 'componentId']
-			args[0].each { k, v -> 
-				assert k in MAP_KEYS, "Map key [$k] is not one of allowed keys: $MAP_KEYS" 
+			int index = 0
+			List buildScripts = []
+			while(index < args.size() && args[index] instanceof Map) {
+				args[index].each { k, v -> 
+					assert k in MAP_KEYS, "Map key [$k] is not one of allowed keys: $MAP_KEYS" 
+				}
+				buildScripts << createBuildScriptFromMap(args[index])
+				index++
 			}
-			applicationBuilds << new ApplicationBuild(name, [createBuildScriptFromMap(args[0])])
+			applicationBuilds << new ApplicationBuild(name, buildScripts)
 		}
 		else if (args[0] instanceof List) {		// List of Maps
 			List list = args[0]

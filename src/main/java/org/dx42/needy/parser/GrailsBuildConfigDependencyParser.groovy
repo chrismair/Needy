@@ -32,7 +32,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 	@Override
 	List<Dependency> parse(String applicationName, String source) {
 		if (source == null) {
-			throw new IllegalArgumentException("Parameter closure was null")
+			throw new IllegalArgumentException("Parameter source was null")
 		}
 
 		GrailsBuildConfig_DslEvaluator dslEvaluator = new GrailsBuildConfig_DslEvaluator(applicationName)
