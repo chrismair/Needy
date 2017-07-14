@@ -13,6 +13,7 @@ TBD: Changes in version 0.4 (Jul ??, 2017)
 - New DependencyParserFactory with getDependencyParser(String name, String type). Use in NeedyRunner.
 - New ParseUtil. Use in DependencyParser classes.
 - New GrailsBuildConfigDependencyParser: DependencyParser for Grails 2.x "BuildConfig.groovy" files.
+- DslNeedyConfiguration: Parse build script type
 
 
 Changes in version 0.3 (Jul 6, 2017)

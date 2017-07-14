@@ -164,7 +164,7 @@ class DslEvaluator {
 	private UrlBuildScript createBuildScriptFromMap(Map map) {
 		String url = map.url
 		assert url, "The url is missing"
-		return new UrlBuildScript(url:url)
+		return new UrlBuildScript(url:url, type:map.type)
 	}
 	
 }

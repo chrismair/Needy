@@ -118,7 +118,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
-		assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle"]]) 
+		assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle", type:"gradle"]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
 	
@@ -129,13 +129,13 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 				applications {
 					Fidget([
 						[url:"http://svn/Fidget/build.gradle"], 
-						[url:"http://svn/Fidget2/build2.gradle"]])
+						[url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]])
 				}
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
-		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/build2.gradle"]]) 
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
 	
@@ -230,6 +230,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		assert actual.buildScripts.every { buildScript -> buildScript instanceof UrlBuildScript }
 		expectedBuildScripts.eachWithIndex { Map expectedBuildScript, int index ->
 			assert actual.buildScripts[index].url.toString() == expectedBuildScript.url
+			assert actual.buildScripts[index].type == expectedBuildScript.type
 		}
 	}
 
