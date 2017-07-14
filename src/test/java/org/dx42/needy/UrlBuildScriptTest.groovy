@@ -58,8 +58,8 @@ class UrlBuildScriptTest extends AbstractTestCase {
 	
 	@Test
 	void test_toString() {
-		def buildScript = new UrlBuildScript(url:TEST_FILE_URL)
-		assert buildScript.toString() == "UrlBuildScript(url=$TEST_FILE_URL)"
+		assert new UrlBuildScript(url:TEST_FILE_URL).toString() == "UrlBuildScript(url=$TEST_FILE_URL; type=null)"
+		assert new UrlBuildScript(url:TEST_FILE_URL, type:"grails2").toString() == "UrlBuildScript(url=$TEST_FILE_URL; type=grails2)"
 	}
 	
 }

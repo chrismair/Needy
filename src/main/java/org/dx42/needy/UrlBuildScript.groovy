@@ -32,7 +32,7 @@ class UrlBuildScript implements BuildScript {
 
 	@Override
 	String toString() {
-		return "UrlBuildScript(url=$url)"
+		return "UrlBuildScript(url=$url; type=$type)"
 	}
 
 	protected URL asURL() {
