@@ -5,14 +5,14 @@ https://github.com/dx42/Needy
 
 TBD: Changes in version 0.4 (Jul ??, 2017)
 --------------------------------------
+- New GrailsBuildConfigDependencyParser: DependencyParser for Grails 2.x "BuildConfig.groovy" files. Type="grails2"
+- NeedyRunner: use new DependencyParserFactory.
+- New DependencyParserFactory with getDependencyParser(String name, String type). Use in NeedyRunner.
 - ByArtifactHtmlReportWriter: Add <meta http-equiv="Content-Type" content="text/html">; Make report title bigger
 - AbstractReportWriter: Create parent directories if necessary.
 - BuildScript: add getType(), getDescription() and getComponentId() methods to interface
 - Change DependencyParser method to parse(String applicationName, String source).
-- NeedyRunner: use new DependencyParserFactory.
-- New DependencyParserFactory with getDependencyParser(String name, String type). Use in NeedyRunner.
 - New ParseUtil. Use in DependencyParser classes.
-- New GrailsBuildConfigDependencyParser: DependencyParser for Grails 2.x "BuildConfig.groovy" files.
 - DslNeedyConfiguration: Parse build script type
 
 

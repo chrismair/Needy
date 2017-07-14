@@ -26,6 +26,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 			applications {
 				Sample1(url:"file:src/test/resources/sample1-build.gradle")
 				Sample_Two(url:"file:src/test/resources/sample2-build.gradle", type:"gradle", description:"sample", componentId:"c1")
+				Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
 			}
 		}"""
 
@@ -34,6 +35,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 			applications {
 				Sample1(url:"file:src/test/resources/sample1-build.gradle")
 				Sample_Two(url:"file:src/test/resources/sample2-build.gradle")
+				Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
 			}
 			reports {
 				report("org.dx42.needy.report.StubReportWriter") { }
@@ -52,7 +54,11 @@ class NeedyRunnerTest extends AbstractTestCase {
 		
 		new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
 		new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"org.codenarc", name:"CodeNarc", version:"0.28"),
-		new Dependency(applicationName:"Sample_Two", configuration:"testCompile", group:"junit", name:"junit", version:"4.12") ]
+		new Dependency(applicationName:"Sample_Two", configuration:"testCompile", group:"junit", name:"junit", version:"4.12"),
+		
+		new Dependency(applicationName:"Sample_Three", group:"mysql", name:"mysql-connector-java", version:"5.1.24", configuration:"runtime"), 
+		new Dependency(applicationName:"Sample_Three", group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile") 
+	]
 
 	private NeedyRunner needyRunner = new NeedyRunner()
 	
