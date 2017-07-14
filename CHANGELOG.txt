@@ -3,7 +3,7 @@ Needy Change Log
 https://github.com/dx42/Needy
 
 
-TBD: Changes in version 0.4 (Jul ??, 2017)
+Changes in version 0.4 (Jul 13, 2017)
 --------------------------------------
 - New GrailsBuildConfigDependencyParser: DependencyParser for Grails 2.x "BuildConfig.groovy" files. Type="grails2"
 - NeedyRunner: use new DependencyParserFactory.

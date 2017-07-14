@@ -9,7 +9,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 
-version = "0.3"
+version = "0.4"
 group = 'org.dx42'
 
 
