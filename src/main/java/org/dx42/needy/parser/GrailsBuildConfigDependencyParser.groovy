@@ -135,8 +135,11 @@ class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
 			LOG.info("Processing [$name]")
 			if (args[0] instanceof Map) {
 				LOG.info "methodMissing (Map): name=$name value=${args[0]}"
-				for (Map m: args) {
+				int index = 0
+				while (index < args.length && args[index] instanceof Map) {
+					Map m = args[index]
 					dependencies << new Dependency(applicationName:applicationName, group:m.group, name:m.name, version:m.version, configuration:name)
+					index++
 				}
 			}
 			else if (args[0] instanceof List) {

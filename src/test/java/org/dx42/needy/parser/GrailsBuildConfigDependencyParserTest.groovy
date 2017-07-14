@@ -15,10 +15,9 @@
  */
 package org.dx42.needy.parser
 
+import org.dx42.needy.AbstractTestCase
 import org.dx42.needy.Dependency
 import org.junit.Test
-
-import org.dx42.needy.AbstractTestCase
 
 /**
  * Tests for GrailsBuildConfigDependencyParser
@@ -88,7 +87,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """grails.project.dependency.resolution = {
 			dependencies {
 				compile "org.hibernate:hibernate-core:3.1"
-				test group: 'junit', name: 'junit', version: '4.8.1'
+				test group: 'junit', name: 'junit', version: '4.8.1', transitive:false
 			}
 		}"""
 		assert parser.parse(NAME, SOURCE) == [
@@ -118,6 +117,65 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 		assert parser.parse(NAME, SOURCE) == [new Dependency(applicationName:NAME, configuration:"build", group:null, name:"MyUtil", version:null)]
 	}
 
+	@Test
+	void test_parse_Excludes() {
+		final SOURCE = """grails.project.dependency.resolution = {
+			dependencies {
+				runtime(group:'com.mysql', name:'mysql-connector-java', version:'5.1.16') {
+				    excludes([ group: 'xml-apis', name: 'xml-apis'],
+				             [ group: 'org.apache.httpcomponents' ],
+				             [ name: 'commons-logging' ])
+				}
+			}
+		}"""
+		assert parser.parse(NAME, SOURCE) == [new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16")]
+	}
+
+	@Test
+	void test_parse_MultipleStrings_WithClosure() {
+		final SOURCE = """grails.project.dependency.resolution = {
+			dependencies {
+				runtime('com.mysql:mysql-connector-java:5.1.16',
+				        'net.sf.ehcache:ehcache:1.6.1') {
+				    transitive = false
+				}
+			}
+		}"""
+		assert parser.parse(NAME, SOURCE) == [
+			new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16"),
+			new Dependency(applicationName:NAME, configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")]
+	}
+
+	@Test
+	void test_parse_MultipleDependenciesPerStatement_Strings() {
+		final SOURCE = """grails.project.dependency.resolution = {
+			dependencies {
+				runtime 'com.mysql:mysql-connector-java:5.1.16',
+        			'net.sf.ehcache:ehcache:1.6.1'
+			}
+		}"""
+		assert parser.parse(NAME, SOURCE) == [
+			new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16"),
+			new Dependency(applicationName:NAME, configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")
+		]
+	}
+	
+	@Test
+	void test_parse_MultipleDependenciesPerStatement_Maps() {
+		final SOURCE = """grails.project.dependency.resolution = {
+			dependencies {
+				runtime(
+				    [group:'com.mysql', name:'mysql-connector-java', version:'5.1.16'],
+				    [group:'net.sf.ehcache', name:'ehcache', version:'1.6.1']
+				)
+			}
+		}"""
+		assert parser.parse(NAME, SOURCE) == [
+			new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16"),
+			new Dependency(applicationName:NAME, configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")
+		]
+	}
+	
 	@Test
 	void test_parse_VariablesUsedWithinDependencySpecification() {
 		final SOURCE = """grails.project.dependency.resolution = {
@@ -173,64 +231,6 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 		assert dependencies[1] == new Dependency(applicationName:"MyApp1", group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile") 
 	}
 
-//	// Tests for other dependency options and formats
-//	
-//	@Test
-//	void test_parse_OtherProperties() {
-//		final SOURCE = """dependencies {
-//			compile group: 'org.h7', name: 'h7', version: '3.1', transitive:false, ext: 'jar', classifier:'jdk17', configuration:'c1'
-//			runtime "org.groovy:groovy:2.2.0@jar"
-//			compile "org.other:service:1.0:jdk15@jar"
-//		}"""
-//		assert parser.parse(NAME, SOURCE) == [
-//			new Dependency(applicationName:NAME, configuration:"compile", group:"org.h7", name:"h7", version:"3.1"),
-//			new Dependency(applicationName:NAME, configuration:"runtime", group:"org.groovy", name:"groovy", version:"2.2.0"),
-//			new Dependency(applicationName:NAME, configuration:"compile", group:"org.other", name:"service", version:"1.0")
-//		]
-//	}
-//
-//	@Test
-//	void test_parse_MultipleDependenciesPerStatement() {
-//		final SOURCE = """dependencies {
-//			runtime(
-//			        [group: 'org.springframework', name: 'spring-core', version: '2.5'],
-//			        [group: 'org.springframework', name: 'spring-aop', version: '2.5']
-//			    )
-//
-//			sealife "sea.mammals:orca:1.0", "sea.fish:shark:1.0", "sea.fish:tuna:1.0"
-//		}"""
-//		assert parser.parse(NAME, SOURCE) == [
-//			new Dependency(applicationName:NAME, configuration:"runtime", group:"org.springframework", name:"spring-core", version:"2.5"),
-//			new Dependency(applicationName:NAME, configuration:"runtime", group:"org.springframework", name:"spring-aop", version:"2.5"),
-//			new Dependency(applicationName:NAME, configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
-//			new Dependency(applicationName:NAME, configuration:"sealife", group:"sea.fish", name:"shark", version:"1.0"),
-//			new Dependency(applicationName:NAME, configuration:"sealife", group:"sea.fish", name:"tuna", version:"1.0"),
-//		]
-//	}
-//	
-//	@Test
-//	void test_parse_OtherSyntax() {
-//		final SOURCE = """dependencies {
-//			compile("org.gradle:api:1.0") {
-//				exclude module: 'shared'
-//			}
-//
-//			alllife configurations.sealife						// ignored
-//
-//			compile project(':shared')							// ignored
-//			runtime files('libs/a.jar', 'libs/b.jar')			// ignored
-//			runtime fileTree(dir: 'libs', include: '*.jar')		// ignored
-//			compile files("build/classes") {					// ignored
-//        		builtBy 'compile'
-//			}
-//			compile gradleApi()									// ignored
-//			compile localGroovy()								// ignored
-//		}"""
-//		assert parser.parse(NAME, SOURCE) == [
-//			new Dependency(applicationName:NAME, configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
-//		]
-//	}
-	
 	// Tests for invalid DSL syntax/format
 	
 	@Test
