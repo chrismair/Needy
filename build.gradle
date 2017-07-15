@@ -39,7 +39,11 @@ dependencies {
 	
 	testCompile 'junit:junit:4.12'
 	testCompile 'log4j:log4j:1.2.17'
-	testCompile 'org.gradle:gradle-core:3.2'		// because the Gradle API is used within some sample Gradle build.gradle files
+	
+	
+	testCompile('org.gradle:gradle-core:3.2')  {				// Because the Gradle API is used within some sample Gradle build.gradle files
+		exclude group: 'org.gradle', module:'gradle-logging'	// To avoid "Class path contains multiple SLF4J bindings" warning
+	}
 	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0', transitive:false
 }
 
