@@ -31,13 +31,16 @@ repositories {
 }
 
 dependencies {
-   
-	//compile "org.codehaus.groovy:groovy-all:2.3.3"
-	compile 'ch.qos.logback:logback-classic:1.2.3'
+	compile "org.codehaus.groovy:groovy-all:2.3.3"
+	compile 'org.slf4j:slf4j-api:1.7.25'
+	
+	testCompile 'ch.qos.logback:logback-classic:1.2.3'
+	testCompile "org.codehaus.groovy:groovy-ant:2.3.3"
 	
 	testCompile 'junit:junit:4.12'
-	testCompile gradleApi()									// because the Gradle API is used within some sample Gradle build.gradle files
-	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0'
+	testCompile 'log4j:log4j:1.2.17'
+	testCompile 'org.gradle:gradle-core:3.2'		// because the Gradle API is used within some sample Gradle build.gradle files
+	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0', transitive:false
 }
 
 task sourcesJar(type: Jar) {
@@ -55,7 +58,7 @@ bintray {
 	publications = ['MyPublication']
 	configurations = ['archives']
 	publish = true
-	override = true
+	override = false
 	
 	pkg {
 		repo = 'dx42'
