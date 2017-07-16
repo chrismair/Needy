@@ -9,21 +9,21 @@
   Here is a sample Gradle script to run Needy. It assumes that a "config.needy" is in the current directory:
   
 ```
-	apply plugin: 'java'
-	 
-	repositories {
-	    jcenter()
-	}
-	 
-	dependencies {
-	    compile 'org.dx42:needy:0.3' 
-	    compile 'ch.qos.logback:logback-classic:1.2.3'
-	}
-	 
-	task execute(type:JavaExec) {
-	    main = "org.dx42.needy.Needy"
-	    classpath = sourceSets.main.runtimeClasspath
-	}
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+     
+dependencies {
+    compile 'org.dx42:needy:0.3' 
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+}
+     
+task execute(type:JavaExec) {
+    main = "org.dx42.needy.Needy"
+    classpath = sourceSets.main.runtimeClasspath
+}
 ```
 
 ### Run as a Linux Script
@@ -31,13 +31,13 @@
   Here is a sample Linux script to execute Needy, assuming that a "config.needy" and the required jars are in the current directory:
   
 ```
- 	needyJar="./Needy.jar"
-	groovyJar="./groovy-all-2.4.6.jar"
-	logbackJar="./logback-classic-1.2.3.jar"
-	logbackCoreJar="./logback-core-1.2.3.jar"
-	slf4jJar="./slf4j-api-1.7.25.jar"
-	classpath="$needyJar:$groovyJar:$logbackJar:$logbackCoreJar:$slf4jJar"
-	java  -classpath $classpath org.dx42.needy.Needy
+    needyJar="./Needy.jar"
+    groovyJar="./groovy-all-2.4.6.jar"
+    logbackJar="./logback-classic-1.2.3.jar"
+    logbackCoreJar="./logback-core-1.2.3.jar"
+    slf4jJar="./slf4j-api-1.7.25.jar"
+    classpath="$needyJar:$groovyJar:$logbackJar:$logbackCoreJar:$slf4jJar"
+    java  -classpath $classpath org.dx42.needy.Needy
 ```
 
 
@@ -46,24 +46,24 @@
   Here is a sample "config.needy" DSL that parses multiple applications and generated two reports (text and HTML):
   
 ```groovy
-	needy {
-		
-		applications {
-			Needy(url:"file:/home/workspaces/someproject/build.gradle")					// "Needy" application
-			CodeNarc(url:"https://rawgit.com/CodeNarc/CodeNarc/master/build.gradle")	// "CodeNarc" application
-			
-			MyGrailsApp(url:"file:SampleGrails/grails-app/config/BuildConfig.groovy", type:"grails2")	// Grails 2.x "BuildConfig.groovy"
-		}
-	
-		reports {
-			report("org.dx42.needy.report.ByArtifactTextReportWriter") { }	// Text report; will write to stdout
-			
-			report("org.dx42.needy.report.ByArtifactHtmlReportWriter") {	// HTML report
-				outputFile = "Needy-Report.html"
-				title = "My Sample Projects"
-			}
-		}
-	}
+needy {
+        
+    applications {
+        Needy(url:"file:/home/workspaces/someproject/build.gradle")               // "Needy" application
+        CodeNarc(url:"https://rawgit.com/CodeNarc/CodeNarc/master/build.gradle")  // "CodeNarc" application
+
+        MyGrailsApp(url:"file:SampleGrails/grails-app/config/BuildConfig.groovy", type:"grails2")  // Grails 2.x "BuildConfig.groovy"
+    }
+    
+    reports {
+        report("org.dx42.needy.report.ByArtifactTextReportWriter") { }  // Text report; will write to stdout
+
+        report("org.dx42.needy.report.ByArtifactHtmlReportWriter") {    // HTML report
+            outputFile = "Needy-Report.html"
+            title = "My Sample Projects"
+        }
+    }
+}
 ```
 
 ### Application Configuration Properties
@@ -74,7 +74,7 @@
   - "componentId" -- an optional id to uniquely identify a build script when an application contains multiple build scripts; optional
 
 ### Allowed Types:
-  - "gradle" -- a Gradle "build.gradle" file. This is the default type, if not type is specified. 
+  - "gradle" -- a Gradle "build.gradle" file. This is the default type, if no type is specified. 
   -  "grails2" -- a Grails 2.x "BuildConfig.groovy" file.
 
 ## Known Limitations
