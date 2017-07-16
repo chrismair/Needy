@@ -111,14 +111,14 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			needy {
 				applications {
 					Fidget(url:"http://svn/Fidget/build.gradle")
-					Wallace(url:"http://svn/Wallace/custom-build.gradle", description:"wallace", type:"gradle", componentId:"wallace")
+					Wallace(url:"http://svn/Wallace/custom-build.gradle", description:"wallace", type:"gradle", componentId:"wallace", properties:[a:1])
 				}
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
-		assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle", type:"gradle"]]) 
+		assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle", type:"gradle", properties:[a:1]]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
 	
@@ -128,14 +128,14 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			needy {
 				applications {
 					Fidget(
-						[url:"http://svn/Fidget/build.gradle"], 
+						[url:"http://svn/Fidget/build.gradle", properties:[:]], 
 						[url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"])
 				}
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
-		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
+		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle", properties:[:]], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
 		assert needyConfiguration.getReportWriters() == []
 	}
 	
@@ -248,6 +248,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		expectedBuildScripts.eachWithIndex { Map expectedBuildScript, int index ->
 			assert actual.buildScripts[index].url.toString() == expectedBuildScript.url
 			assert actual.buildScripts[index].type == expectedBuildScript.type
+			assert actual.buildScripts[index].properties == expectedBuildScript.properties
 		}
 	}
 

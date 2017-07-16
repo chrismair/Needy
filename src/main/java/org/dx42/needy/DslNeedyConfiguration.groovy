@@ -141,7 +141,7 @@ class DslEvaluator {
 		}
 		if (args[0] instanceof Map) {
 			LOG.info "methodMissing (Map): name=$name args=$args"
-			final MAP_KEYS = ['url', 'description', 'type', 'componentId']
+			final MAP_KEYS = ['url', 'description', 'type', 'componentId', 'properties']
 			int index = 0
 			List buildScripts = []
 			while(index < args.size() && args[index] instanceof Map) {
@@ -170,7 +170,7 @@ class DslEvaluator {
 	private UrlBuildScript createBuildScriptFromMap(Map map) {
 		String url = map.url
 		assert url, "The url is missing"
-		return new UrlBuildScript(url:url, type:map.type)
+		return new UrlBuildScript(url:url, type:map.type, properties:map['properties'])
 	}
 	
 }
