@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    compile 'log4j:log4j:1.2.14'
+    compile "log4j:log4j:$log4jVersion"
     compile('org.codenarc:CodeNarc:0.28') { transitive = false }
     
 	testCompile 'junit:junit:4.12'

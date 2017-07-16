@@ -25,7 +25,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 		needy {
 			applications {
 				Sample1(url:"file:src/test/resources/sample1-build.gradle")
-				Sample_Two(url:"file:src/test/resources/sample2-build.gradle", type:"gradle", description:"sample", componentId:"c1")
+				Sample_Two(url:"file:src/test/resources/sample2-build.gradle", type:"gradle", description:"sample", componentId:"c1", properties:[log4jVersion:"1.2.14"])
 				Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
 			}
 		}"""
@@ -34,7 +34,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 		needy {
 			applications {
 				Sample1(url:"file:src/test/resources/sample1-build.gradle")
-				Sample_Two(url:"file:src/test/resources/sample2-build.gradle")
+				Sample_Two(url:"file:src/test/resources/sample2-build.gradle", properties:[log4jVersion:"1.2.14"])
 				Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
 			}
 			reports {
