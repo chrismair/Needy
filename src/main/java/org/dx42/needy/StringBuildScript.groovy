@@ -15,8 +15,6 @@
  */
 package org.dx42.needy
 
-import java.util.Map
-
 class StringBuildScript implements BuildScript {
 
 	private final String text

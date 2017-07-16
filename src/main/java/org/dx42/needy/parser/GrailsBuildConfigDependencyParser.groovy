@@ -15,8 +15,6 @@
  */
 package org.dx42.needy.parser
 
-import java.util.Map
-
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 import org.dx42.needy.Dependency
 import org.slf4j.Logger

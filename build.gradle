@@ -45,6 +45,7 @@ dependencies {
 		exclude group: 'org.gradle', module:'gradle-logging'	// To avoid "Class path contains multiple SLF4J bindings" warning
 	}
 	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0', transitive:false
+	testCompile group:'org.gmetrics', name:'GMetrics', version: '0.7', transitive:false
 }
 
 task sourcesJar(type: Jar) {
