@@ -1,5 +1,4 @@
-Needy Change Log
-==================================================
+# Needy Change Log
 <https://github.com/dx42/Needy>
 
 
