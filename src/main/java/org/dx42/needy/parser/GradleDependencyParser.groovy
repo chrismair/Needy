@@ -62,7 +62,7 @@ class GradleDependencyParser implements DependencyParser {
 		def callDependencies = { Closure closure ->
 			dslEvaluator.evaluate(closure)
 		}
-		Map predefinedMap = [dependencies:callDependencies, ext:[:]] + binding
+		Map predefinedMap = [dependencies:callDependencies] + binding
 		Map bindingMap = predefinedMap.withDefault { name -> return DoNothing.INSTANCE }
 		Binding groovyShellBinding = new Binding(bindingMap)
 

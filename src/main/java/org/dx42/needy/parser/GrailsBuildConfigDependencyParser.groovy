@@ -37,7 +37,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 			throw new IllegalArgumentException("Parameter source was null")
 		}
 
-		GrailsBuildConfig_DslEvaluator dslEvaluator = new GrailsBuildConfig_DslEvaluator(applicationName)
+		GrailsBuildConfig_DslEvaluator dslEvaluator = new GrailsBuildConfig_DslEvaluator(applicationName, binding)
 
 		def grailsMap = [
 			project:[
@@ -45,7 +45,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 			].withDefault(ParseUtil.ignoreEverything())
 		].withDefault(ParseUtil.ignoreEverything())
 
-		GroovyShell shell = createGroovyShell(grailsMap)
+		GroovyShell shell = createGroovyShell(grailsMap, binding)
 		try {
 			shell.evaluate(source)
 		} 
@@ -67,16 +67,17 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 		return dependencies
 	}
 	
-	private GroovyShell createGroovyShell(def grailsMap) {
+	private GroovyShell createGroovyShell(def grailsMap, Map<String, Object> binding) {
 		def grailsSettingsMap = [:].withDefault(ParseUtil.ignoreEverything())
-		Map bindingMap = [
+		Map predefinedMap = [
 			grails:grailsMap,
 			grailsSettings:grailsSettingsMap,
 			userHome:'/home/chris',							// TODO Remove and make this configurable
-			].withDefault { n -> return new DoNothing() }
-		Binding binding = new Binding(bindingMap)
+			] + binding
+		Map bindingMap = predefinedMap.withDefault { n -> return new DoNothing() }
+		Binding groovyShellBinding = new Binding(bindingMap)
 
-		return new GroovyShell(this.class.classLoader, binding)
+		return new GroovyShell(this.class.classLoader, groovyShellBinding)
 	}
 
 }
@@ -87,9 +88,11 @@ class GrailsBuildConfig_DslEvaluator {
 	
 	final List<Dependency> dependencies = []
 	final String applicationName
+	final Map<String, Object> binding
 	
-	GrailsBuildConfig_DslEvaluator(String applicationName) {
+	GrailsBuildConfig_DslEvaluator(String applicationName, Map<String, Object> binding) {
 		this.applicationName = applicationName
+		this.binding = binding
 	}
 	
 	void evaluate(Closure closure) {
@@ -101,7 +104,7 @@ class GrailsBuildConfig_DslEvaluator {
 	def methodMissing(String name, args) {
 		if (name == "dependencies" && args.size() == 1 && args[0] instanceof Closure) {
 			Closure dependenciesClosure = args[0]
-			def dependenciesDslEvaluator = new GrailsBuildConfig_DependenciesClosure_DslEvaluator(applicationName)
+			def dependenciesDslEvaluator = new GrailsBuildConfig_DependenciesClosure_DslEvaluator(applicationName, binding)
 			dependenciesDslEvaluator.evaluate(dependenciesClosure)
 			LOG.info("Found: ${dependenciesDslEvaluator.dependencies}")
 			dependencies.addAll(dependenciesDslEvaluator.dependencies)
@@ -112,8 +115,9 @@ class GrailsBuildConfig_DslEvaluator {
 	}
 	
 	def propertyMissing(String name) {
-		LOG.info("propertyMissing: $name")
-		return [:]
+		def bindingValue = binding.containsKey(name) ? binding[name] : DoNothing.INSTANCE
+		LOG.info("propertyMissing: $name; value=$bindingValue") 
+		return bindingValue
 	}
 }
 
@@ -123,9 +127,11 @@ class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
 	
 	final List<Dependency> dependencies = []
 	final String applicationName
+	final Map<String, Object> binding
 	
-	GrailsBuildConfig_DependenciesClosure_DslEvaluator(String applicationName) {
+	GrailsBuildConfig_DependenciesClosure_DslEvaluator(String applicationName, Map<String, Object> binding) {
 		this.applicationName = applicationName
+		this.binding = binding
 	}
 	
 	void evaluate(Closure closure) {
@@ -170,8 +176,9 @@ class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
 	}
 
 	def propertyMissing(String name) {
-		LOG.info("propertyMissing: $name") 
-		return [:] 
+		def bindingValue = binding.containsKey(name) ? binding[name] : DoNothing.INSTANCE
+		LOG.info("propertyMissing: $name; value=$bindingValue") 
+		return bindingValue
 	}
 	
 	private boolean isValidConfigurationName(String name) {

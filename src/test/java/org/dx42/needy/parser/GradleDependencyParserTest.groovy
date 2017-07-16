@@ -137,7 +137,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 	@Test
 	void test_parse_RequiredVariableUsedWithinOuterScript_DefinedInBinding() {
 		final SOURCE = """
-			new File("\$testsrc/test-config.txt").withReader { props.load(it) }
+			new File("\$testsrc/test-config.txt").withReader { }
 			dependencies { }
 			"""
 		def binding = [testsrc:"src/test/resources"]
