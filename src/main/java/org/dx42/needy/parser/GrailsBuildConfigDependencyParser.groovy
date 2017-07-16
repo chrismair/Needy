@@ -15,6 +15,8 @@
  */
 package org.dx42.needy.parser
 
+import java.util.Map
+
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 import org.dx42.needy.Dependency
 import org.slf4j.Logger
@@ -30,7 +32,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 	private static final Logger LOG = LoggerFactory.getLogger(GrailsBuildConfigDependencyParser)
 
 	@Override
-	List<Dependency> parse(String applicationName, String source) {
+	List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {
 		if (source == null) {
 			throw new IllegalArgumentException("Parameter source was null")
 		}

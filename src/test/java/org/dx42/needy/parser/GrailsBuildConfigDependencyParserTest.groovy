@@ -15,6 +15,8 @@
  */
 package org.dx42.needy.parser
 
+import java.util.Map
+
 import org.dx42.needy.AbstractTestCase
 import org.dx42.needy.Dependency
 import org.junit.Test
@@ -27,6 +29,7 @@ import org.junit.Test
 class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 
 	private static final String NAME = "MyApp1"
+	private static final Map BINDING = [:]
 	
 	private parser = new GrailsBuildConfigDependencyParser()
 	
@@ -36,20 +39,21 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
-	void test_parse_Null() {
-		shouldFail(IllegalArgumentException) { parser.parse(NAME, null) }
+	void test_parse_NullSource() {
+		shouldFail(IllegalArgumentException) { parser.parse(NAME, null, BINDING) }
 	}
 
 	@Test
 	void test_parse_EmptySource() {
-		assert parser.parse(NAME, "") == []
+		assert parser.parse(NAME, "", BINDING) == []
 	}
 
 	@Test
 	void test_parse_EmptyDependenciesClosure() {
-		assert parser.parse(NAME, """grails.project.dependency.resolution = {
+		final SOURCE = """grails.project.dependency.resolution = {
 			dependencies { }
-			}""") == []
+			}"""
+		assert parser.parse(NAME, SOURCE, BINDING) == []
 	}
 	
 	@Test
@@ -59,7 +63,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [new Dependency(applicationName:NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
+		assert parser.parse(NAME, SOURCE, BINDING) == [new Dependency(applicationName:NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
 
 	@Test
@@ -73,7 +77,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				provided group: 'g3', name: 'n3', version: 'v3'
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [
+		assert parser.parse(NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
 			new Dependency(applicationName:NAME, configuration:"test", group:"junit", name:"junit", version:"4.8.1"),
 			new Dependency(applicationName:NAME, configuration:"runtime", group:"g1", name:"n1", version:"v1"),
@@ -90,7 +94,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				test group: 'junit', name: 'junit', version: '4.8.1', transitive:false
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [
+		assert parser.parse(NAME, SOURCE, BINDING) == [
             new Dependency(applicationName:NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
             new Dependency(applicationName:NAME, configuration:"test", group:"junit", name:"junit", version:"4.8.1")
         ]
@@ -103,7 +107,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				runtime ":MyUtil:9"
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [new Dependency(applicationName:NAME, configuration:"runtime", group:null, name:"MyUtil", version:"9")]
+		assert parser.parse(NAME, SOURCE, BINDING) == [new Dependency(applicationName:NAME, configuration:"runtime", group:null, name:"MyUtil", version:"9")]
 	}
 
 	// TODO Is name-only valid in "BuildConfig.groovy"?
@@ -114,7 +118,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				build "MyUtil"
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [new Dependency(applicationName:NAME, configuration:"build", group:null, name:"MyUtil", version:null)]
+		assert parser.parse(NAME, SOURCE, BINDING) == [new Dependency(applicationName:NAME, configuration:"build", group:null, name:"MyUtil", version:null)]
 	}
 
 	@Test
@@ -128,7 +132,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				}
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16")]
+		assert parser.parse(NAME, SOURCE, BINDING) == [new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16")]
 	}
 
 	@Test
@@ -141,7 +145,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				}
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [
+		assert parser.parse(NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16"),
 			new Dependency(applicationName:NAME, configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")]
 	}
@@ -154,7 +158,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
         			'net.sf.ehcache:ehcache:1.6.1'
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [
+		assert parser.parse(NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16"),
 			new Dependency(applicationName:NAME, configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")
 		]
@@ -170,7 +174,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				)
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [
+		assert parser.parse(NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:NAME, configuration:"runtime", group:"com.mysql", name:"mysql-connector-java", version:"5.1.16"),
 			new Dependency(applicationName:NAME, configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")
 		]
@@ -186,7 +190,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				test group: 'junit', name: junitName, version: '4.8.1'
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [
+		assert parser.parse(NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
 			new Dependency(applicationName:NAME, configuration:"test", group:"junit", name:"junit", version:"4.8.1")
 		]
@@ -199,7 +203,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				compile "org.hibernate:hibernate-core:\$hibernateVersion"
 			}
 		}"""
-		assert parser.parse(NAME, SOURCE) == [
+		assert parser.parse(NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"?")
 		]
 	}
@@ -216,13 +220,13 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				dependencies {
 				}
 			}"""
-		assert parser.parse(NAME, SOURCE) == []
+		assert parser.parse(NAME, SOURCE, BINDING) == []
 	}
 
 	@Test
 	void test_parse_FullGrailsBuildConfigFile() {
 		String source = new File('src/test/resources/sample1-grails-buildconfig.txt').text
-		def dependencies = parser.parse(NAME, source)
+		def dependencies = parser.parse(NAME, source, BINDING)
 		assert dependencies.size() == 11
 		assert dependencies[0] == new Dependency(applicationName:"MyApp1", group:"mydb", name:"client", version:"16.0.EBF26086", configuration:"runtime") 
 		assert dependencies[1] == new Dependency(applicationName:"MyApp1", group:"acme", name:"util", version:"1.0", configuration:"runtime") 
@@ -240,7 +244,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 	@Test
 	void test_parse_FullGrailsBuildConfigFile_2() {
 		String source = new File('src/test/resources/sample2-grails-buildconfig.txt').text
-		def dependencies = parser.parse(NAME, source)
+		def dependencies = parser.parse(NAME, source, BINDING)
 		assert dependencies.size() == 2
 		assert dependencies[0] == new Dependency(applicationName:"MyApp1", group:"mysql", name:"mysql-connector-java", version:"5.1.24", configuration:"runtime") 
 		assert dependencies[1] == new Dependency(applicationName:"MyApp1", group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile") 
@@ -249,7 +253,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 	@Test
 	void test_parse_FullGrailsBuildConfigFile_3() {
 		String source = new File('src/test/resources/sample3-grails-buildconfig.txt').text
-		def dependencies = parser.parse(NAME, source)
+		def dependencies = parser.parse(NAME, source, BINDING)
 		assert dependencies.size() == 13
 	}
 
@@ -257,9 +261,10 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 	
 	@Test
 	void test_parse_InvalidConfigurationName() {
-		shouldFail { parser.parse(NAME, """grails.project.dependency.resolution = {
-			dependencies { custom 'log4j:log4:1.17' }
-		}""") }
+		final SOURCE = """grails.project.dependency.resolution = {
+				dependencies { custom 'log4j:log4:1.17' }
+			}"""
+		shouldFail { parser.parse(NAME, SOURCE, BINDING) }
 	}
 
 	@Test
@@ -269,7 +274,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 				compile ""
 			}
 		}"""
-		shouldFailWithMessage("empty") { parser.parse(NAME, SOURCE) }
+		shouldFailWithMessage("empty") { parser.parse(NAME, SOURCE, BINDING) }
 	}
 	
 }

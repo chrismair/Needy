@@ -23,8 +23,9 @@ import org.dx42.needy.AbstractTestCase
 class GradleDependencyParserTest extends AbstractTestCase {
 
 	private static final String APPLICATION_NAME = "MyApp1"
+	private static final Map BINDING = [:]
 	
-	private parser = new GradleDependencyParser()
+	private GradleDependencyParser parser = new GradleDependencyParser()
 	
 	@Test
 	void test_ImplementsDependencyParser() {
@@ -32,18 +33,18 @@ class GradleDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
-	void test_parse_Null() {
-		shouldFail(IllegalArgumentException) { parser.parse(APPLICATION_NAME, null) }
+	void test_parse_NullSource() {
+		shouldFail(IllegalArgumentException) { parser.parse(APPLICATION_NAME, null, BINDING) }
 	}
 
 	@Test
 	void test_parse_EmptySource() {
-		assert parser.parse(APPLICATION_NAME, "") == []
+		assert parser.parse(APPLICATION_NAME, "", BINDING) == []
 	}
 
 	@Test
 	void test_parse_EmptyDependenciesClosure() {
-		assert parser.parse(APPLICATION_NAME, "dependencies { }") == []
+		assert parser.parse(APPLICATION_NAME, "dependencies { }", BINDING) == []
 	}
 	
 	@Test
@@ -51,7 +52,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """dependencies {
 			compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
 
 	@Test
@@ -60,7 +61,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			compile group: 'org.hibernate', name: 'hibernate-core', version: '3.1'
 			testCompile group: 'junit', name: 'junit', version: '4.8.1'
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
 		]
@@ -72,7 +73,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			compile "org.hibernate:hibernate-core:3.1"
 			testCompile group: 'junit', name: 'junit', version: '4.8.1'
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
             new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
             new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
         ]
@@ -83,7 +84,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """dependencies {
 			runtime "MyUtil:9"
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:null, name:"MyUtil", version:"9")]
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:null, name:"MyUtil", version:"9")]
 	}
 
 	@Test
@@ -91,7 +92,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """dependencies {
 			other "MyUtil"
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"other", group:null, name:"MyUtil", version:null)]
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"other", group:null, name:"MyUtil", version:null)]
 	}
 
 	@Test
@@ -102,7 +103,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			compile "org.hibernate:hibernate-core:\$hibernateVersion"
 			testCompile group: 'junit', name: junitName, version: '4.8.1'
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
 		]
@@ -113,7 +114,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 		final SOURCE = """dependencies {
 			compile "org.hibernate:hibernate-core:\$hibernateVersion"
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"?")
 		]
 	}
@@ -153,7 +154,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			    from javadoc
 			}
 		"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
 
 	@Test
@@ -305,7 +306,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			    cobertura.exclude group: 'xerces'
 			}
 		'''
-		assert parser.parse(APPLICATION_NAME, SOURCE).size() == 25
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING).size() == 25
 	}
 
 	@Test
@@ -320,7 +321,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 				return templateFiles
 			}
 		"""
-		assert parser.parse(APPLICATION_NAME, SOURCE).size() == 1
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING).size() == 1
 	}
 
 	// Tests for other dependency options and formats
@@ -332,7 +333,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			runtime "org.groovy:groovy:2.2.0@jar"
 			compile "org.other:service:1.0:jdk15@jar"
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.h7", name:"h7", version:"3.1"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.groovy", name:"groovy", version:"2.2.0"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.other", name:"service", version:"1.0")
@@ -349,7 +350,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 
 			sealife "sea.mammals:orca:1.0", "sea.fish:shark:1.0", "sea.fish:tuna:1.0"
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.springframework", name:"spring-core", version:"2.5"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.springframework", name:"spring-aop", version:"2.5"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"sealife", group:"sea.mammals", name:"orca", version:"1.0"),
@@ -366,7 +367,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			               "org.apache.ant:ant:1.9.6@jar"]
 			runtime groovy
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.apache.ant", name:"ant", version:"1.9.6"),
@@ -380,7 +381,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			List hibernate = ['org.hibernate:hibernate:3.0.5@jar']		    
 			runtime groovy, hibernate
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.codehaus.groovy", name:"groovy-all", version:"2.4.10"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"commons-cli", name:"commons-cli", version:"1.0"),
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:"org.hibernate", name:"hibernate", version:"3.0.5"),
@@ -405,7 +406,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			compile gradleApi()									// ignored
 			compile localGroovy()								// ignored
 		}"""
-		assert parser.parse(APPLICATION_NAME, SOURCE) == [
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
 			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
 		]
 	}
@@ -414,12 +415,12 @@ class GradleDependencyParserTest extends AbstractTestCase {
 	
 	@Test
 	void test_parse_StringFormat_Empty() {
-		shouldFail { parser.parse(APPLICATION_NAME, "dependencies { compile '' }") }	
+		shouldFail { parser.parse(APPLICATION_NAME, "dependencies { compile '' }", BINDING) }	
 	}
 
 	@Test
 	void test_parse_IllegalGroovySyntax() {
-		shouldFail(IllegalStateException) { parser.parse(APPLICATION_NAME, "%^@ &*[]") }	
+		shouldFail(IllegalStateException) { parser.parse(APPLICATION_NAME, "%^@ &*[]", BINDING) }	
 	}
 	
 }

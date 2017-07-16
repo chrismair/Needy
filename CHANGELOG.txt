@@ -7,6 +7,7 @@ TBD: Changes in version 0.5 (??? ??, 2017)
 ------------------------------------------
 - DslNeedyConfiguration: Fix not picking up "type" from: Application(Map1, Map2).
 - build.gradle: Switch to explicit and more fine-grained dependencies. Fix "Class path contains multiple SLF4J bindings" warning.
+- DependencyParser: Change to parse(String applicationName, String source, Map binding).
 
 
 Changes in version 0.4 (Jul 13, 2017)

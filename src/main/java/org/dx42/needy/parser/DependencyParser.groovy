@@ -19,6 +19,6 @@ import org.dx42.needy.Dependency
 
 interface DependencyParser {
 
-	List<Dependency> parse(String applicationName, String source)
+	List<Dependency> parse(String applicationName, String source, Map<String, Object> binding)
 	
 }

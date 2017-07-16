@@ -41,7 +41,8 @@ class NeedyRunner {
 			applicationBuild.buildScripts.each { BuildScript buildScript ->
 				DependencyParser dependencyParser = dependencyParserFactory.getDependencyParser(buildScript.type)
 				String buildFileText = buildScript.getText()
-				List<Dependency> buildFileDependencies = dependencyParser.parse(applicationBuild.name, buildFileText)
+				Map binding = [:]	// TODO ignored for now
+				List<Dependency> buildFileDependencies = dependencyParser.parse(applicationBuild.name, buildFileText, binding)
 				allDependencies.addAll(buildFileDependencies)
 				
 				buildFileDependencies.each { dependency ->
