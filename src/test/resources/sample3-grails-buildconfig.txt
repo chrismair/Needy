@@ -44,8 +44,7 @@ if(gradleConfig.artifactory_contextUrl) {
     artifactoryUser = gradleConfig.artifactory_user
     artifactoryPassword = gradleConfig.artifactory_password
 }else{
-	// TODO Restore
-    //throw new IOException("***** ERROR: USER_HOME/.gradle/gradle.properties not configured for Artifactory!! ******")
+    throw new IOException("***** ERROR: USER_HOME/.gradle/gradle.properties not configured for Artifactory!! ******")
 }
 //---- END Gradle/Artifactory Config ----//
  
