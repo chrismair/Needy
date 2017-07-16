@@ -96,7 +96,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
-	void test_parse_VariablesUsedWithinDependencySpecification() {
+	void test_parse_LocalVariablesUsedWithinDependencySpecification() {
 		final SOURCE = """dependencies {
 			String hibernateVersion = "3.1"
 			String junitName = "junit"
@@ -110,13 +110,48 @@ class GradleDependencyParserTest extends AbstractTestCase {
 	}
 
 	@Test
+	void test_parse_BindingVariablesUsedWithinDependencySpecification() {
+		final SOURCE = """dependencies {
+			compile "org.hibernate:hibernate-core:\$hibernateVersion"
+			testCompile group: 'junit', name: junitName, version: '4.8.1'
+		}"""
+		def binding = [hibernateVersion:"3.1", junitName:"junit"]
+		assert parser.parse(APPLICATION_NAME, SOURCE, binding) == [
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1")
+		]
+	}
+
+	@Test
 	void test_parse_UnknownVariableUsedWithinDependencySpecification() {
 		final SOURCE = """dependencies {
 			compile "org.hibernate:hibernate-core:\$hibernateVersion"
+			testCompile group: 'junit', name: junitName, version: '4.8.1'
 		}"""
 		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
-			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"?")
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"?"),
+			new Dependency(applicationName:APPLICATION_NAME, configuration:"testCompile", group:"junit", name:"?", version:"4.8.1")
 		]
+	}
+
+	@Test
+	void test_parse_RequiredVariableUsedWithinOuterScript_DefinedInBinding() {
+		final SOURCE = """
+			new File("\$testsrc/test-config.txt").withReader { props.load(it) }
+			dependencies { }
+			"""
+		def binding = [testsrc:"src/test/resources"]
+		assert parser.parse(APPLICATION_NAME, SOURCE, binding) == []
+	}
+
+	@Test
+	void test_parse_RequiredButUndefinedVariableUsedWithinOuterScript() {
+		final SOURCE = """
+			new File("\$userHome/.gradle/gradle.properties").withReader { props.load(it) }
+			dependencies {
+				compile "org.hibernate:hibernate-core:1.0"
+			}"""
+		shouldFail(FileNotFoundException) { parser.parse(APPLICATION_NAME, SOURCE, BINDING) }
 	}
 
 	@Test

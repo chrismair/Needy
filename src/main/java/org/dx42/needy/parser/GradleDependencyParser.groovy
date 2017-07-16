@@ -41,9 +41,9 @@ class GradleDependencyParser implements DependencyParser {
 			throw new IllegalArgumentException("Parameter source was null")
 		}
 
-		GradleDependencyParser_DslEvaluator dslEvaluator = new GradleDependencyParser_DslEvaluator(applicationName)
+		GradleDependencyParser_DslEvaluator dslEvaluator = new GradleDependencyParser_DslEvaluator(applicationName, binding)
 		
-		GroovyShell shell = createGroovyShell(dslEvaluator)
+		GroovyShell shell = createGroovyShell(dslEvaluator, binding)
 		try {
 			String normalizedSource = STANDARD_GRADLE_API_IMPORTS + source
 			shell.evaluate(normalizedSource)
@@ -58,16 +58,15 @@ class GradleDependencyParser implements DependencyParser {
 		return dependencies
 	}
 
-	private GroovyShell createGroovyShell(GradleDependencyParser_DslEvaluator dslEvaluator) {
+	private GroovyShell createGroovyShell(GradleDependencyParser_DslEvaluator dslEvaluator, Map<String, Object> binding) {
 		def callDependencies = { Closure closure ->
 			dslEvaluator.evaluate(closure)
 		}
-		Map bindingMap = [dependencies:callDependencies, ext:[:]].withDefault { name ->
-			return DoNothing.INSTANCE 
-		}
-		Binding binding = new Binding(bindingMap)
+		Map predefinedMap = [dependencies:callDependencies, ext:[:]] + binding
+		Map bindingMap = predefinedMap.withDefault { name -> return DoNothing.INSTANCE }
+		Binding groovyShellBinding = new Binding(bindingMap)
 
-		return new GroovyShell(this.class.classLoader, binding)
+		return new GroovyShell(this.class.classLoader, groovyShellBinding)
 	}
 	
 }
@@ -79,9 +78,11 @@ class GradleDependencyParser_DslEvaluator {
 	
 	final List<Dependency> dependencies = []
 	final String applicationName
+	final Map<String, Object> binding
 	
-	GradleDependencyParser_DslEvaluator(String applicationName) {
+	GradleDependencyParser_DslEvaluator(String applicationName, Map<String, Object> binding) {
 		this.applicationName = applicationName
+		this.binding = binding
 	}
 	
 	void evaluate(Closure closure) {
@@ -123,8 +124,9 @@ class GradleDependencyParser_DslEvaluator {
 	}
 
 	def propertyMissing(String name) {
-		LOG.info("propertyMissing: $name") 
-		return [:] 
+		def bindingValue = binding.containsKey(name) ? binding[name] : DoNothing.INSTANCE
+		LOG.info("propertyMissing: $name; value=$bindingValue") 
+		return bindingValue
 	}
 	
 }
@@ -140,6 +142,11 @@ class DoNothing extends Expando {
 	
 	def propertyMissing(String name) {
 		return INSTANCE
+	}
+
+	@Override
+	String toString() {
+		return "?"
 	}
 
 }
