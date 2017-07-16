@@ -21,5 +21,6 @@ interface BuildScript {
 	String getType()
 	String getDescription()
 	String getComponentId()
+	Map<String, Object> getProperties()
 	
 }

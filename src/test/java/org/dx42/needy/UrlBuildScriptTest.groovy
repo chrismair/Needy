@@ -24,11 +24,12 @@ class UrlBuildScriptTest extends AbstractTestCase {
 	
 	@Test
 	void test_Constructor_Map() {
-		def urlBuildScript = new UrlBuildScript([url:'http://url', type:'gradle', description:'123', componentId:'c1'])
+		def urlBuildScript = new UrlBuildScript([url:'http://url', type:'gradle', description:'123', componentId:'c1', properties:[a:1]])
 		assert urlBuildScript.getUrl() == 'http://url'
 		assert urlBuildScript.getType() == 'gradle'
 		assert urlBuildScript.getDescription() == '123'
 		assert urlBuildScript.getComponentId() == 'c1'
+		assert urlBuildScript.getProperties() == [a:1]
 	}
 	
 	@Test
@@ -58,8 +59,8 @@ class UrlBuildScriptTest extends AbstractTestCase {
 	
 	@Test
 	void test_toString() {
-		assert new UrlBuildScript(url:TEST_FILE_URL).toString() == "UrlBuildScript(url=$TEST_FILE_URL; type=null)"
-		assert new UrlBuildScript(url:TEST_FILE_URL, type:"grails2").toString() == "UrlBuildScript(url=$TEST_FILE_URL; type=grails2)"
+		assert new UrlBuildScript(url:TEST_FILE_URL).toString() == "UrlBuildScript(url=$TEST_FILE_URL; type=null; properties=null)"
+		assert new UrlBuildScript(url:TEST_FILE_URL, type:"grails2", properties:[a:1]).toString() == "UrlBuildScript(url=$TEST_FILE_URL; type=grails2; properties=[a:1])"
 	}
 	
 }

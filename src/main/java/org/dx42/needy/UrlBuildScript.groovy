@@ -24,6 +24,7 @@ class UrlBuildScript implements BuildScript {
 	String type
 	String description
 	String componentId
+	Map<String, Object> properties
 	
 	@Override
 	String getText() {
@@ -32,7 +33,7 @@ class UrlBuildScript implements BuildScript {
 
 	@Override
 	String toString() {
-		return "UrlBuildScript(url=$url; type=$type)"
+		return "UrlBuildScript(url=$url; type=$type; properties=$properties)"
 	}
 
 	protected URL asURL() {

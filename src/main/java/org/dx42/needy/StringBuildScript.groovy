@@ -15,12 +15,15 @@
  */
 package org.dx42.needy
 
+import java.util.Map
+
 class StringBuildScript implements BuildScript {
 
 	private final String text
 	String type
 	String description
 	String componentId
+	Map<String, Object> properties
 
 	StringBuildScript(String text) {
 		assert text != null, "The text value must not be null"
