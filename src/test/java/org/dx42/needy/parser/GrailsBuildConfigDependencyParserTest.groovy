@@ -263,7 +263,8 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 	@Test
 	void test_parse_FullGrailsBuildConfigFile() {
 		String source = new File('src/test/resources/sample1-grails-buildconfig.txt').text
-		def dependencies = parser.parse(NAME, source, BINDING)
+		def binding = [userHome:'src/test/resources']
+		def dependencies = parser.parse(NAME, source, binding)
 		assert dependencies.size() == 11
 		assert dependencies[0] == new Dependency(applicationName:"MyApp1", group:"mydb", name:"client", version:"16.0.EBF26086", configuration:"runtime") 
 		assert dependencies[1] == new Dependency(applicationName:"MyApp1", group:"acme", name:"util", version:"1.0", configuration:"runtime") 
@@ -290,7 +291,8 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 	@Test
 	void test_parse_FullGrailsBuildConfigFile_3() {
 		String source = new File('src/test/resources/sample3-grails-buildconfig.txt').text
-		def dependencies = parser.parse(NAME, source, BINDING)
+		def binding = [userHome:'src/test/resources']
+		def dependencies = parser.parse(NAME, source, binding)
 		assert dependencies.size() == 13
 	}
 

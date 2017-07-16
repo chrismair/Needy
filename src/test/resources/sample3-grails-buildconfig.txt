@@ -35,7 +35,7 @@ coverage {
 // ---- Gradle/Artifactory Config ----//
 String artifactoryRepo, artifactoryUser, artifactoryPassword
 Properties gradleConfig = new Properties()
-new File("$userHome/.gradle/gradle.properties").withReader {
+new File("$userHome/sample-gradle.properties").withReader {
     gradleConfig.load(it)
 }
 String artifactoryResolveRepoKey = "twowys_maven_deploy_virtual"

@@ -70,7 +70,6 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 		Map predefinedMap = [
 			grails:grailsMap,
 			grailsSettings:grailsSettingsMap,
-			userHome:'/home/chris',							// TODO Remove and make this configurable
 			] + binding
 		Map bindingMap = predefinedMap.withDefault { n -> return new DoNothing() }
 		Binding groovyShellBinding = new Binding(bindingMap)
