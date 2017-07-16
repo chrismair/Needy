@@ -43,7 +43,7 @@
 
 ## Configuration
 
-  Here is a sample "config.needy" DSL that pulls in two applications and generated two reports (text and HTML):
+  Here is a sample "config.needy" DSL that parses multiple applications and generated two reports (text and HTML):
   
 ```groovy
 	needy {
@@ -51,18 +51,31 @@
 		applications {
 			Needy(url:"file:/home/workspaces/someproject/build.gradle")					// "Needy" application
 			CodeNarc(url:"https://rawgit.com/CodeNarc/CodeNarc/master/build.gradle")	// "CodeNarc" application
+			
+			MyGrailsApp(url:"file:SampleGrails/grails-app/config/BuildConfig.groovy", type:"grails2")	// Grails 2.x "BuildConfig.groovy"
 		}
 	
 		reports {
-			report("org.dx42.needy.report.ByArtifactTextReportWriter") { }		// Text report; will write to stdout
+			report("org.dx42.needy.report.ByArtifactTextReportWriter") { }	// Text report; will write to stdout
 			
-			report("org.dx42.needy.report.ByArtifactHtmlReportWriter") {		// HTML report
+			report("org.dx42.needy.report.ByArtifactHtmlReportWriter") {	// HTML report
 				outputFile = "Needy-Report.html"
 				title = "My Sample Projects"
 			}
 		}
 	}
 ```
+
+### Application Configuration Properties
+  - "url" -- the URL for the application build script file; required
+  - "type" -- the type of build script: "gradle" (default) or "grails2"; optional
+  - "properties" -- a Map of binding properties, used when evaluating the build script; optional
+  - "description" -- a text description for the build script; for documentation only; optional
+  - "componentId" -- an optional id to uniquely identify a build script when an application contains multiple build scripts; optional
+
+### Allowed Types:
+  - "gradle" -- a Gradle "build.gradle" file. This is the default type, if not type is specified. 
+  -  "grails2" -- a Grails 2.x "BuildConfig.groovy" file.
 
 ## Known Limitations
 
