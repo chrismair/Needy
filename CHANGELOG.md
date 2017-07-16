@@ -1,9 +1,4 @@
 # Needy Change Log
-<<<<<<< HEAD
-=======
-==================================================
-
->>>>>>> branch 'master' of https://github.com/dx42/Needy.git
 <https://github.com/dx42/Needy>
 
 
