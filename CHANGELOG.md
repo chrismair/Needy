@@ -20,11 +20,7 @@ Version 0.4 (Jul 13, 2017)
 - `AbstractReportWriter`: Create parent directories if necessary.
 - `BuildScript`: add `getType()`, `getDescription()` and `getComponentId()` methods to interface
 - Change `DependencyParser` method to `parse(String applicationName, String source)`.
-<<<<<<< HEAD
 - New `ParseUtil`. Use in DependencyParser classes.
-=======
-- New ParseUtil. Use in DependencyParser classes.
->>>>>>> branch 'master' of https://github.com/dx42/Needy.git
 - `DslNeedyConfiguration`: Parse build script type
 
 
