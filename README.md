@@ -78,6 +78,11 @@
 
   - "config.needy" configuration file in the current directory
   - Groovy jar
-  - Logback jar(s)
-  - SLF4J jar
+  - SLF4J API and implementation jar(s) -- e.g. Logback
   - TBD...
+  
+## Road Map
+
+  - Parse Maven POM XML
+  - XML Report and/or JSON Report
+  - Checker/Handler/Visitor way to analyze or validate each dependency -- check for known vulnerabilities or disallow artifacts by policy
