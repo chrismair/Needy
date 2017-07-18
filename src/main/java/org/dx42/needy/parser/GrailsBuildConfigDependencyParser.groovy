@@ -29,13 +29,15 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GrailsBuildConfigDependencyParser)
 
+	boolean includePlugins = false
+	
 	@Override
 	List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {
 		if (source == null) {
 			throw new IllegalArgumentException("Parameter source was null")
 		}
 
-		GrailsBuildConfig_DslEvaluator dslEvaluator = new GrailsBuildConfig_DslEvaluator(applicationName, binding)
+		GrailsBuildConfig_DslEvaluator dslEvaluator = new GrailsBuildConfig_DslEvaluator(applicationName, binding, includePlugins)
 
 		def grailsMap = [
 			project:[
@@ -86,10 +88,12 @@ class GrailsBuildConfig_DslEvaluator {
 	final List<Dependency> dependencies = []
 	final String applicationName
 	final Map<String, Object> binding
+	final boolean includePlugins = false
 	
-	GrailsBuildConfig_DslEvaluator(String applicationName, Map<String, Object> binding) {
+	GrailsBuildConfig_DslEvaluator(String applicationName, Map<String, Object> binding, boolean includePlugins) {
 		this.applicationName = applicationName
 		this.binding = binding
+		this.includePlugins = includePlugins
 	}
 	
 	void evaluate(Closure closure) {
@@ -104,6 +108,14 @@ class GrailsBuildConfig_DslEvaluator {
 			def dependenciesDslEvaluator = new GrailsBuildConfig_DependenciesClosure_DslEvaluator(applicationName, binding)
 			dependenciesDslEvaluator.evaluate(dependenciesClosure)
 			LOG.info("Found: ${dependenciesDslEvaluator.dependencies}")
+			dependencies.addAll(dependenciesDslEvaluator.dependencies)
+			return
+		}
+		if (includePlugins && name == "plugins" && args.size() == 1 && args[0] instanceof Closure) {
+			Closure dependenciesClosure = args[0]
+			def dependenciesDslEvaluator = new GrailsBuildConfig_DependenciesClosure_DslEvaluator(applicationName, binding)
+			dependenciesDslEvaluator.evaluate(dependenciesClosure)
+			LOG.info("Found Plugins: ${dependenciesDslEvaluator.dependencies}")
 			dependencies.addAll(dependenciesDslEvaluator.dependencies)
 			return
 		}

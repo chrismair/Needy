@@ -2,6 +2,11 @@
 <https://github.com/dx42/Needy>
 
 
+TBD: Version 0.6 (Jul ??, 2017)
+--------------------------------------------------
+`GrailsBuildConfigDependencyParser`: Include dependencies defined with `plugins { }` closure. Support *includePlugins* property.
+
+
 Version 0.5 (Jul 16, 2017)
 --------------------------------------------------
 - `DslNeedyConfiguration`: Fix not picking up "type" from: Application(Map1, Map2).
