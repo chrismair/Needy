@@ -39,7 +39,7 @@ class DependencyParserFactory {
 			return new GradleDependencyParser()
 		}
 		if (type.equalsIgnoreCase("grails2")) {
-			return new GrailsBuildConfigDependencyParser()
+			return new GrailsBuildConfigDependencyParser(includePlugins:true)
 		}
 		throw new IllegalArgumentException("No such DependencyParser type [$type]")
 	}
