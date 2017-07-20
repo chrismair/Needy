@@ -5,6 +5,7 @@
 TBD: Version 0.6 (Jul ??, 2017)
 --------------------------------------------------
 `GrailsBuildConfigDependencyParser`: Include dependencies defined with `plugins { }` closure. Support *includePlugins* property.
+Config DSL: Change report to specify report name, e.g., `textReport("org.dx42.needy.report.ByArtifactTextReportWriter")`.
 
 
 Version 0.5 (Jul 16, 2017)

@@ -56,9 +56,11 @@ needy {
     }
     
     reports {
-        report("org.dx42.needy.report.ByArtifactTextReportWriter") { }  // Text report; will write to stdout
+    	// Syntax:  <report-name>(<report-writer-class>) { <optional-report-writer-properties> }
+    
+        textReport("org.dx42.needy.report.ByArtifactTextReportWriter")    // Will write to stdout
 
-        report("org.dx42.needy.report.ByArtifactHtmlReportWriter") {    // HTML report
+        HtmlReport("org.dx42.needy.report.ByArtifactHtmlReportWriter") {
             outputFile = "Needy-Report.html"
             title = "My Sample Projects"
         }

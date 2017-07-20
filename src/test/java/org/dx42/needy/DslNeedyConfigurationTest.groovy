@@ -18,6 +18,7 @@ package org.dx42.needy
 import org.junit.Test
 
 import org.dx42.needy.report.ByArtifactTextReportWriter
+import org.dx42.needy.report.ReportWriter
 import org.dx42.needy.report.StubReportWriter
 
 class DslNeedyConfigurationTest extends AbstractTestCase {
@@ -181,7 +182,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 				}
 
 				reports {
-					report("org.dx42.needy.report.ByArtifactTextReportWriter") {
+					textReport("org.dx42.needy.report.ByArtifactTextReportWriter") {
 						outputFile = "xxx"
 					}
 				}
@@ -204,10 +205,10 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 				}
 
 				reports {
-					report("org.dx42.needy.report.ByArtifactTextReportWriter") {
+					textReport("org.dx42.needy.report.ByArtifactTextReportWriter") {
 						outputFile = "xxx"
 					}
-					report("org.dx42.needy.report.StubReportWriter")
+					stubReport("org.dx42.needy.report.StubReportWriter")
 				}
 			}
 		"""
@@ -229,6 +230,51 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 			}
 		"""
 		shouldFail(MissingMethodException) { DslNeedyConfiguration.fromString(TEXT) }
+	}
+	
+	@Test
+	void test_getApplicationBuilds_WrongMethodSignatureInsideReports() {
+		final TEXT1 = """
+			needy { 
+				reports {
+					unknown()
+				}
+			}
+		"""
+		shouldFail(MissingMethodException) { DslNeedyConfiguration.fromString(TEXT1) }
+		
+		final TEXT2 = """
+			needy { 
+				reports {
+					unknown("org.dx42.needy.report.StubReportWriter", [a:1], "tooManyParameters")
+				}
+			}
+		"""
+		shouldFail(MissingMethodException) { DslNeedyConfiguration.fromString(TEXT2) }
+	}
+	
+	@Test
+	void test_getApplicationBuilds_2ndReportParameterNotAClosure() {
+		final TEXT1 = """
+			needy { 
+				reports {
+					unknown("org.dx42.needy.report.StubReportWriter", "shouldBeAClosure")
+				}
+			}
+		"""
+		shouldFailWithMessage("must be a Closure") { DslNeedyConfiguration.fromString(TEXT1) }
+	}
+	
+	@Test
+	void test_getApplicationBuilds_NotAReportWriterClass() {
+		final TEXT1 = """
+			needy { 
+				reports {
+					unknown("org.dx42.needy.Artifact")
+				}
+			}
+		"""
+		shouldFailWithMessage(ReportWriter.name) { DslNeedyConfiguration.fromString(TEXT1) }
 	}
 	
 	@Test

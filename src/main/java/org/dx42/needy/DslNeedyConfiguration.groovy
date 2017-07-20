@@ -99,7 +99,6 @@ class DslEvaluator {
 	List<ApplicationBuild> applicationBuilds = []
 	List<ReportWriter> reportWriters = []
 	private boolean withinApplications = false
-	private boolean withinReports = false
 	
 	void evaluate(Closure closure) {
 		closure.delegate = this
@@ -114,25 +113,9 @@ class DslEvaluator {
 	}
 	
 	def reports(Closure closure) {
-		withinReports = true
-		closure.call()
-		withinReports = false
-	}
-	
-	def report(String reportClassName, Closure closure) {
-		Class reportClass = getClass().classLoader.loadClass(reportClassName)
-		ReportWriter reportWriter = reportClass.newInstance() 
-		reportWriters << reportWriter
-		
-		closure.delegate = reportWriter
-		closure.resolveStrategy = Closure.DELEGATE_FIRST
-		closure.call()
-	}
-	
-	def report(String reportClassName) {
-		Class reportClass = getClass().classLoader.loadClass(reportClassName)
-		ReportWriter reportWriter = reportClass.newInstance() 
-		reportWriters << reportWriter
+		def reportsDslEvaluator = new Reports_DslEvaluator()
+		reportsDslEvaluator.evaluate(closure)
+		this.reportWriters = reportsDslEvaluator.reportWriters
 	}
 	
 	def methodMissing(String name, def args) {
@@ -173,4 +156,41 @@ class DslEvaluator {
 		return new UrlBuildScript(url:url, type:map.type, properties:map['properties'])
 	}
 	
+}
+
+class Reports_DslEvaluator {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(Reports_DslEvaluator)
+
+	List<ReportWriter> reportWriters = []
+
+	void evaluate(Closure closure) {
+		closure.delegate = this
+		closure.setResolveStrategy(Closure.DELEGATE_FIRST)
+		closure.call()
+	}
+
+	def methodMissing(String name, def args) {
+		LOG.info "methodMissing: name=$name args=$args"
+		if (args.size() in [1, 2] && args[0] instanceof String) {
+			String reportClassName = args[0]
+			Class reportClass = getClass().classLoader.loadClass(reportClassName)
+			assert ReportWriter.isAssignableFrom(reportClass), "The classname must be a " + ReportWriter.name
+			ReportWriter reportWriter = reportClass.newInstance()
+			
+			if (args.size() == 2) {
+				assert args[1] instanceof Closure, "The 2nd argument must be a Closure"
+				def reportWriterClosure = args[1]
+				reportWriterClosure.delegate = reportWriter
+				reportWriterClosure.resolveStrategy = Closure.DELEGATE_FIRST
+				reportWriterClosure.call()
+			}
+			
+			reportWriters << reportWriter
+			return
+		}
+		
+		throw new MissingMethodException(name, getClass(), args)
+	}
+
 }
