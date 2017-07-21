@@ -128,23 +128,3 @@ class GradleDependencyParser_DslEvaluator {
 	}
 	
 }
-
-@SuppressWarnings('UnusedMethodParameter')
-class DoNothing extends Expando {
-	
-	static final INSTANCE = new DoNothing()
-	
-	def methodMissing(String name, args) {
-		return INSTANCE
-	}
-	
-	def propertyMissing(String name) {
-		return INSTANCE
-	}
-
-	@Override
-	String toString() {
-		return "?"
-	}
-
-}
