@@ -25,24 +25,27 @@ import org.dx42.needy.Dependency
  */
 class CreateSampleReport {
 	
-	private static final String OUTPUT_FILE = "build/reports/sample-html-report.html"
+	private static final String OUTPUT_FILE = "samples/sample-html-report.html"
 	private static final List<Dependency> DEPENDENCIES = [
-		new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
 		new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-		new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
 		new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
+		new Dependency(applicationName:"Sample1", group:"org.slf4j", name:"slf4j-api", version:"1.7.25"),
+		new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
+		new Dependency(applicationName:"Sample_Two", group:"commons-codec", name:"commons-codec", version:"1.6"),
+		new Dependency(applicationName:"Sample_Two", group:"junit", name:"junit", version:"4.12"),
+		new Dependency(applicationName:"Sample_Two", group:"com.google.guava", name:"guava", version:"14.0.1"),
+		new Dependency(applicationName:"MyApp3", group:"org.other", name:"service", version:"2.0"),
+		new Dependency(applicationName:"MyApp3", group:"log4j", name:"log4j", version:"1.2.14"),
+		new Dependency(applicationName:"MyApp3", group:"log4j-extra", name:"stuff", version:"1.0"),
+		new Dependency(applicationName:"MyApp3", group:"commons-codec", name:"commons-codec", version:"1.6"),
+		new Dependency(applicationName:"MyApp3", group:"org.codehaus.groovy", name:"groovy-all", version:"2.3.9"),
+		new Dependency(applicationName:"MyApp3", group:"org.slf4j", name:"slf4j-api", version:"1.7.25"),
 	]
 
 	static void main(String[] args) {
 		def reportWriter = new ByArtifactHtmlReportWriter()
 		reportWriter.outputFile = OUTPUT_FILE
-		reportWriter.title = "My Sample Project"
-		
-		// TODO Remove once it auto-creates the parent dir
-		new File(OUTPUT_FILE).getParentFile()?.mkdirs()
-		
+		reportWriter.title = "Sample Project"
 		reportWriter.writeReport(DEPENDENCIES)
 	}
 	

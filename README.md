@@ -79,6 +79,12 @@ needy {
   - "gradle" -- a Gradle "build.gradle" file. This is the default type, if no type is specified. 
   -  "grails2" -- a Grails 2.x "BuildConfig.groovy" file.
 
+### Reports
+
+  The provided report types are:
+  - `org.dx42.needy.report.ByArtifactTextReportWriter` - Simple text report listing all artifacts
+  - `org.dx42.needy.report.ByArtifactHtmlReportWriter` - HTML report listing all artifacts; See [Sample HTML Report](samples/sample-html-report.html)
+
 ## Known Limitations
 
   - This implementation is quite limited. 

@@ -4,7 +4,8 @@
 
 TBD: Version 0.7 (Jul ??, 2017)
 --------------------------------------------------
-- Move DoNothing into standalone top-level class file.
+- Move `DoNothing` into standalone top-level class file.
+- Include sample HTML report in distribution and reference from README.
 
 
 Version 0.6 (Jul 19, 2017)
