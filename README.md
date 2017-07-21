@@ -83,7 +83,7 @@ needy {
 
   The provided report types are:
   - `org.dx42.needy.report.ByArtifactTextReportWriter` - Simple text report listing all artifacts
-  - `org.dx42.needy.report.ByArtifactHtmlReportWriter` - HTML report listing all artifacts; See [Sample HTML Report](samples/sample-html-report.html)
+  - `org.dx42.needy.report.ByArtifactHtmlReportWriter` - HTML report listing all artifacts; See [Sample HTML Report](http://htmlpreview.github.com/?https://github.com/dx42/Needy/blob/master/samples/sample-html-report.html)
 
 ## Known Limitations
 
