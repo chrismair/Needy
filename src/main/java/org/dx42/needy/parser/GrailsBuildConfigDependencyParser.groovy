@@ -29,7 +29,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GrailsBuildConfigDependencyParser)
 
-	boolean includePlugins = false
+	boolean includePlugins = true
 	
 	@Override
 	List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {

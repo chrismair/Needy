@@ -38,7 +38,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 
 	@Test
 	void test_Initialization() {
-		assert parser.includePlugins == false
+		assert parser.includePlugins == true
 	}
 
 	@Test
