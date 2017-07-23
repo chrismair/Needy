@@ -19,12 +19,15 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import org.dx42.needy.Dependency
+import org.dx42.needy.util.WildcardUtil
 
 abstract class AbstractReportWriter implements ReportWriter {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractReportWriter)
 	
 	String outputFile
+	String includeApplications 
+	String excludeApplications
 	
 	protected Closure getDate = { new Date() }
 	
@@ -54,6 +57,14 @@ abstract class AbstractReportWriter implements ReportWriter {
 			return file.newPrintWriter()
 		}
 		return System.out.newPrintWriter()
+	}
+	
+	protected boolean includeApplication(String applicationName) {
+		return includeApplications ? WildcardUtil.matches(applicationName, includeApplications) : true
+	}
+	
+	protected boolean excludeApplication(String applicationName) {
+		return excludeApplications ? WildcardUtil.matches(applicationName, excludeApplications) : false
 	}
 	
 }

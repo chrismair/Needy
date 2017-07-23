@@ -94,4 +94,38 @@ class AbstractReportWriterTest extends AbstractTestCase {
 		assert reportWriter.getDate() instanceof Date
 	}
 	
+	@Test
+	void test_includeApplication() {
+		assert reportWriter.includeApplication("a")
+
+		reportWriter.includeApplications = "A*"		
+		assert reportWriter.includeApplication("AAA")
+		assert reportWriter.includeApplication("A-B")
+		assert !reportWriter.includeApplication("B")
+		
+		reportWriter.includeApplications = "A, B*"		
+		assert reportWriter.includeApplication("A")
+		assert reportWriter.includeApplication("B")
+		assert reportWriter.includeApplication("BAB")
+		assert !reportWriter.includeApplication("A-B")
+		assert !reportWriter.includeApplication("AB")
+	}
+	
+	@Test
+	void test_excludeApplication() {
+		assert !reportWriter.excludeApplication("a")
+		
+		reportWriter.excludeApplications = "A*"
+		assert reportWriter.excludeApplication("AAA")
+		assert reportWriter.excludeApplication("A-B")
+		assert !reportWriter.excludeApplication("B")
+		
+		reportWriter.excludeApplications = "A, B*"
+		assert reportWriter.excludeApplication("A")
+		assert reportWriter.excludeApplication("B")
+		assert reportWriter.excludeApplication("BAB")
+		assert !reportWriter.excludeApplication("A-B")
+		assert !reportWriter.excludeApplication("AB")
+	}
+	
 }
