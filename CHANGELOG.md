@@ -2,7 +2,7 @@
 <https://github.com/dx42/Needy>
 
 
-TBD: Version 0.7 (Jul ??, 2017)
+Version 0.7 (Jul 23, 2017)
 --------------------------------------------------
 - `ByArtifactHtmlReportWriter`: Support *includeApplications* and *excludeApplications* filters.
 - New `WildcardUtil`.
