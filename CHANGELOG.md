@@ -1,5 +1,8 @@
 # Needy Change Log
-<https://github.com/dx42/Needy>
+
+TBD: Version 0.8 (Jul ??, 2017)
+--------------------------------------------------
+- `ByArtifactHtmlReportWriter`: When filter out applications, reset numbering.
 
 
 Version 0.7 (Jul 23, 2017)
@@ -47,3 +50,5 @@ Version 0.3 (Jul 6, 2017)
 - Publish to JCenter; group = org.dx42.
 - Introduce parser sub-package.
 - `DslNeedyConfiguration`: Remove support for applicationName(String) and applicationName(List<String>).
+
+<https://github.com/dx42/Needy>

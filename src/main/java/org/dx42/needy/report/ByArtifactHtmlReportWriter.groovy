@@ -109,18 +109,22 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 					}
 					int index = 1
 					sortedMap.each{ k, v ->
-						out << buildRow(k, v, index++)
+						def closure = buildRow(k, v, index)
+						if (closure) {
+							out << closure
+							index++
+						}
 					} 
 				}
 			}
 		}
 	}
 
-	private buildRow(k, v, int index) {
+	private Closure buildRow(k, v, int index) {
 		def applicationNames = v.findAll { name -> includeApplication(name) }
 		applicationNames = applicationNames.findAll { name -> !excludeApplication(name) }
 		if (!applicationNames) {
-			return {  }
+			return null
 		}
 		return {
 			tr {

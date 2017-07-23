@@ -51,7 +51,7 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 		</table></div><div class='summary'><h2>Dependencies</h2><table><tr class='tableHeader'><th>#</th>
 		<th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr>
 		<tr><td>1</td><td>log4j</td><td>log4j</td><td>1.2.14</td><td class='applicationNames'>Sample1, Sample_Two</td></tr>
-		<tr><td>3</td><td>org.hibernate</td><td>hibernate-core</td><td>3.1</td><td class='applicationNames'>Sample1</td></tr>
+		<tr><td>2</td><td>org.hibernate</td><td>hibernate-core</td><td>3.1</td><td class='applicationNames'>Sample1</td></tr>
 		</table></div></body></html>
 		"""
 		
