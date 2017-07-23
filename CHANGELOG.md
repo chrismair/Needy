@@ -4,12 +4,13 @@
 
 TBD: Version 0.7 (Jul ??, 2017)
 --------------------------------------------------
+- `ByArtifactHtmlReportWriter`: Support *includeApplications* and *excludeApplications* filters.
+- New `WildcardUtil`.
+- `AbstractReportWriter`: Add *includeApplications* and *excludeApplications* properties and `includeApplication(String applicationName)` and `excludeApplication(String applicationName)`.
 - New `DependencyParserRegistry`. Change `NeedyRunner` to use it.
 - `GrailsBuildConfigDependencyParser`: Change *includePlugins* default to true.
 - Move `DoNothing` into standalone top-level class file.
 - Include sample HTML report in distribution and reference from README.
-- New `WildcardUtil`.
-- `AbstractReportWriter`: Add *includeApplications* and *excludeApplications* properties and `includeApplication(String applicationName)` and `excludeApplication(String applicationName)`.
 
 
 Version 0.6 (Jul 19, 2017)

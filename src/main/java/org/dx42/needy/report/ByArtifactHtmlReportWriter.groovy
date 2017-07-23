@@ -117,13 +117,18 @@ class ByArtifactHtmlReportWriter extends AbstractReportWriter {
 	}
 
 	private buildRow(k, v, int index) {
+		def applicationNames = v.findAll { name -> includeApplication(name) }
+		applicationNames = applicationNames.findAll { name -> !excludeApplication(name) }
+		if (!applicationNames) {
+			return {  }
+		}
 		return {
 			tr {
 				td(index)
 				td(k.group)
 				td(k.name)
 				td(k.version)
-				td(v.join(", "), class:'applicationNames')
+				td(applicationNames.join(", "), class:'applicationNames')
 			}
 		}
 	}

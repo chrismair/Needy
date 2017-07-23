@@ -40,9 +40,21 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 
 	private static final String EXPECTED_REPORT_TEXT = """
 		<!DOCTYPE html><html><head><title>Needy Dependency Report: Dependency Report</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>
-		<body><h1>Needy Dependency Report</h1><div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>Dependency Report</td></tr><tr><td class='em'>Timestamp:</td><td>Jul 1, 2017 7:20:09 AM</td></tr><tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr></table></div><div class='summary'><h2>Dependencies</h2><table><tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr><tr><td>1</td><td>log4j</td><td>log4j</td><td>1.2.14</td><td class='applicationNames'>Sample1, Sample_Two, Third</td></tr><tr><td>2</td><td>log4j-extra</td><td>stuff</td><td>1.0</td><td class='applicationNames'>Third</td></tr><tr><td>3</td><td>org.hibernate</td><td>hibernate-core</td><td>3.1</td><td class='applicationNames'>Sample1</td></tr><tr><td>4</td><td>org.other</td><td>service</td><td>2.0</td><td class='applicationNames'>Third</td></tr></table></div></body></html>
+		<body><h1>Needy Dependency Report</h1><div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>Dependency Report</td></tr><tr><td class='em'>Timestamp:</td><td>$TIMESTAMP_STRING</td></tr><tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr></table></div><div class='summary'><h2>Dependencies</h2><table><tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr><tr><td>1</td><td>log4j</td><td>log4j</td><td>1.2.14</td><td class='applicationNames'>Sample1, Sample_Two, Third</td></tr><tr><td>2</td><td>log4j-extra</td><td>stuff</td><td>1.0</td><td class='applicationNames'>Third</td></tr><tr><td>3</td><td>org.hibernate</td><td>hibernate-core</td><td>3.1</td><td class='applicationNames'>Sample1</td></tr><tr><td>4</td><td>org.other</td><td>service</td><td>2.0</td><td class='applicationNames'>Third</td></tr></table></div></body></html>
 		"""
 
+	private static final String EXPECTED_REPORT_TEXT_NO_THIRD = """
+		<!DOCTYPE html><html><head><title>Needy Dependency Report: Dependency Report</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>
+		<body><h1>Needy Dependency Report</h1><div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>Dependency Report</td></tr>
+		<tr><td class='em'>Timestamp:</td><td>$TIMESTAMP_STRING</td></tr>
+		<tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr>
+		</table></div><div class='summary'><h2>Dependencies</h2><table><tr class='tableHeader'><th>#</th>
+		<th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr>
+		<tr><td>1</td><td>log4j</td><td>log4j</td><td>1.2.14</td><td class='applicationNames'>Sample1, Sample_Two</td></tr>
+		<tr><td>3</td><td>org.hibernate</td><td>hibernate-core</td><td>3.1</td><td class='applicationNames'>Sample1</td></tr>
+		</table></div></body></html>
+		"""
+		
 	private ByArtifactHtmlReportWriter reportWriter = new ByArtifactHtmlReportWriter()
 	private StringWriter writer = new StringWriter()
 	
@@ -63,7 +75,7 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 	void test_writeReport_EmptyDependencies_SetTitle() {
 		final EXPECTED = """
 			<!DOCTYPE html><html><head><title>Needy Dependency Report: My Title</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>
-			<body><h1>Needy Dependency Report</h1><div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>My Title</td></tr><tr><td class='em'>Timestamp:</td><td>Jul 1, 2017 7:20:09 AM</td></tr><tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr></table></div><div class='summary'><h2>Dependencies</h2><table><tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr></table></div></body></html>
+			<body><h1>Needy Dependency Report</h1><div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>My Title</td></tr><tr><td class='em'>Timestamp:</td><td>$TIMESTAMP_STRING</td></tr><tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr></table></div><div class='summary'><h2>Dependencies</h2><table><tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr></table></div></body></html>
 			"""
 		reportWriter.title = "My Title"
 		reportWriter.writeReport(writer, [])
@@ -74,6 +86,20 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 	void test_writeReport_Dependencies() {
 		reportWriter.writeReport(writer, DEPENDENCIES)
 		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT)
+	}
+	
+	@Test
+	void test_writeReport_includeApplications() {
+		reportWriter.includeApplications = "Sample*, Other"
+		reportWriter.writeReport(writer, DEPENDENCIES)
+		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_THIRD)
+	}
+	
+	@Test
+	void test_writeReport_excludeApplications() {
+		reportWriter.excludeApplications = "Th*"
+		reportWriter.writeReport(writer, DEPENDENCIES)
+		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_THIRD)
 	}
 	
 	@Test

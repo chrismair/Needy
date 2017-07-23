@@ -61,8 +61,10 @@ needy {
         textReport("org.dx42.needy.report.ByArtifactTextReportWriter")    // Will write to stdout
 
         HtmlReport("org.dx42.needy.report.ByArtifactHtmlReportWriter") {
-            outputFile = "Needy-Report.html"
-            title = "My Sample Projects"
+            outputFile = "Needy-Report.html"// Optional; If not set (null) then write report to stdout
+            title = "My Sample Projects"	// Optional; report title
+            includeApplications = null		// Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean include all
+            excludeApplications = null		// Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean exclude none
         }
     }
 }
