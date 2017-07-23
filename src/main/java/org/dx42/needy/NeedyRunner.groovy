@@ -15,19 +15,18 @@
  */
 package org.dx42.needy
 
+import org.dx42.needy.parser.DependencyParser
+import org.dx42.needy.parser.DependencyParserRegistry
+import org.dx42.needy.report.ReportWriter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import org.dx42.needy.parser.DependencyParser
-import org.dx42.needy.parser.DependencyParserFactory
-import org.dx42.needy.report.ReportWriter
 
 class NeedyRunner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(NeedyRunner)
 	
 	NeedyConfiguration needyConfiguration
-	DependencyParserFactory dependencyParserFactory = new DependencyParserFactory() 
+	DependencyParserRegistry dependencyParserRegistry = new DependencyParserRegistry() 
 	
 	List<Dependency>  execute() {
 		assert needyConfiguration
@@ -39,7 +38,7 @@ class NeedyRunner {
 		applicationBuilds.forEach{ ApplicationBuild applicationBuild ->
 			LOG.info("Processing application [${applicationBuild.name}]")
 			applicationBuild.buildScripts.each { BuildScript buildScript ->
-				DependencyParser dependencyParser = dependencyParserFactory.getDependencyParser(buildScript.type)
+				DependencyParser dependencyParser = dependencyParserRegistry.getDependencyParser(buildScript.type)
 				String buildFileText = buildScript.getText()
 				Map binding = buildScript.properties ?: [:]
 				List<Dependency> buildFileDependencies = dependencyParser.parse(applicationBuild.name, buildFileText, binding)
