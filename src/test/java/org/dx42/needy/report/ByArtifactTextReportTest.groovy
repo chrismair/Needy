@@ -20,7 +20,7 @@ import org.junit.Test
 import org.dx42.needy.AbstractTestCase
 import org.dx42.needy.Dependency
 
-class ByArtifactTextReportWriterTest extends AbstractTestCase {
+class ByArtifactTextReportTest extends AbstractTestCase {
 
 	private static final String OUTPUT_FILE = "src/test/resources/temp-report.txt"
 	private static final List<Dependency> DEPENDENCIES = [
@@ -40,17 +40,17 @@ Needy
 "org.other:service:2.0" -- [Third]
 		""".trim()
 
-	private ByArtifactTextReportWriter reportWriter = new ByArtifactTextReportWriter()
+	private ByArtifactTextReport report = new ByArtifactTextReport()
 	
 	@Test
 	void test_writeReport_Null() {
-		shouldFailWithMessage("dependencies") { reportWriter.writeReport(null) }
+		shouldFailWithMessage("dependencies") { report.writeReport(null) }
 	}
 	
 	@Test
 	void test_writerReport_WritesToStdOut() {
 		def output = captureSystemOut {
-			reportWriter.writeReport(DEPENDENCIES)
+			report.writeReport(DEPENDENCIES)
 		}
 		log "output=\n$output"
 
@@ -59,8 +59,8 @@ Needy
 	
 	@Test
 	void test_writerReport_OutputFile_WritesToFile() {
-		reportWriter.outputFile = OUTPUT_FILE
-		reportWriter.writeReport(DEPENDENCIES)
+		report.outputFile = OUTPUT_FILE
+		report.writeReport(DEPENDENCIES)
 
 		def file = new File(OUTPUT_FILE)
 		file.deleteOnExit()
@@ -70,8 +70,8 @@ Needy
 	
 	@Test
 	void test_writerReport_OutputFilee_CannotCreateOutputFile() {
-		reportWriter.outputFile = "///noSuchDir/orSubDir/file.txt"
-		shouldFail(FileNotFoundException) { reportWriter.writeReport(DEPENDENCIES) }
+		report.outputFile = "///noSuchDir/orSubDir/file.txt"
+		shouldFail(FileNotFoundException) { report.writeReport(DEPENDENCIES) }
 	}
 	
 }

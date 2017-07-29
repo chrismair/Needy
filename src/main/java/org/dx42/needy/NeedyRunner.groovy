@@ -17,7 +17,7 @@ package org.dx42.needy
 
 import org.dx42.needy.parser.DependencyParser
 import org.dx42.needy.parser.DependencyParserRegistry
-import org.dx42.needy.report.ReportWriter
+import org.dx42.needy.report.Report
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -50,8 +50,8 @@ class NeedyRunner {
 			}
 		}
 		
-		needyConfiguration.reportWriters.each { ReportWriter reportWriter ->
-			reportWriter.writeReport(allDependencies)
+		needyConfiguration.reports.each { Report report ->
+			report.writeReport(allDependencies)
 		}
 		
 		return allDependencies

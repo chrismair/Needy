@@ -18,7 +18,7 @@ package org.dx42.needy
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import org.dx42.needy.report.ReportWriter
+import org.dx42.needy.report.Report
 
 import org.codehaus.groovy.control.MultipleCompilationErrorsException
 
@@ -28,7 +28,7 @@ class DslNeedyConfiguration implements NeedyConfiguration {
 	
 	private String text
 	private List<ApplicationBuild> applicationBuilds
-	private List<ReportWriter> reportWriters
+	private List<Report> reports
 	
 	static DslNeedyConfiguration fromFile(String file) {
 		assert file, "The file parameter must not be null or empty"
@@ -52,8 +52,8 @@ class DslNeedyConfiguration implements NeedyConfiguration {
 	}
 	
 	@Override
-	List<ReportWriter> getReportWriters() {
-		return reportWriters
+	List<Report> getReports() {
+		return reports
 	}
 	
 	// For testing
@@ -76,7 +76,7 @@ class DslNeedyConfiguration implements NeedyConfiguration {
 		}
 
 		applicationBuilds = dslEvaluator.applicationBuilds
-		reportWriters = dslEvaluator.reportWriters
+		reports = dslEvaluator.reports
 		LOG.info "applicationBuilds = $applicationBuilds"
 	}
 
@@ -97,7 +97,7 @@ class DslEvaluator {
 	private static final Logger LOG = LoggerFactory.getLogger(DslEvaluator)
 
 	List<ApplicationBuild> applicationBuilds = []
-	List<ReportWriter> reportWriters = []
+	List<Report> reports = []
 	private boolean withinApplications = false
 	
 	void evaluate(Closure closure) {
@@ -112,10 +112,11 @@ class DslEvaluator {
 		withinApplications = false
 	}
 	
+	@SuppressWarnings("ConfusingMethodName")
 	def reports(Closure closure) {
 		def reportsDslEvaluator = new Reports_DslEvaluator()
 		reportsDslEvaluator.evaluate(closure)
-		this.reportWriters = reportsDslEvaluator.reportWriters
+		this.reports = reportsDslEvaluator.reports
 	}
 	
 	def methodMissing(String name, def args) {
@@ -162,7 +163,7 @@ class Reports_DslEvaluator {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(Reports_DslEvaluator)
 
-	List<ReportWriter> reportWriters = []
+	List<Report> reports = []
 
 	void evaluate(Closure closure) {
 		closure.delegate = this
@@ -175,18 +176,18 @@ class Reports_DslEvaluator {
 		if (args.size() in [1, 2] && args[0] instanceof String) {
 			String reportClassName = args[0]
 			Class reportClass = getClass().classLoader.loadClass(reportClassName)
-			assert ReportWriter.isAssignableFrom(reportClass), "The classname must be a " + ReportWriter.name
-			ReportWriter reportWriter = reportClass.newInstance()
+			assert Report.isAssignableFrom(reportClass), "The classname must be a " + Report.name
+			Report report = reportClass.newInstance()
 			
 			if (args.size() == 2) {
 				assert args[1] instanceof Closure, "The 2nd argument must be a Closure"
-				def reportWriterClosure = args[1]
-				reportWriterClosure.delegate = reportWriter
-				reportWriterClosure.resolveStrategy = Closure.DELEGATE_FIRST
-				reportWriterClosure.call()
+				def reportClosure = args[1]
+				reportClosure.delegate = report
+				reportClosure.resolveStrategy = Closure.DELEGATE_FIRST
+				reportClosure.call()
 			}
 			
-			reportWriters << reportWriter
+			reports << report
 			return
 		}
 		

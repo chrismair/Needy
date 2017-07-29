@@ -15,12 +15,12 @@
  */
 package org.dx42.needy
 
-import org.dx42.needy.report.ReportWriter
+import org.dx42.needy.report.Report
 
 interface NeedyConfiguration {
 	
 	List<ApplicationBuild> getApplicationBuilds()
 
-	List<ReportWriter> getReportWriters()
+	List<Report> getReports()
 	
 }

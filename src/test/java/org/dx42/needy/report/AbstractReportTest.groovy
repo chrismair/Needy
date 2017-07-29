@@ -21,11 +21,11 @@ import org.dx42.needy.Dependency
 import org.junit.Test
 
 /**
- * Tests for AbstractReportWriter
+ * Tests for AbstractReport
  * 
  * @author Chris Mair
  */
-class AbstractReportWriterTest extends AbstractTestCase {
+class AbstractReportTest extends AbstractTestCase {
 
 	private static final Date DATE = new Date(1499477419708L)
 	private static final List<Dependency> DEPENDENCIES = [
@@ -33,7 +33,7 @@ class AbstractReportWriterTest extends AbstractTestCase {
 
 	private Writer writer
 	private List<Dependency> dependencies
-	private reportWriter = new AbstractReportWriter() {  
+	private report = new AbstractReport() {  
 		@Override
 		void writeReport(Writer writer, List<Dependency> dependencies) {
 			this.writer = writer
@@ -47,7 +47,7 @@ class AbstractReportWriterTest extends AbstractTestCase {
 	
 	@Test
 	void test_writeReport() {
-		reportWriter.writeReport(DEPENDENCIES)
+		report.writeReport(DEPENDENCIES)
 		assert dependencies == DEPENDENCIES
 		assert writer instanceof PrintWriter
 	}
@@ -56,76 +56,76 @@ class AbstractReportWriterTest extends AbstractTestCase {
 	void test_writeReport_CreateParentDirectoriesIfNecessary() {
 		def parentDir = "src/test/resources/doesNotExist"
 		def reportFile = parentDir + "/tmpfile.txt"
-		reportWriter.outputFile = reportFile
+		report.outputFile = reportFile
 		new File(parentDir).deleteOnExit()
 		new File(reportFile).deleteOnExit()
-		reportWriter.writeReport(DEPENDENCIES)
+		report.writeReport(DEPENDENCIES)
 		assert dependencies == DEPENDENCIES
 	}
 
 	@Test
 	void test_writeReport_NullDependencies() {
-		shouldFailWithMessage('dependencies') { reportWriter.writeReport(null) }
+		shouldFailWithMessage('dependencies') { report.writeReport(null) }
 	}
 
 	@Test
 	void test_getFormattedTimestamp() {
-		reportWriter.getDate = { DATE }
-		log(reportWriter.getFormattedTimestamp())
-		assert reportWriter.getFormattedTimestamp() == java.text.DateFormat.getDateTimeInstance().format(DATE)
+		report.getDate = { DATE }
+		log(report.getFormattedTimestamp())
+		assert report.getFormattedTimestamp() == java.text.DateFormat.getDateTimeInstance().format(DATE)
 	}
 	
 	@Test
 	void test_createPrintWriter() {
-		def writer = reportWriter.createPrintWriter()
+		def writer = report.createPrintWriter()
 		assert writer
 	}
 	
 	@Test
 	void test_createPrintWriter_outputFile() {
-		reportWriter.outputFile = "build/tmpfile.txt"
-		new File(reportWriter.outputFile).deleteOnExit()
-		def writer = reportWriter.createPrintWriter()
+		report.outputFile = "build/tmpfile.txt"
+		new File(report.outputFile).deleteOnExit()
+		def writer = report.createPrintWriter()
 		assert writer
 	}
 	
 	@Test
 	void test_getDate() {
-		assert reportWriter.getDate() instanceof Date
+		assert report.getDate() instanceof Date
 	}
 	
 	@Test
 	void test_includeApplication() {
-		assert reportWriter.includeApplication("a")
+		assert report.includeApplication("a")
 
-		reportWriter.includeApplications = "A*"		
-		assert reportWriter.includeApplication("AAA")
-		assert reportWriter.includeApplication("A-B")
-		assert !reportWriter.includeApplication("B")
+		report.includeApplications = "A*"		
+		assert report.includeApplication("AAA")
+		assert report.includeApplication("A-B")
+		assert !report.includeApplication("B")
 		
-		reportWriter.includeApplications = "A, B*"		
-		assert reportWriter.includeApplication("A")
-		assert reportWriter.includeApplication("B")
-		assert reportWriter.includeApplication("BAB")
-		assert !reportWriter.includeApplication("A-B")
-		assert !reportWriter.includeApplication("AB")
+		report.includeApplications = "A, B*"		
+		assert report.includeApplication("A")
+		assert report.includeApplication("B")
+		assert report.includeApplication("BAB")
+		assert !report.includeApplication("A-B")
+		assert !report.includeApplication("AB")
 	}
 	
 	@Test
 	void test_excludeApplication() {
-		assert !reportWriter.excludeApplication("a")
+		assert !report.excludeApplication("a")
 		
-		reportWriter.excludeApplications = "A*"
-		assert reportWriter.excludeApplication("AAA")
-		assert reportWriter.excludeApplication("A-B")
-		assert !reportWriter.excludeApplication("B")
+		report.excludeApplications = "A*"
+		assert report.excludeApplication("AAA")
+		assert report.excludeApplication("A-B")
+		assert !report.excludeApplication("B")
 		
-		reportWriter.excludeApplications = "A, B*"
-		assert reportWriter.excludeApplication("A")
-		assert reportWriter.excludeApplication("B")
-		assert reportWriter.excludeApplication("BAB")
-		assert !reportWriter.excludeApplication("A-B")
-		assert !reportWriter.excludeApplication("AB")
+		report.excludeApplications = "A, B*"
+		assert report.excludeApplication("A")
+		assert report.excludeApplication("B")
+		assert report.excludeApplication("BAB")
+		assert !report.excludeApplication("A-B")
+		assert !report.excludeApplication("AB")
 	}
 	
 }

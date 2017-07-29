@@ -22,7 +22,7 @@ import org.dx42.needy.Dependency
 import org.dx42.needy.NeedyVersion
 import groovy.xml.StreamingMarkupBuilder
 
-class ByArtifactHtmlReportWriter extends AbstractReportWriter {
+class ByArtifactHtmlReport extends AbstractReport {
 
 	private static final String STANDARD_TITLE = "Needy Dependency Report"
 	private static final String CSS_FILE = 'htmlreport.css'

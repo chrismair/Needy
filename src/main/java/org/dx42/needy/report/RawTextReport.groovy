@@ -17,14 +17,17 @@ package org.dx42.needy.report
 
 import org.dx42.needy.Dependency
 
-class StubReportWriter implements ReportWriter {
+class RawTextReport implements Report {
 
-	List<Dependency> dependencies
-	String outputFile
-	
+	@SuppressWarnings('Println')
 	@Override
 	void writeReport(List<Dependency> dependencies) {
-		this.dependencies = dependencies
+		assert dependencies != null
+	
+		dependencies.each { dependency ->
+			println(dependency)
+		}
+
 	}
 
 }

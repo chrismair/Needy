@@ -17,18 +17,12 @@ package org.dx42.needy.report
 
 import org.dx42.needy.Dependency
 
-class ByArtifactTextReportWriter extends AbstractReportWriter {
+interface Report {
 
-	@Override
-	void writeReport(Writer writer, List<Dependency> dependencies) {
-		Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
-
-		writer.withWriter { w ->
-			w.println "Needy\n"
-			sortedMap.each { k, v ->
-				w.println(/"$k" -- $v/)
-			}
-		}
-	}
+	/**
+	 * Write out a report for the specified dependencies
+	 * @param dependencies - The List of Dependencies
+	 */
+	void writeReport(List<Dependency> dependencies)
 	
 }

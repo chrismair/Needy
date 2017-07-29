@@ -22,7 +22,7 @@ import org.dx42.needy.AbstractTestCase
 import org.dx42.needy.Dependency
 import org.dx42.needy.NeedyVersion
 
-class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
+class ByArtifactHtmlReportTest extends AbstractTestCase {
 
 	private static final String OUTPUT_FILE = "src/test/resources/temp-html-report.html"
 	private static final List<Dependency> DEPENDENCIES = [
@@ -55,18 +55,18 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 		</table></div></body></html>
 		"""
 		
-	private ByArtifactHtmlReportWriter reportWriter = new ByArtifactHtmlReportWriter()
+	private ByArtifactHtmlReport report = new ByArtifactHtmlReport()
 	private StringWriter writer = new StringWriter()
 	
 	@Test
 	void test_writeReport_Null() {
-		shouldFailWithMessage("dependencies") { reportWriter.writeReport(null) }
+		shouldFailWithMessage("dependencies") { report.writeReport(null) }
 	}
 
 	@Test
 	void test_writeReport_WritesToStdOut() {
 		def output = captureSystemOut {
-			reportWriter.writeReport(DEPENDENCIES)
+			report.writeReport(DEPENDENCIES)
 		}
 		assertSameXml(output, EXPECTED_REPORT_TEXT)
 	}
@@ -77,35 +77,35 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 			<!DOCTYPE html><html><head><title>Needy Dependency Report: My Title</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>
 			<body><h1>Needy Dependency Report</h1><div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>My Title</td></tr><tr><td class='em'>Timestamp:</td><td>$TIMESTAMP_STRING</td></tr><tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr></table></div><div class='summary'><h2>Dependencies</h2><table><tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr></table></div></body></html>
 			"""
-		reportWriter.title = "My Title"
-		reportWriter.writeReport(writer, [])
+		report.title = "My Title"
+		report.writeReport(writer, [])
 		assertSameXml(writer.toString(), EXPECTED)
 	}
 	
 	@Test
 	void test_writeReport_Dependencies() {
-		reportWriter.writeReport(writer, DEPENDENCIES)
+		report.writeReport(writer, DEPENDENCIES)
 		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT)
 	}
 	
 	@Test
 	void test_writeReport_includeApplications() {
-		reportWriter.includeApplications = "Sample*, Other"
-		reportWriter.writeReport(writer, DEPENDENCIES)
+		report.includeApplications = "Sample*, Other"
+		report.writeReport(writer, DEPENDENCIES)
 		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_THIRD)
 	}
 	
 	@Test
 	void test_writeReport_excludeApplications() {
-		reportWriter.excludeApplications = "Th*"
-		reportWriter.writeReport(writer, DEPENDENCIES)
+		report.excludeApplications = "Th*"
+		report.writeReport(writer, DEPENDENCIES)
 		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_THIRD)
 	}
 	
 	@Test
 	void test_writeReport_OutputFile_WritesToFile() {
-		reportWriter.outputFile = OUTPUT_FILE
-		reportWriter.writeReport(DEPENDENCIES)
+		report.outputFile = OUTPUT_FILE
+		report.writeReport(DEPENDENCIES)
 
 		def file = new File(OUTPUT_FILE)
 		file.deleteOnExit()
@@ -115,13 +115,13 @@ class ByArtifactHtmlReportWriterTest extends AbstractTestCase {
 	
 	@Test
 	void test_writeReport_OutputFile_CannotCreateOutputFile() {
-		reportWriter.outputFile = "///noSuchDir/orSubDir/file.txt"
-		shouldFail(FileNotFoundException) { reportWriter.writeReport(DEPENDENCIES) }
+		report.outputFile = "///noSuchDir/orSubDir/file.txt"
+		shouldFail(FileNotFoundException) { report.writeReport(DEPENDENCIES) }
 	}
 
 	@Before
 	void setUp() {
-		reportWriter.getFormattedTimestamp = { TIMESTAMP_STRING }
+		report.getFormattedTimestamp = { TIMESTAMP_STRING }
 	}
 		
 }

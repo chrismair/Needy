@@ -43,10 +43,10 @@ class CreateSampleReport {
 	]
 
 	static void main(String[] args) {
-		def reportWriter = new ByArtifactHtmlReportWriter()
-		reportWriter.outputFile = OUTPUT_FILE
-		reportWriter.title = "Sample Project"
-		reportWriter.writeReport(DEPENDENCIES)
+		def report = new ByArtifactHtmlReport()
+		report.outputFile = OUTPUT_FILE
+		report.title = "Sample Project"
+		report.writeReport(DEPENDENCIES)
 	}
 	
 }

@@ -58,9 +58,9 @@ needy {
     reports {
     	// Syntax:  <report-name>(<report-writer-class>) { <optional-report-writer-properties> }
     
-        textReport("org.dx42.needy.report.ByArtifactTextReportWriter")    // Will write to stdout
+        textReport("org.dx42.needy.report.ByArtifactTextReport")    // Will write to stdout
 
-        HtmlReport("org.dx42.needy.report.ByArtifactHtmlReportWriter") {
+        HtmlReport("org.dx42.needy.report.ByArtifactHtmlReport") {
             outputFile = "Needy-Report.html"// Optional; If not set (null) then write report to stdout
             title = "My Sample Projects"	// Optional; report title
             includeApplications = null		// Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean include all
@@ -84,8 +84,8 @@ needy {
 ### Reports
 
   The provided report types are:
-  - `org.dx42.needy.report.ByArtifactTextReportWriter` - Simple text report listing all artifacts
-  - `org.dx42.needy.report.ByArtifactHtmlReportWriter` - HTML report listing all artifacts; See [Sample HTML Report](http://htmlpreview.github.com/?https://github.com/dx42/Needy/blob/master/samples/sample-html-report.html)
+  - `org.dx42.needy.report.ByArtifactTextReport` - Simple text report listing all artifacts
+  - `org.dx42.needy.report.ByArtifactHtmlReport` - HTML report listing all artifacts; See [Sample HTML Report](http://htmlpreview.github.com/?https://github.com/dx42/Needy/blob/master/samples/sample-html-report.html)
 
 ## Known Limitations
 

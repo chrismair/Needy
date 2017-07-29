@@ -8,7 +8,7 @@ ruleset {
     ruleset('rulesets/braces.xml')
 
 	// Dry rules
-    DuplicateMapLiteral(doNotApplyToClassNames:'*ReportWriter')
+    DuplicateMapLiteral(doNotApplyToClassNames:'*Report')
     
     ruleset('rulesets/exceptions.xml')
 

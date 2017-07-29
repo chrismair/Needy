@@ -17,12 +17,14 @@ package org.dx42.needy.report
 
 import org.dx42.needy.Dependency
 
-interface ReportWriter {
+class StubReport implements Report {
 
-	/**
-	 * Write out a report for the specified dependencies
-	 * @param dependencies - The List of Dependencies
-	 */
-	void writeReport(List<Dependency> dependencies)
+	List<Dependency> dependencies
+	String outputFile
 	
+	@Override
+	void writeReport(List<Dependency> dependencies) {
+		this.dependencies = dependencies
+	}
+
 }

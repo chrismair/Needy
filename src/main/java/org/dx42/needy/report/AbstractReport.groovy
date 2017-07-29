@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory
 import org.dx42.needy.Dependency
 import org.dx42.needy.util.WildcardUtil
 
-abstract class AbstractReportWriter implements ReportWriter {
+abstract class AbstractReport implements Report {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractReportWriter)
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractReport)
 	
 	String outputFile
 	String includeApplications 

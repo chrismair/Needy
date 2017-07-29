@@ -17,7 +17,7 @@ package org.dx42.needy
 
 import org.junit.Test
 
-import org.dx42.needy.report.StubReportWriter
+import org.dx42.needy.report.StubReport
 
 class NeedyRunnerTest extends AbstractTestCase {
 
@@ -38,8 +38,8 @@ class NeedyRunnerTest extends AbstractTestCase {
 				Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
 			}
 			reports {
-				report("org.dx42.needy.report.StubReportWriter") { }
-				report("org.dx42.needy.report.StubReportWriter") {
+				report("org.dx42.needy.report.StubReport") { }
+				report("org.dx42.needy.report.StubReport") {
 					outputFile = "report.txt"
 				}
 			}
@@ -68,7 +68,7 @@ class NeedyRunnerTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_execute_NoReportWriters() {
+	void test_execute_NoReports() {
 		def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		log(applicationBuilds)
@@ -79,19 +79,19 @@ class NeedyRunnerTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_execute_ReportWriters() {
+	void test_execute_Reports() {
 		def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT_WITH_REPORTS)
 		needyRunner.needyConfiguration = needyConfiguration
 		def result = needyRunner.execute()
 		
 		assert result == DEPENDENCIES
-		def reportWriters = needyConfiguration.reportWriters
-		assert reportWriters.size() == 2
-		assert reportWriters[0] instanceof StubReportWriter
-		assert reportWriters[0].dependencies == DEPENDENCIES
-		assert reportWriters[1] instanceof StubReportWriter
-		assert reportWriters[1].outputFile == "report.txt"
-		assert reportWriters[1].dependencies == DEPENDENCIES
+		def report = needyConfiguration.reports
+		assert report.size() == 2
+		assert report[0] instanceof StubReport
+		assert report[0].dependencies == DEPENDENCIES
+		assert report[1] instanceof StubReport
+		assert report[1].outputFile == "report.txt"
+		assert report[1].dependencies == DEPENDENCIES
 	}
 	
 }

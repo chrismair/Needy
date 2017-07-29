@@ -2,6 +2,7 @@
 
 TBD: Version 0.8 (Jul ??, 2017)
 --------------------------------------------------
+- [BREAKING CHANGE] Rename XxxReportWriter classes to XxxReport.
 - `ByArtifactHtmlReportWriter`: When filter out applications, reset numbering.
 
 

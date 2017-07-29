@@ -17,9 +17,9 @@ package org.dx42.needy
 
 import org.junit.Test
 
-import org.dx42.needy.report.ByArtifactTextReportWriter
-import org.dx42.needy.report.ReportWriter
-import org.dx42.needy.report.StubReportWriter
+import org.dx42.needy.report.ByArtifactTextReport
+import org.dx42.needy.report.Report
+import org.dx42.needy.report.StubReport
 
 class DslNeedyConfigurationTest extends AbstractTestCase {
 
@@ -52,7 +52,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 	void test_EmptyNeedyClosure() {
 		def needyConfiguration = DslNeedyConfiguration.fromString("needy { }")
 		assert needyConfiguration.getApplicationBuilds() == []
-		assert needyConfiguration.getReportWriters() == []
+		assert needyConfiguration.getReports() == []
 	}
 
 	@Test
@@ -67,7 +67,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
-		assert needyConfiguration.getReportWriters() == []
+		assert needyConfiguration.getReports() == []
 	}
 
 	@Test
@@ -120,7 +120,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
 		assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle", type:"gradle", properties:[a:1]]]) 
-		assert needyConfiguration.getReportWriters() == []
+		assert needyConfiguration.getReports() == []
 	}
 	
 	@Test
@@ -137,7 +137,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle", properties:[:]], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
-		assert needyConfiguration.getReportWriters() == []
+		assert needyConfiguration.getReports() == []
 	}
 	
 	@Test
@@ -154,7 +154,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
-		assert needyConfiguration.getReportWriters() == []
+		assert needyConfiguration.getReports() == []
 	}
 	
 	@Test
@@ -182,7 +182,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 				}
 
 				reports {
-					textReport("org.dx42.needy.report.ByArtifactTextReportWriter") {
+					textReport("org.dx42.needy.report.ByArtifactTextReport") {
 						outputFile = "xxx"
 					}
 				}
@@ -191,9 +191,9 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
-		assert needyConfiguration.getReportWriters().size() == 1
-		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
-		assert needyConfiguration.getReportWriters()[0].outputFile == "xxx"
+		assert needyConfiguration.getReports().size() == 1
+		assert needyConfiguration.getReports()[0] instanceof ByArtifactTextReport
+		assert needyConfiguration.getReports()[0].outputFile == "xxx"
 	}
 	
 	@Test
@@ -205,20 +205,20 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 				}
 
 				reports {
-					textReport("org.dx42.needy.report.ByArtifactTextReportWriter") {
+					textReport("org.dx42.needy.report.ByArtifactTextReport") {
 						outputFile = "xxx"
 					}
-					stubReport("org.dx42.needy.report.StubReportWriter")
+					stubReport("org.dx42.needy.report.StubReport")
 				}
 			}
 		"""
 		def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
 		def applicationBuilds = needyConfiguration.getApplicationBuilds()
 		assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
-		assert needyConfiguration.getReportWriters().size() == 2
-		assert needyConfiguration.getReportWriters()[0] instanceof ByArtifactTextReportWriter
-		assert needyConfiguration.getReportWriters()[0].outputFile == "xxx"
-		assert needyConfiguration.getReportWriters()[1] instanceof StubReportWriter
+		assert needyConfiguration.getReports().size() == 2
+		assert needyConfiguration.getReports()[0] instanceof ByArtifactTextReport
+		assert needyConfiguration.getReports()[0].outputFile == "xxx"
+		assert needyConfiguration.getReports()[1] instanceof StubReport
 	}
 	
 	@Test
@@ -246,7 +246,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		final TEXT2 = """
 			needy { 
 				reports {
-					unknown("org.dx42.needy.report.StubReportWriter", [a:1], "tooManyParameters")
+					unknown("org.dx42.needy.report.StubReport", [a:1], "tooManyParameters")
 				}
 			}
 		"""
@@ -258,7 +258,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 		final TEXT1 = """
 			needy { 
 				reports {
-					unknown("org.dx42.needy.report.StubReportWriter", "shouldBeAClosure")
+					unknown("org.dx42.needy.report.StubReport", "shouldBeAClosure")
 				}
 			}
 		"""
@@ -266,7 +266,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_getApplicationBuilds_NotAReportWriterClass() {
+	void test_getApplicationBuilds_NotAReportClass() {
 		final TEXT1 = """
 			needy { 
 				reports {
@@ -274,7 +274,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
 				}
 			}
 		"""
-		shouldFailWithMessage(ReportWriter.name) { DslNeedyConfiguration.fromString(TEXT1) }
+		shouldFailWithMessage(Report.name) { DslNeedyConfiguration.fromString(TEXT1) }
 	}
 	
 	@Test

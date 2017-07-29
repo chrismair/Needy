@@ -20,13 +20,13 @@ import org.junit.Test
 import org.dx42.needy.AbstractTestCase
 import org.dx42.needy.Dependency
 
-class RawTextReportWriterTest extends AbstractTestCase {
+class RawTextReportTest extends AbstractTestCase {
 
-	private RawTextReportWriter reportWriter = new RawTextReportWriter()
+	private RawTextReport report = new RawTextReport()
 	
 	@Test
 	void test_writeReport_Null() {
-		shouldFailWithMessage("dependencies") { reportWriter.writeReport(null) }
+		shouldFailWithMessage("dependencies") { report.writeReport(null) }
 	}
 	
 	@Test
@@ -38,7 +38,7 @@ class RawTextReportWriterTest extends AbstractTestCase {
 		]
 		
 		def output = captureSystemOut {
-			reportWriter.writeReport(dependencies)
+			report.writeReport(dependencies)
 		}
 
 		log "output=\n$output"
