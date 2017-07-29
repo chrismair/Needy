@@ -69,6 +69,9 @@ class ByArtifactHtmlReport extends AbstractReport {
 			body {
 				h1(STANDARD_TITLE)
 				out << buildReportMetadata()
+				if (notesHtml) {
+					unescaped << notesHtml
+				}
 				out << buildDependencyTable(sortedMap)
 			}
 		}

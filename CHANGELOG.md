@@ -4,6 +4,7 @@ TBD: Version 0.8 (Jul ??, 2017)
 --------------------------------------------------
 - [BREAKING CHANGE] Rename XxxReportWriter classes to XxxReport.
 - `ByArtifactHtmlReportWriter`: When filter out applications, reset numbering.
+- `ByArtifactHtmlReport`: Add *notesHtml* property to optionally embed custom HTML at top of report.
 
 
 Version 0.7 (Jul 23, 2017)

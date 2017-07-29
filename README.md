@@ -91,10 +91,11 @@ needy {
 
 | Configuration Property | Description                                                           | Default             |
 | ---------------------- |-----------------------------------------------------------------------|---------------------|
-| *outputFile*           | The path for the output file. If null, write to *standard out*.       | null                |
+| *outputFile*           | The path for the report output file. If null, write to *standard out*.| null                |
 | *title*                | The title for the report.                                             | "Dependency Report" |
-| *includeApplications*  | An comma-separated list of application names to include in the report, with optional wildcards ("*"); null mean include all. | null |
-| *excludeApplications*  | An comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
+| *notesHtml*            | If not null, embed this HTML in the report after the title and report info, before the *Dependencies* section.                 | null |
+| *includeApplications*  | A comma-separated list of application names to include in the report, with optional wildcards ("*"); null mean include all.    | null |
+| *excludeApplications*  | A comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
 
 #### org.dx42.needy.report.ByArtifactTextReport
  
@@ -102,7 +103,7 @@ needy {
     
 | Configuration Property | Description                                                           | Default        |
 | ---------------------- |-----------------------------------------------------------------------|----------------|
-| *outputFile*           | The path for the output file. If null, write to *standard out*.       | null           |
+| *outputFile*           | The path for the report output file. If null, write to *standard out*.| null           |
 
 
 ## Known Limitations

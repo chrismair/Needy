@@ -46,6 +46,7 @@ class CreateSampleReport {
 		def report = new ByArtifactHtmlReport()
 		report.outputFile = OUTPUT_FILE
 		report.title = "Sample Project"
+		report.notesHtml = "<h2>Notes</h2><p>This section is optional HTML you can insert using the <em>notesHtml</em> Report property</p>"
 		report.writeReport(DEPENDENCIES)
 	}
 	

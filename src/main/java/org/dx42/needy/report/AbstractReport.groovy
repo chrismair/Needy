@@ -28,6 +28,7 @@ abstract class AbstractReport implements Report {
 	String outputFile
 	String includeApplications 
 	String excludeApplications
+	String notesHtml
 	
 	protected Closure getDate = { new Date() }
 	
