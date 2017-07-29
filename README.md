@@ -56,7 +56,7 @@ needy {
     }
     
     reports {
-    	// Syntax:  <report-name>(<report-writer-class>) { <optional-report-writer-properties> }
+    	// Syntax:  <report-name>(<report-class>) { <optional-report-properties> }
     
         textReport("org.dx42.needy.report.ByArtifactTextReport")    // Will write to stdout
 
@@ -83,9 +83,27 @@ needy {
 
 ### Reports
 
-  The provided report types are:
-  - `org.dx42.needy.report.ByArtifactTextReport` - Simple text report listing all artifacts
-  - `org.dx42.needy.report.ByArtifactHtmlReport` - HTML report listing all artifacts; See [Sample HTML Report](http://htmlpreview.github.com/?https://github.com/dx42/Needy/blob/master/samples/sample-html-report.html)
+  The provided report types are described below.
+
+#### org.dx42.needy.report.ByArtifactHtmlReport
+
+  This is an HTML report listing all artifacts. See [Sample HTML Report](http://htmlpreview.github.com/?https://github.com/dx42/Needy/blob/master/samples/sample-html-report.html).
+
+| Configuration Property | Description                                                           | Default             |
+| ---------------------- |-----------------------------------------------------------------------|---------------------|
+| *outputFile*           | The path for the output file. If null, write to *standard out*.       | null                |
+| *title*                | The title for the report.                                             | "Dependency Report" |
+| *includeApplications*  | An comma-separated list of application names to include in the report, with optional wildcards ("*"); null mean include all. | null |
+| *excludeApplications*  | An comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
+
+#### org.dx42.needy.report.ByArtifactTextReport
+ 
+   This is a simple text report listing all artifacts.
+    
+| Configuration Property | Description                                                           | Default        |
+| ---------------------- |-----------------------------------------------------------------------|----------------|
+| *outputFile*           | The path for the output file. If null, write to *standard out*.       | null           |
+
 
 ## Known Limitations
 
