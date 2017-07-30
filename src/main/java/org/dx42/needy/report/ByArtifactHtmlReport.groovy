@@ -19,52 +19,17 @@ package org.dx42.needy.report
 import static org.dx42.needy.report.ReportUtil.*
 
 import org.dx42.needy.Dependency
-import org.dx42.needy.NeedyVersion
-import groovy.xml.StreamingMarkupBuilder
 
-class ByArtifactHtmlReport extends AbstractReport {
+/**
+ * HTML Report that displays all dependencies sorted by artifact name. 
+ *
+ * @author Chris Mair
+ */
+class ByArtifactHtmlReport extends AbstractHtmlReport {
 
-	private static final String STANDARD_TITLE = "Needy Dependency Report"
-	private static final String CSS_FILE = 'htmlreport.css'
-	
-	String title = "Dependency Report"
-	
-	@Override
-	void writeReport(Writer writer, List<Dependency> dependencies) {
+	protected buildBodySection(List<Dependency> dependencies) {
 		Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 
-		def builder = new StreamingMarkupBuilder()
-		def html = builder.bind {
-			mkp.yieldUnescaped('<!DOCTYPE html>')
-			html {
-				out << buildHeaderSection()
-				out << buildBodySection(sortedMap)
-			}
-		}
-		writer << html
-	}
-	
-	protected buildHeaderSection() {
-		return {
-			head {
-				title(STANDARD_TITLE + ": " + title)
-				mkp.yieldUnescaped('<meta http-equiv="Content-Type" content="text/html">')
-				out << buildCSS()
-			}
-		}
-	}
-
-	protected buildCSS() {
-		return {
-			def cssInputStream = getClasspathFileInputStream(CSS_FILE)
-			def css = cssInputStream.text
-			style(type: 'text/css') {
-				unescaped << css
-			}
-		}
-	}
-
-	protected buildBodySection(Map sortedMap) {
 		return {
 			body {
 				h1(STANDARD_TITLE)
@@ -73,27 +38,6 @@ class ByArtifactHtmlReport extends AbstractReport {
 					unescaped << notesHtml
 				}
 				out << buildDependencyTable(sortedMap)
-			}
-		}
-	}
-
-	protected buildReportMetadata() {
-		return {
-			div(class: 'metadata') {
-				table {
-					tr {
-						td(class: 'em', "Report Title:")
-						td(class: 'reportTitle', title)
-					}
-					tr {
-						td(class: 'em', "Timestamp:")
-						td getFormattedTimestamp()
-					}
-					tr {
-						td(class: 'em', "Generated With:")
-						td { a("Needy v" + NeedyVersion.version, href:"https://github.com/dx42/Needy") }
-					}
-				}
 			}
 		}
 	}
@@ -112,30 +56,13 @@ class ByArtifactHtmlReport extends AbstractReport {
 					}
 					int index = 1
 					sortedMap.each{ k, v ->
-						def closure = buildRow(k, v, index)
+						def closure = buildDependencyRow(k, v, index)
 						if (closure) {
 							out << closure
 							index++
 						}
 					} 
 				}
-			}
-		}
-	}
-
-	private Closure buildRow(k, v, int index) {
-		def applicationNames = v.findAll { name -> includeApplication(name) }
-		applicationNames = applicationNames.findAll { name -> !excludeApplication(name) }
-		if (!applicationNames) {
-			return null
-		}
-		return {
-			tr {
-				td(index)
-				td(k.group)
-				td(k.name)
-				td(k.version)
-				td(applicationNames.join(", "), class:'applicationNames')
 			}
 		}
 	}
