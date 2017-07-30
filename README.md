@@ -85,7 +85,7 @@ needy {
 
   The provided report types are described below.
 
-#### org.dx42.needy.report.ByArtifactHtmlReport
+#### ByArtifactHtmlReport (org.dx42.needy.report.ByArtifactHtmlReport)
 
   This is an HTML report listing all artifacts. See [Sample HTML Report](http://htmlpreview.github.com/?https://github.com/dx42/Needy/blob/master/samples/sample-html-report.html).
 
@@ -97,7 +97,7 @@ needy {
 | *includeApplications*  | A comma-separated list of application names to include in the report, with optional wildcards ("*"); null mean include all.    | null |
 | *excludeApplications*  | A comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
 
-#### org.dx42.needy.report.ByArtifactTextReport
+#### ByArtifactTextReport (org.dx42.needy.report.ByArtifactTextReport)
  
    This is a simple text report listing all artifacts.
     
@@ -127,4 +127,4 @@ needy {
 
   - Parse Maven POM XML
   - XML Report and/or JSON Report
-  - Checker/Handler/Visitor way to analyze or validate each dependency -- check for known vulnerabilities or disallow artifacts by policy
+  - Reports that show disallowed/deprecated/end-of-life artifacts, as configured; or check for artifacts with known vulnerabilities 
