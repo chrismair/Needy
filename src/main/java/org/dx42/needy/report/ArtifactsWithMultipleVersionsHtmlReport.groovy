@@ -18,17 +18,19 @@ package org.dx42.needy.report
 
 import static org.dx42.needy.report.ReportUtil.*
 
+import org.dx42.needy.Artifact
 import org.dx42.needy.Dependency
 
 /**
- * HTML Report that displays all dependencies sorted by artifact name. 
+ * HTML Report that displays only dependencies for artifacts with more than one version used 
+ * across the applications, sorted by artifact name. 
  *
  * @author Chris Mair
  */
 class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
 
 	protected buildBodySection(List<Dependency> dependencies) {
-		Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
+		Map sortedMap = buildArtifactMap(dependencies)
 
 		return {
 			body {
@@ -45,7 +47,7 @@ class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
 	private buildDependencyTable(Map sortedMap) {
 		return {
 			div(class: 'summary') {
-				h2("Dependencies")
+				h2("Artifacts with Multiple Versions")
 				table {
 					tr(class:'tableHeader') {
 						th("#")
@@ -64,6 +66,33 @@ class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
 					} 
 				}
 			}
+		}
+	}
+
+	private SortedMap<Artifact, Set<String>> buildArtifactMap(List<Dependency> dependencies) {
+		SortedMap<Artifact, Set<String>> map = new TreeMap<>(ARTIFACT_COMPARATOR)
+		
+		dependencies.each { dependency ->
+			Artifact key = dependency.artifact
+			
+			if (containsArtifactWithDifferentVersion(dependencies, dependency)) {
+				if (!map.containsKey(key)) {
+					map[key] = new TreeSet<String>()
+				}
+				map[key] << dependency.applicationName
+			}
+		}
+		return map
+	}
+
+	private boolean containsArtifactWithDifferentVersion(List<Dependency> dependencies, Dependency dependency) {
+		Artifact artifact = dependency.artifact
+		return dependencies.find { dep ->  			
+			Artifact otherArtifact = dep.artifact
+			
+			// If any other dependency artifact has the same group and name, but different version
+			return isIncludedApplication(dep.applicationName) && 
+				artifact.group == otherArtifact.group && artifact.name == otherArtifact.name && artifact.version != otherArtifact.version
 		}
 	}
 

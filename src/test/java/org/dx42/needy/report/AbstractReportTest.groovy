@@ -127,5 +127,20 @@ class AbstractReportTest extends AbstractTestCase {
 		assert !report.excludeApplication("A-B")
 		assert !report.excludeApplication("AB")
 	}
-	
+
+	@Test
+	void test_isIncludedApplication() {
+		report.includeApplications = "A*"		
+		report.excludeApplications = "B*, CCC"
+				
+		assert report.isIncludedApplication("AAA")
+		assert report.isIncludedApplication("ABC")
+		
+		assert !report.isIncludedApplication("B")
+		assert !report.isIncludedApplication("BBB")
+		assert !report.isIncludedApplication("CCC")
+		assert !report.isIncludedApplication("CXX")
+		assert !report.isIncludedApplication("Other")
+	}
+		
 }

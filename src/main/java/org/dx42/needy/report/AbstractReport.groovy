@@ -68,4 +68,8 @@ abstract class AbstractReport implements Report {
 		return excludeApplications ? WildcardUtil.matches(applicationName, excludeApplications) : false
 	}
 	
+	protected boolean isIncludedApplication(String applicationName) {
+		return includeApplication(applicationName) && !excludeApplication(applicationName)
+	}
+	
 }
