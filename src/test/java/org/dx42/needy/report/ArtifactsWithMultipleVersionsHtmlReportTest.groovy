@@ -15,29 +15,9 @@
  */
 package org.dx42.needy.report
 
-import org.junit.Before
 import org.junit.Test
 
-import org.dx42.needy.AbstractTestCase
-import org.dx42.needy.Dependency
-import org.dx42.needy.NeedyVersion
-
-class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractTestCase {
-
-	private static final String OUTPUT_FILE = "src/test/resources/temp-html-report.html"
-	private static final List<Dependency> DEPENDENCIES = [
-		new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-		new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.17"),
-		new Dependency(applicationName:"Sample_Two", group:"org.other", name:"service", version:"1.9"),
-		new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
-		new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
-	]
-	private static final String TIMESTAMP_STRING = "Jul 1, 2017 7:20:09 AM"
-	private static final String CSS_FILE = "src/main/resources/htmlreport.css"
-	private static final String CSS = new File(CSS_FILE).text
-	private static final String VERSION = NeedyVersion.version
+class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractHtmlReportTestCase {
 
 	private static final String EXPECTED_REPORT_TEXT = """
 		<!DOCTYPE html><html><head><title>Needy Dependency Report: Dependency Report</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>
@@ -64,22 +44,18 @@ class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractTestCase {
 		</table></div></body></html>
 		"""
 		
-	private ArtifactsWithMultipleVersionsHtmlReport report = new ArtifactsWithMultipleVersionsHtmlReport()
-	private StringWriter writer = new StringWriter()
-	
-	@Test
-	void test_writeReport_Null() {
-		shouldFailWithMessage("dependencies") { report.writeReport(null) }
-	}
+    protected String getExpectedReportText() {
+        return EXPECTED_REPORT_TEXT
+    }
+    
+    protected Report createReport() {
+        return new ArtifactsWithMultipleVersionsHtmlReport()
+    }
 
-	@Test
-	void test_writeReport_WritesToStdOut() {
-		def output = captureSystemOut {
-			report.writeReport(DEPENDENCIES)
-		}
-		assertSameXml(output, EXPECTED_REPORT_TEXT)
-	}
-
+    //------------------------------------------------------------------------------------
+    // Tests
+    //------------------------------------------------------------------------------------
+    
 	@Test
 	void test_writeReport_EmptyDependencies_SetTitle() {
 		final EXPECTED = """
@@ -121,26 +97,4 @@ class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractTestCase {
 		assertSameXml(writer.toString(), expected)
 	}
 	
-	@Test
-	void test_writeReport_OutputFile_WritesToFile() {
-		report.outputFile = OUTPUT_FILE
-		report.writeReport(DEPENDENCIES)
-
-		def file = new File(OUTPUT_FILE)
-		file.deleteOnExit()
-		
-		assertSameXml(file.text, EXPECTED_REPORT_TEXT)
-	}
-	
-	@Test
-	void test_writeReport_OutputFile_CannotCreateOutputFile() {
-		report.outputFile = "///noSuchDir/orSubDir/file.txt"
-		shouldFail(FileNotFoundException) { report.writeReport(DEPENDENCIES) }
-	}
-
-	@Before
-	void setUp() {
-		report.getFormattedTimestamp = { TIMESTAMP_STRING }
-	}
-		
 }
