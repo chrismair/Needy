@@ -40,6 +40,14 @@ class ReportUtil {
 		return map
 	}
 
+    static SortedSet<String> buildSetOfApplicationNames(List<Dependency> dependencies) {
+        SortedSet<String> names = [] as SortedSet
+        dependencies.each { dependency ->
+            names << dependency.applicationName
+        }
+        return names
+    }
+    
 	static InputStream getClasspathFileInputStream(String path) throws IOException {
 		def inputStream = ReportUtil.classLoader.getResourceAsStream(path)
 		if (!inputStream) {

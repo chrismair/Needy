@@ -25,7 +25,16 @@ class ReportUtilTest extends AbstractTestCase {
 
 	private static final String FILE_ON_CLASSPATH = "htmlreport.css"
 	private static final String FILE_PATH = "src/main/resources/$FILE_ON_CLASSPATH"
-	
+
+    private static final DEPENDENCIES = [
+        new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
+        new Dependency(applicationName:"Sample1", group:"ORG.hibernate", name:"hibernate-core", version:"3.1"),
+        new Dependency(applicationName:"sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
+    ]
+
 	@Test
 	void test_buildMapOfArtifactToApplicationNames_EmptyDependencies() {
 		def dependencies = []
@@ -46,16 +55,7 @@ class ReportUtilTest extends AbstractTestCase {
 	
 	@Test
 	void test_buildMapOfArtifactToApplicationNames() {
-		def dependencies = [
-			new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
-			new Dependency(applicationName:"Sample1", group:"ORG.hibernate", name:"hibernate-core", version:"3.1"),
-			new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
-			new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
-			new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
-			new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
-		]
-
-		def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
+		def map = ReportUtil.buildMapOfArtifactToApplicationNames(DEPENDENCIES)
 
 		def a1 = new Artifact(group:"log4j", name:"log4j", version:"1.2.14")
 		def a2 = new Artifact(group:"log4j-extra", name:"stuff", version:"1.0") 
@@ -66,12 +66,17 @@ class ReportUtilTest extends AbstractTestCase {
 		assert map.keySet() as List == [a1, a2, a3, a4]
 		
 		assert map == [
-			(a1): ["Sample1", "Sample_Two", "Third"] as SortedSet,
+			(a1): ["Sample1", "sample_Two", "Third"] as SortedSet,
 			(a2): ["Third"] as SortedSet,
 			(a3): ["Sample1"] as SortedSet,
 			(a4): ["Third"] as SortedSet]
 	}
 	
+    @Test
+    void test_buildSetOfApplicationNames() {
+        assert ReportUtil.buildSetOfApplicationNames(DEPENDENCIES) == ["Sample1", "sample_Two", "Third"] as Set
+    }
+    
 	@Test
 	void test_getClasspathFileInputStream() {
 		def fileText = new File(FILE_PATH).text
