@@ -100,37 +100,37 @@ class AbstractReportTest extends AbstractTestCase {
 	}
 	
 	@Test
-	void test_includeApplication() {
-		assert report.includeApplication("a")
+	void test_matchesIcludeApplication() {
+		assert report.matchesIncludeApplications("a")
 
 		report.includeApplications = "A*"		
-		assert report.includeApplication("AAA")
-		assert report.includeApplication("A-B")
-		assert !report.includeApplication("B")
+		assert report.matchesIncludeApplications("AAA")
+		assert report.matchesIncludeApplications("A-B")
+		assert !report.matchesIncludeApplications("B")
 		
 		report.includeApplications = "A, B*"		
-		assert report.includeApplication("A")
-		assert report.includeApplication("B")
-		assert report.includeApplication("BAB")
-		assert !report.includeApplication("A-B")
-		assert !report.includeApplication("AB")
+		assert report.matchesIncludeApplications("A")
+		assert report.matchesIncludeApplications("B")
+		assert report.matchesIncludeApplications("BAB")
+		assert !report.matchesIncludeApplications("A-B")
+		assert !report.matchesIncludeApplications("AB")
 	}
 	
 	@Test
-	void test_excludeApplication() {
-		assert !report.excludeApplication("a")
+	void test_matchesExcludeApplications() {
+		assert !report.matchesExcludeApplications("a")
 		
 		report.excludeApplications = "A*"
-		assert report.excludeApplication("AAA")
-		assert report.excludeApplication("A-B")
-		assert !report.excludeApplication("B")
+		assert report.matchesExcludeApplications("AAA")
+		assert report.matchesExcludeApplications("A-B")
+		assert !report.matchesExcludeApplications("B")
 		
 		report.excludeApplications = "A, B*"
-		assert report.excludeApplication("A")
-		assert report.excludeApplication("B")
-		assert report.excludeApplication("BAB")
-		assert !report.excludeApplication("A-B")
-		assert !report.excludeApplication("AB")
+		assert report.matchesExcludeApplications("A")
+		assert report.matchesExcludeApplications("B")
+		assert report.matchesExcludeApplications("BAB")
+		assert !report.matchesExcludeApplications("A-B")
+		assert !report.matchesExcludeApplications("AB")
 	}
 
 	@Test

@@ -92,8 +92,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
 	}
 
 	protected Closure buildDependencyRow(k, v, int index) {
-		def applicationNames = v.findAll { name -> includeApplication(name) }
-		applicationNames = applicationNames.findAll { name -> !excludeApplication(name) }
+		def applicationNames = v.findAll { name -> isIncludedApplication(name) }
 		if (!applicationNames) {
 			return null
 		}

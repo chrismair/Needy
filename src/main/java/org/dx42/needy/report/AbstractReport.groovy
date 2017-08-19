@@ -60,16 +60,16 @@ abstract class AbstractReport implements Report {
 		return System.out.newPrintWriter()
 	}
 	
-	protected boolean includeApplication(String applicationName) {
+	protected boolean matchesIncludeApplications(String applicationName) {
 		return includeApplications ? WildcardUtil.matches(applicationName, includeApplications) : true
 	}
 	
-	protected boolean excludeApplication(String applicationName) {
+	protected boolean matchesExcludeApplications(String applicationName) {
 		return excludeApplications ? WildcardUtil.matches(applicationName, excludeApplications) : false
 	}
 	
 	protected boolean isIncludedApplication(String applicationName) {
-		return includeApplication(applicationName) && !excludeApplication(applicationName)
+		return matchesIncludeApplications(applicationName) && !matchesExcludeApplications(applicationName)
 	}
 	
     protected SortedSet<String> getApplicationNames(List<Dependency> dependencies) {
