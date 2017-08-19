@@ -40,6 +40,7 @@ class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
 					unescaped << notesHtml
 				}
 				out << buildDependencyTable(sortedMap)
+                out << buildApplicationList(dependencies)
 			}
 		}
 	}

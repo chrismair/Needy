@@ -29,7 +29,14 @@ class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractHtmlReportTest
 		<tr><td>2</td><td>log4j</td><td>log4j</td><td>1.2.17</td><td class='applicationNames'>Sample_Two</td></tr>
 		<tr><td>3</td><td>org.other</td><td>service</td><td>1.9</td><td class='applicationNames'>Sample_Two</td></tr>
 		<tr><td>4</td><td>org.other</td><td>service</td><td>2.0</td><td class='applicationNames'>Third</td></tr>
-		</table></div></body></html>
+		</table></div>
+        <h2>Application Names</h2>
+        <ol>
+            <li>Sample1</li>
+            <li>Sample_Two</li>
+            <li>Third</li>
+        </ol>
+        </body></html>
 		"""
 
 	private static final String EXPECTED_REPORT_TEXT_NO_THIRD = """
@@ -41,7 +48,13 @@ class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractHtmlReportTest
 		<th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr>
 		<tr><td>1</td><td>log4j</td><td>log4j</td><td>1.2.14</td><td class='applicationNames'>Sample1</td></tr>
 		<tr><td>2</td><td>log4j</td><td>log4j</td><td>1.2.17</td><td class='applicationNames'>Sample_Two</td></tr>
-		</table></div></body></html>
+		</table></div>
+        <h2>Application Names</h2>
+        <ol>
+            <li>Sample1</li>
+            <li>Sample_Two</li>
+        </ol>
+        </body></html>
 		"""
 		
     protected String getExpectedReportText() {
@@ -61,7 +74,9 @@ class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractHtmlReportTest
 		final EXPECTED = """
 			<!DOCTYPE html><html><head><title>Needy Dependency Report: My Title</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>
 			<body><h1>Needy Dependency Report</h1><div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>My Title</td></tr><tr><td class='em'>Timestamp:</td><td>$TIMESTAMP_STRING</td></tr><tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr></table></div><div class='summary'>
-			<h2>Artifacts with Multiple Versions</h2><table><tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr></table></div></body></html>
+			<h2>Artifacts with Multiple Versions</h2><table><tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr></table></div>
+            <h2>Application Names</h2><ol></ol>
+            </body></html>
 			"""
 		report.title = "My Title"
 		report.writeReport(writer, [])

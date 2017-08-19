@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2017 the original author or authors.
  * 
@@ -38,6 +37,7 @@ class ByArtifactHtmlReport extends AbstractHtmlReport {
 					unescaped << notesHtml
 				}
 				out << buildDependencyTable(sortedMap)
+				out << buildApplicationList(dependencies)
 			}
 		}
 	}

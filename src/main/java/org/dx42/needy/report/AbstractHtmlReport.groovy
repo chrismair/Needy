@@ -108,4 +108,16 @@ abstract class AbstractHtmlReport extends AbstractReport {
 		}
 	}
 
+    protected buildApplicationList(List<Dependency> dependencies) {
+        SortedSet<String> applicationNames = getApplicationNames(dependencies)
+        return {
+            h2("Application Names")
+            ol {
+                applicationNames.each { name ->
+                    li(name)
+                }
+            }
+        }
+    }
+
 }

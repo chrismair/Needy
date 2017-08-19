@@ -2,6 +2,8 @@
 
 Version 0.9 (Aug ??, 2017)
 --------------------------------------------------
+- `ByArtifactHtmlReport` and `ArtifactsWithMultipleVersionsHtmlReport`: Add "Applications" section to HTML reports that lists filtered list of application names.
+
 Infrastructure
 - New `AbstractHtmlReportTestCase`
 
