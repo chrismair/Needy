@@ -15,11 +15,10 @@
  */
 package org.dx42.needy.report
 
-import org.junit.Test
-
 import org.dx42.needy.AbstractTestCase
 import org.dx42.needy.Artifact
 import org.dx42.needy.Dependency
+import org.junit.Test
 
 class ReportUtilTest extends AbstractTestCase {
 
@@ -72,11 +71,6 @@ class ReportUtilTest extends AbstractTestCase {
 			(a4): ["Third"] as SortedSet]
 	}
 	
-    @Test
-    void test_buildSetOfApplicationNames() {
-        assert ReportUtil.buildSetOfApplicationNames(DEPENDENCIES) == ["Sample1", "sample_Two", "Third"] as Set
-    }
-    
 	@Test
 	void test_getClasspathFileInputStream() {
 		def fileText = new File(FILE_PATH).text

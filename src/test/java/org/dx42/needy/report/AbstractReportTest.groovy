@@ -28,9 +28,14 @@ import org.junit.Test
 class AbstractReportTest extends AbstractTestCase {
 
 	private static final Date DATE = new Date(1499477419708L)
-	private static final List<Dependency> DEPENDENCIES = [
-		new Dependency(applicationName:"App1", group:"acme", name:"service", version:"2.0")]
-
+    private static final List<Dependency> DEPENDENCIES = [
+        new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
+        new Dependency(applicationName:"Sample1", group:"ORG.hibernate", name:"hibernate-core", version:"3.1"),
+        new Dependency(applicationName:"sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
+    ]
 	private Writer writer
 	private List<Dependency> dependencies
 	private report = new AbstractReport() {  
@@ -142,5 +147,16 @@ class AbstractReportTest extends AbstractTestCase {
 		assert !report.isIncludedApplication("CXX")
 		assert !report.isIncludedApplication("Other")
 	}
-		
+
+    @Test
+    void test_getApplicationNames() {
+        assert report.getApplicationNames(DEPENDENCIES) == ["Sample1", "sample_Two", "Third"] as Set
+        
+        report.excludeApplications = "*1"
+        assert report.getApplicationNames(DEPENDENCIES) == ["sample_Two", "Third"] as Set
+        
+        report.includeApplications = "*amp*"
+        assert report.getApplicationNames(DEPENDENCIES) == ["sample_Two"] as Set
+    }
+    		
 }

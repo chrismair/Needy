@@ -1,6 +1,12 @@
 # Needy Change Log
 
-TBD: Version 0.8 (Jul ??, 2017)
+Version 0.9 (Aug ??, 2017)
+--------------------------------------------------
+Infrastructure
+- New `AbstractHtmlReportTestCase`
+
+
+Version 0.8 (Jul 30, 2017)
 --------------------------------------------------
 - [BREAKING CHANGE] Rename XxxReportWriter classes to XxxReport.
 - `ByArtifactHtmlReportWriter`: When filter out applications, reset numbering.

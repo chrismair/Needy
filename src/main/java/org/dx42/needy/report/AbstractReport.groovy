@@ -72,4 +72,15 @@ abstract class AbstractReport implements Report {
 		return includeApplication(applicationName) && !excludeApplication(applicationName)
 	}
 	
+    protected SortedSet<String> getApplicationNames(List<Dependency> dependencies) {
+        SortedSet<String> names = [] as SortedSet
+        dependencies.each { dependency ->
+            String name = dependency.applicationName
+            if (isIncludedApplication(name)) {
+                names << name
+            }
+        }
+        return names
+    }
+
 }
