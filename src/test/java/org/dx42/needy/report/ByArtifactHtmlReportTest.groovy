@@ -33,6 +33,17 @@ class ByArtifactHtmlReportTest extends AbstractHtmlReportTestCase {
         </body></html>
 		"""
 
+    private static final String EXPECTED_REPORT_TEXT_NO_LOG4J = """
+        <!DOCTYPE html><html>$HEAD_HTML <body>$H1_HTML    $METADATA_HTML
+        <div class='summary'><h2>Dependencies</h2><table>$DEP_TABLE_HEADER_HTML
+        ${dependencyRow(1, "org.hibernate", "hibernate-core", "3.1", "Sample1")}
+        ${dependencyRow(2, "org.other", "service", "1.9", "Sample_Two")}
+        ${dependencyRow(3, "org.other", "service", "2.0", "Third")}
+        </table></div>
+        $APPLICATION_NAMES_HTML
+        </body></html>
+        """
+
 	private static final String EXPECTED_REPORT_TEXT_NO_THIRD = """
 		<!DOCTYPE html><html>$HEAD_HTML <body>$H1_HTML  $METADATA_HTML
         <div class='summary'><h2>Dependencies</h2><table> $DEP_TABLE_HEADER_HTML
@@ -95,6 +106,20 @@ class ByArtifactHtmlReportTest extends AbstractHtmlReportTestCase {
 		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_THIRD)
 	}
 	
+    @Test
+    void test_writeReport_includeArtifacts() {
+        report.includeArtifacts = "org.hibernate:*:*, *:service:1.9, org.other:service:2.0"
+        report.writeReport(writer, DEPENDENCIES)
+        assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_LOG4J)
+    }
+    
+    @Test
+    void test_writeReport_excludeArtifacts() {
+        report.excludeArtifacts = "log4j:*:*, *:*:1.0"
+        report.writeReport(writer, DEPENDENCIES)
+        assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_LOG4J)
+    }
+    
 	@Test
 	void test_writeReport_notesHtml() {
 		String notesHtml = "<h2>Notes</h2><p>Some text</p>"

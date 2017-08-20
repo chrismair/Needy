@@ -32,6 +32,17 @@ class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractHtmlReportTest
         </body></html>
 		"""
 
+    private static final String EXPECTED_REPORT_TEXT_NO_LOG4J = """
+        <!DOCTYPE html><html> $HEAD_HTML  <body>$H1_HTML  $METADATA_HTML
+        <div class='summary'><h2>Artifacts with Multiple Versions</h2><table>
+        $DEP_TABLE_HEADER_HTML
+        ${dependencyRow(1, "org.other", "service", "1.9", "Sample_Two")}
+        ${dependencyRow(2, "org.other", "service", "2.0", "Third")}
+        </table></div>
+        $APPLICATION_NAMES_HTML
+        </body></html>
+        """
+
 	private static final String EXPECTED_REPORT_TEXT_NO_THIRD = """
 		<!DOCTYPE html><html> $HEAD_HTML  <body>$H1_HTML  $METADATA_HTML
         <div class='summary'><h2>Artifacts with Multiple Versions</h2><table>
@@ -93,6 +104,20 @@ class ArtifactsWithMultipleVersionsHtmlReportTest extends AbstractHtmlReportTest
 		assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_THIRD)
 	}
 	
+    @Test
+    void test_writeReport_includeArtifacts() {
+        report.includeArtifacts = "org.other:service:*"
+        report.writeReport(writer, DEPENDENCIES)
+        assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_LOG4J)
+    }
+    
+    @Test
+    void test_writeReport_excludeArtifacts() {
+        report.excludeArtifacts = "log4j:*:*"
+        report.writeReport(writer, DEPENDENCIES)
+        assertSameXml(writer.toString(), EXPECTED_REPORT_TEXT_NO_LOG4J)
+    }
+    
 	@Test
 	void test_writeReport_notesHtml() {
 		String notesHtml = "<h2>Notes</h2><p>Some text</p>"

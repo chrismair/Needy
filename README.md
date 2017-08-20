@@ -65,6 +65,8 @@ needy {
             title = "My Sample Projects"	// Optional; report title
             includeApplications = null		// Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean include all
             excludeApplications = null		// Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean exclude none
+            includeArtifacts = null			// Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean include all
+            excludeArtifacts = null			// Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean exclude none
         }
     }
 }
@@ -96,6 +98,8 @@ needy {
 | *notesHtml*            | If not null, embed this HTML in the report after the title and report info, before the *Dependencies* section.                 | null |
 | *includeApplications*  | A comma-separated list of application names to include in the report, with optional wildcards ("*"); null mean include all.    | null |
 | *excludeApplications*  | A comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
+| *includeArtifacts*     | A comma-separated list of artifact names to include in the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean include all. | null |
+| *excludeArtifacts*     | A comma-separated list of artifact names to exclude from the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean exclude none. | null |
 
 #### ArtifactsWithMultipleVersionsHtmlReport (org.dx42.needy.report.ArtifactsWithMultipleVersionsHtmlReport)
 
@@ -108,6 +112,8 @@ needy {
 | *notesHtml*            | If not null, embed this HTML in the report after the title and report info, before the *Dependencies* section.                 | null |
 | *includeApplications*  | A comma-separated list of application names to include in the report, with optional wildcards ("*"); null mean include all.    | null |
 | *excludeApplications*  | A comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
+| *includeArtifacts*     | A comma-separated list of artifact names to include in the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean include all.    | null |
+| *excludeArtifacts*     | A comma-separated list of artifact names to exclude from the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean exclude none. | null |
 
 #### ByArtifactTextReport (org.dx42.needy.report.ByArtifactTextReport)
  
@@ -120,20 +126,17 @@ needy {
 
 ## Known Limitations
 
-  - This implementation is quite limited. 
   - It supports only relatively standard Gradle syntax.
-  - It only handles declared dependencies  (not transitive dependencies).
+  - It only processes declared dependencies  (not transitive dependencies).
   - The report does not include dependencies (jars) embedded within the project
   - When running Needy, you must include jars on the classpath for all classes referenced within the build files being parsed, e.g. the Gradle API or application-specific classes.
-  - TBD... 
   
 
 ## Needy Runtime Dependencies
 
-  - "config.needy" configuration file in the current directory
+  - A "config.needy" configuration file in the current directory
   - Groovy jar
-  - SLF4J API and implementation jar(s) -- e.g. Logback
-  - TBD...
+  - (SLF4J)[https://www.slf4j.org/] API and implementation (binding) jars
   
 ## Road Map
 

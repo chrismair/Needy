@@ -55,12 +55,14 @@ class ByArtifactHtmlReport extends AbstractHtmlReport {
 						th("Applications")
 					}
 					int index = 1
-					sortedMap.each{ k, v ->
-						def closure = buildDependencyRow(k, v, index)
-						if (closure) {
-							out << closure
-							index++
-						}
+					sortedMap.each{ artifact, names ->
+                        if (isIncludedArtifact(artifact)) {
+    						def closure = buildDependencyRow(artifact, names, index)
+    						if (closure) {
+    							out << closure
+    							index++
+    						}
+                        }
 					} 
 				}
 			}

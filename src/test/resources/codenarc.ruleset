@@ -37,7 +37,7 @@ ruleset {
 	CyclomaticComplexity
 	MethodCount
 	MethodSize(doNotApplyToClassNames:'*Test')
-	NestedBlockDepth
+	NestedBlockDepth(doNotApplyToClassNames:'*HtmlReport')
 	ParameterCount
 
     ruleset('rulesets/unnecessary.xml') {

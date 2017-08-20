@@ -91,17 +91,17 @@ abstract class AbstractHtmlReport extends AbstractReport {
 		}
 	}
 
-	protected Closure buildDependencyRow(k, v, int index) {
-		def applicationNames = v.findAll { name -> isIncludedApplication(name) }
+	protected Closure buildDependencyRow(artifact, names, int index) {
+		def applicationNames = names.findAll { name -> isIncludedApplication(name) }
 		if (!applicationNames) {
 			return null
 		}
 		return {
 			tr {
 				td(index)
-				td(k.group)
-				td(k.name)
-				td(k.version)
+				td(artifact.group)
+				td(artifact.name)
+				td(artifact.version)
 				td(applicationNames.join(", "), class:'applicationNames')
 			}
 		}

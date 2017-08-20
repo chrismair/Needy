@@ -74,13 +74,13 @@ class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
 		SortedMap<Artifact, Set<String>> map = new TreeMap<>(ARTIFACT_COMPARATOR)
 		
 		dependencies.each { dependency ->
-			Artifact key = dependency.artifact
+			Artifact artifact = dependency.artifact
 			
-			if (containsArtifactWithDifferentVersion(dependencies, dependency)) {
-				if (!map.containsKey(key)) {
-					map[key] = new TreeSet<String>()
+			if (isIncludedArtifact(artifact) && containsArtifactWithDifferentVersion(dependencies, dependency)) {
+				if (!map.containsKey(artifact)) {
+					map[artifact] = new TreeSet<String>()
 				}
-				map[key] << dependency.applicationName
+				map[artifact] << dependency.applicationName
 			}
 		}
 		return map
