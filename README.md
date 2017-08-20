@@ -1,4 +1,4 @@
-# Needy  (https://github.com/dx42/Needy)
+# Needy
 
 **Needy** Produces simple consolidated dependency report across multiple Gradle projects.
 
@@ -61,12 +61,12 @@ needy {
         textReport("org.dx42.needy.report.ByArtifactTextReport")    // Will write to stdout
 
         HtmlReport("org.dx42.needy.report.ByArtifactHtmlReport") {
-            outputFile = "Needy-Report.html"// Optional; If not set (null) then write report to stdout
-            title = "My Sample Projects"	// Optional; report title
-            includeApplications = null		// Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean include all
-            excludeApplications = null		// Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean exclude none
-            includeArtifacts = null			// Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean include all
-            excludeArtifacts = null			// Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean exclude none
+            outputFile = "Needy-Report.html" // Optional; If not set (null) then write report to stdout
+            title = "My Sample Projects"     // Optional; report title
+            includeApplications = null       // Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean include all
+            excludeApplications = null       // Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean exclude none
+            includeArtifacts = null          // Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean include all
+            excludeArtifacts = null          // Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean exclude none
         }
     }
 }
@@ -143,3 +143,5 @@ needy {
   - Parse Maven POM XML
   - XML Report and/or JSON Report
   - Reports that show disallowed/deprecated/end-of-life artifacts, as configured; or check for artifacts with known vulnerabilities 
+
+<https://github.com/dx42/Needy>  

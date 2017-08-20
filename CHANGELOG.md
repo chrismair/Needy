@@ -1,6 +1,6 @@
 # Needy Change Log
 
-Version 0.9 (Aug ??, 2017)
+Version 0.9 (Aug 20, 2017)
 --------------------------------------------------
 - `ByArtifactHtmlReport` and `ArtifactsWithMultipleVersionsHtmlReport`: Add "Applications" section to HTML reports that lists filtered list of application names.
 - `ByArtifactHtmlReport` and `ArtifactsWithMultipleVersionsHtmlReport`: Add support for *includeArtifacts* and *excludeArtifacts* properties.
