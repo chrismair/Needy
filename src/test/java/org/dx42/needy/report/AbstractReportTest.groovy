@@ -17,6 +17,7 @@
 package org.dx42.needy.report
 
 import org.dx42.needy.AbstractTestCase
+import org.dx42.needy.Artifact
 import org.dx42.needy.Dependency
 import org.junit.Test
 
@@ -99,8 +100,21 @@ class AbstractReportTest extends AbstractTestCase {
 		assert report.getDate() instanceof Date
 	}
 	
+    @Test
+    void test_getApplicationNames() {
+        assert report.getApplicationNames(DEPENDENCIES) == ["Sample1", "sample_Two", "Third"] as Set
+        
+        report.excludeApplications = "*1"
+        assert report.getApplicationNames(DEPENDENCIES) == ["sample_Two", "Third"] as Set
+        
+        report.includeApplications = "*amp*"
+        assert report.getApplicationNames(DEPENDENCIES) == ["sample_Two"] as Set
+    }
+
+    // Tests for include/exclude applications
+                
 	@Test
-	void test_matchesIcludeApplication() {
+	void test_matchesIncludeApplication() {
 		assert report.matchesIncludeApplications("a")
 
 		report.includeApplications = "A*"		
@@ -148,15 +162,63 @@ class AbstractReportTest extends AbstractTestCase {
 		assert !report.isIncludedApplication("Other")
 	}
 
+    // Tests for include/exclude artifacts
+                
+    private static final Artifact ARTIFACT_A_X_1 = new Artifact(group:'A', name:'X', version:'1')
+    private static final Artifact ARTIFACT_A_X_2 = new Artifact(group:'A', name:'X', version:'2')
+    private static final Artifact ARTIFACT_A_Y_1 = new Artifact(group:'A', name:'Y', version:'1')
+    private static final Artifact ARTIFACT_AA_XX_11 = new Artifact(group:'AA', name:'XX', version:'11')
+    private static final Artifact ARTIFACT_BB_XX_22 = new Artifact(group:'BB', name:'XX', version:'22')
+    private static final Artifact ARTIFACT_BB_YY_11 = new Artifact(group:'BB', name:'YY', version:'11')
+    
     @Test
-    void test_getApplicationNames() {
-        assert report.getApplicationNames(DEPENDENCIES) == ["Sample1", "sample_Two", "Third"] as Set
+    void test_matchesIncludeArtifacts() {
+        assert report.matchesIncludeArtifacts(ARTIFACT_A_X_1)
+
+        report.includeArtifacts = "A:X*:*1"       
+        assert report.matchesIncludeArtifacts(ARTIFACT_A_X_1)
+        assert !report.matchesIncludeArtifacts(ARTIFACT_A_X_2)
+        assert !report.matchesIncludeArtifacts(ARTIFACT_A_Y_1)
         
-        report.excludeApplications = "*1"
-        assert report.getApplicationNames(DEPENDENCIES) == ["sample_Two", "Third"] as Set
+        report.includeArtifacts = "BB:YY:11, A*:X*:*"       
+        assert report.matchesIncludeArtifacts(ARTIFACT_A_X_1)
+        assert report.matchesIncludeArtifacts(ARTIFACT_A_X_2)
+        assert report.matchesIncludeArtifacts(ARTIFACT_AA_XX_11)
+        assert report.matchesIncludeArtifacts(ARTIFACT_BB_YY_11)
         
-        report.includeApplications = "*amp*"
-        assert report.getApplicationNames(DEPENDENCIES) == ["sample_Two"] as Set
+        assert !report.matchesIncludeArtifacts(ARTIFACT_BB_XX_22)
+        assert !report.matchesIncludeArtifacts(ARTIFACT_A_Y_1)
     }
-    		
+    
+    @Test
+    void test_matchesExcludeArtifacts() {
+        assert !report.matchesExcludeArtifacts(ARTIFACT_A_X_1)
+        
+        report.excludeArtifacts = "A:X*:*2"
+        assert report.matchesExcludeArtifacts(ARTIFACT_A_X_2)
+        assert !report.matchesExcludeArtifacts(ARTIFACT_A_X_1)
+        assert !report.matchesExcludeArtifacts(ARTIFACT_AA_XX_11)
+        
+        report.excludeArtifacts = "BB:YY:11, A*:X*:*"
+        assert report.matchesExcludeArtifacts(ARTIFACT_A_X_1)
+        assert report.matchesExcludeArtifacts(ARTIFACT_A_X_2)
+        assert report.matchesExcludeArtifacts(ARTIFACT_AA_XX_11)
+        assert report.matchesExcludeArtifacts(ARTIFACT_BB_YY_11)
+        assert !report.matchesExcludeArtifacts(ARTIFACT_A_Y_1)
+        assert !report.matchesExcludeArtifacts(ARTIFACT_BB_XX_22)
+    }
+
+    @Test
+    void test_isIncludedArtifact() {
+        report.includeArtifacts = "A*"       
+        report.excludeArtifacts = "B*:*:*, *:*:2"
+                
+        assert report.isIncludedArtifact(ARTIFACT_A_X_1)
+        assert !report.isIncludedArtifact(ARTIFACT_A_X_2)
+        assert report.isIncludedArtifact(ARTIFACT_AA_XX_11)
+        assert !report.isIncludedArtifact(ARTIFACT_BB_YY_11)
+        assert report.isIncludedArtifact(ARTIFACT_A_Y_1)
+        assert !report.isIncludedArtifact(ARTIFACT_BB_XX_22)
+    }
+
 }

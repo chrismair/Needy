@@ -15,11 +15,11 @@
  */
 package org.dx42.needy.report
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
+import org.dx42.needy.Artifact
 import org.dx42.needy.Dependency
 import org.dx42.needy.util.WildcardUtil
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 abstract class AbstractReport implements Report {
 
@@ -28,6 +28,8 @@ abstract class AbstractReport implements Report {
 	String outputFile
 	String includeApplications 
 	String excludeApplications
+	String includeArtifacts 
+	String excludeArtifacts
 	String notesHtml
 	
 	protected Closure getDate = { new Date() }
@@ -72,6 +74,18 @@ abstract class AbstractReport implements Report {
 		return matchesIncludeApplications(applicationName) && !matchesExcludeApplications(applicationName)
 	}
 	
+    protected boolean matchesIncludeArtifacts(Artifact artifact) {
+        return includeArtifacts ? WildcardUtil.matches(artifact.toString(), includeArtifacts) : true
+    }
+    
+    protected boolean matchesExcludeArtifacts(Artifact artifact) {
+        return excludeArtifacts ? WildcardUtil.matches(artifact.toString(), excludeArtifacts) : false
+    }
+    
+    protected boolean isIncludedArtifact(Artifact artifact) {
+        return matchesIncludeArtifacts(artifact) && !matchesExcludeArtifacts(artifact)
+    }
+    
     protected SortedSet<String> getApplicationNames(List<Dependency> dependencies) {
         SortedSet<String> names = [] as SortedSet
         dependencies.each { dependency ->
