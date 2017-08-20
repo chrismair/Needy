@@ -38,7 +38,32 @@ abstract class AbstractHtmlReportTestCase extends AbstractTestCase {
     protected static final String CSS = new File(CSS_FILE).text
     protected static final String VERSION = NeedyVersion.version
 
-    
+    protected static final String HEAD_HTML = """<head><title>Needy Dependency Report: Dependency Report</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>"""
+    protected static final String H1_HTML = "<h1>Needy Dependency Report</h1>"
+    protected static final String METADATA_HTML = metadataHtml("Dependency Report")
+    protected static final String DEP_TABLE_HEADER_HTML = "<tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Version</th><th>Applications</th></tr>"
+    protected static final String APPLICATION_NAMES_HTML = """
+        <h2>Application Names</h2>
+        <ol>
+            <li>Sample1</li>
+            <li>Sample_Two</li>
+            <li>Third</li>
+        </ol>
+    """
+
+    protected static String metadataHtml(String title) {
+        return """
+        <div class='metadata'><table><tr><td class='em'>Report Title:</td><td class='reportTitle'>$title</td></tr>
+        <tr><td class='em'>Timestamp:</td><td>$TIMESTAMP_STRING</td></tr>
+        <tr><td class='em'>Generated With:</td><td><a href='https://github.com/dx42/Needy'>Needy v$VERSION</a></td></tr></table></div>"""
+    }
+    protected static String dependencyRow(int index, String group, String name, String version, String applicationNames) {
+        return "<tr><td>$index</td><td>$group</td><td>$name</td><td>$version</td><td class='applicationNames'>$applicationNames</td></tr>"
+    }
+    protected static String headHtml(String title) {
+        return """<head><title>Needy Dependency Report: $title</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>"""
+    }
+
     protected Report report
     protected StringWriter writer = new StringWriter()
     
