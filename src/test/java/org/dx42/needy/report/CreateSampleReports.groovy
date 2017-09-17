@@ -23,7 +23,7 @@ import org.dx42.needy.Dependency
  * 
  * @author Chris Mair
  */
-class CreateSampleReport {
+class CreateSampleReports {
 	
 	private static final String OUTPUT_FILE = "samples/sample-html-report.html"
 	private static final List<Dependency> DEPENDENCIES = [
