@@ -25,7 +25,6 @@ sourceSets {
 }
 
 repositories {
-	//maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 	maven { url "http://repo.maven.apache.org/maven2" }
 	jcenter()
 }
@@ -44,8 +43,8 @@ dependencies {
 	testCompile('org.gradle:gradle-core:3.2')  {				// Because the Gradle API is used within some sample Gradle build.gradle files
 		exclude group: 'org.gradle', module:'gradle-logging'	// To avoid "Class path contains multiple SLF4J bindings" warning
 	}
-	testCompile group:'org.codenarc', name:'CodeNarc', version: '0.27.0', transitive:false
-	testCompile group:'org.gmetrics', name:'GMetrics', version: '0.7', transitive:false
+	testCompile group:'org.codenarc', name:'CodeNarc', version: '1.0', transitive:false
+	testCompile group:'org.gmetrics', name:'GMetrics', version: '1.0', transitive:false
 }
 
 task sourcesJar(type: Jar) {
