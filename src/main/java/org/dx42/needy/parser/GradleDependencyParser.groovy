@@ -33,13 +33,15 @@ class GradleDependencyParser implements DependencyParser {
 		import org.gradle.api.file.*
 	"""
 	
+    boolean includeFileDependencies = true
+    
 	@Override
 	List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {
 		if (source == null) {
 			throw new IllegalArgumentException("Parameter source was null")
 		}
 
-		GradleDependencyParser_DslEvaluator dslEvaluator = new GradleDependencyParser_DslEvaluator(applicationName, binding)
+		GradleDependencyParser_DslEvaluator dslEvaluator = new GradleDependencyParser_DslEvaluator(applicationName, binding, includeFileDependencies)
 		
 		GroovyShell shell = createGroovyShell(dslEvaluator, binding)
 		try {
@@ -69,18 +71,32 @@ class GradleDependencyParser implements DependencyParser {
 	
 }
 
-class GradleDependencyParser_DslEvaluator {
+class FileDependency {
+    protected static final String GROUP = "** FILE DEPENDENCY"
+    
+    String name
+    def args
+}
 
+class GradleDependencyParser_DslEvaluator {
+    
 	private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser_DslEvaluator)
-	private static final IGNORED_METHOD_NAMES = ['project', 'files', 'fileTree']
 	
 	final List<Dependency> dependencies = []
 	final String applicationName
 	final Map<String, Object> binding
-	
-	GradleDependencyParser_DslEvaluator(String applicationName, Map<String, Object> binding) {
+	final boolean includeFileDependencies
+    final List ignoredMethodNames = ['project']
+    
+	GradleDependencyParser_DslEvaluator(String applicationName, Map<String, Object> binding, boolean includeFileDependencies) {
 		this.applicationName = applicationName
 		this.binding = binding
+        this.includeFileDependencies = includeFileDependencies
+        
+        this.ignoredMethodNames = ['project']
+        if (!includeFileDependencies) {
+            this.ignoredMethodNames += ["files", "fileTree"]
+        }
 	}
 	
 	void evaluate(Closure closure) {
@@ -90,12 +106,20 @@ class GradleDependencyParser_DslEvaluator {
 	}
 
 	def methodMissing(String name, args) {
-		if (IGNORED_METHOD_NAMES.contains(name)) {
+		if (ignoredMethodNames.contains(name)) {
 			return
 		}
+        if (name in ["files", "fileTree"]) {
+            def actualArgs = (args[-1] instanceof Closure) ? args[0..-2] : args
+            return new FileDependency(name:name, args:actualArgs)
+        }
 		if (args.length == 0) {
 			return
 		}
+        if (args[0] instanceof FileDependency) {
+            String methodString = args[0].name + "(" + args[0].args.inspect()+ ")"
+            dependencies << new Dependency(applicationName:applicationName, group:FileDependency.GROUP, name:methodString, version:"", configuration:name)
+        }
 		if (args[0] instanceof Map) {
 			LOG.info "methodMissing (Map): name=$name value=${args[0]}"
 			for (Map m: args) {

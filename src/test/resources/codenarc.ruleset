@@ -45,6 +45,7 @@ ruleset {
         exclude 'UnnecessaryGetter'
         exclude 'UnnecessaryReturnKeyword'
         exclude 'UnnecessarySubstring'
+        exclude 'UnnecessarySetter'
     }
 
     ruleset('rulesets/unused.xml')

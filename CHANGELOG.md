@@ -1,5 +1,11 @@
 # Needy Change Log
 
+Version 0.10 (Sep 17, 2017)
+--------------------------------------------------
+- `GradleDependencyParser`: Add entries for `file()` and `fileTree()` dependencies. Add *includeFileDependencies* property.
+- Upgrade to CodeNarc 1.0 and GMetrics 1.0.
+
+
 Version 0.9 (Aug 20, 2017)
 --------------------------------------------------
 - `ByArtifactHtmlReport` and `ArtifactsWithMultipleVersionsHtmlReport`: Add "Applications" section to HTML reports that lists filtered list of application names.

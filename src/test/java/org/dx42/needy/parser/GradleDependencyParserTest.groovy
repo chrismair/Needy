@@ -423,6 +423,35 @@ class GradleDependencyParserTest extends AbstractTestCase {
 		]
 	}
 
+    @Test
+    void test_parse_FileDependencies() {
+        final FILE_DEP = FileDependency.GROUP
+        final SOURCE = """dependencies {
+            compile files("build/classes") {                    
+                builtBy 'compile'
+            }
+            runtime files('libs/a.jar', 'libs/b.jar')
+            runtime fileTree(dir: 'libs', include: '*.jar')
+        }"""
+        assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:FILE_DEP, name:"files(['build/classes'])", version:""),
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:FILE_DEP, name:"files(['libs/a.jar', 'libs/b.jar'])", version:""),
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"runtime", group:FILE_DEP, name:"fileTree([['dir':'libs', 'include':'*.jar']])", version:"") ]
+    }
+
+    @Test
+    void test_parse_FileDependencies_includeFileDependencies_False() {
+        final SOURCE = """dependencies {
+            compile files("build/classes") {                    
+                builtBy 'compile'
+            }
+            runtime files('libs/a.jar', 'libs/b.jar')
+            runtime fileTree(dir: 'libs', include: '*.jar')
+        }"""
+        parser.includeFileDependencies = false
+        assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == []
+    }
+    
 	@Test
 	void test_parse_OtherSyntax() {
 		final SOURCE = """dependencies {
@@ -433,11 +462,6 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			alllife configurations.sealife						// ignored
 
 			compile project(':shared')							// ignored
-			runtime files('libs/a.jar', 'libs/b.jar')			// ignored
-			runtime fileTree(dir: 'libs', include: '*.jar')		// ignored
-			compile files("build/classes") {					// ignored
-        		builtBy 'compile'
-			}
 			compile gradleApi()									// ignored
 			compile localGroovy()								// ignored
 		}"""
