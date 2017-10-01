@@ -6,7 +6,8 @@
 
 ### Run as a Gradle Task
 
-  Here is a sample Gradle script to run Needy. It assumes that a "config.needy" is in the current directory:
+  Here is a sample Gradle script to run Needy. By default, it looks for a "config.needy" is in the current
+  directory, or you can pass the path/file for the "config.needy" as a command-line argument:
   
 ```
 apply plugin: 'java'
@@ -23,6 +24,7 @@ dependencies {
 task execute(type:JavaExec) {
     main = "org.dx42.needy.Needy"
     classpath = sourceSets.main.runtimeClasspath
+    //args "other/config.needy"
 }
 ```
 
