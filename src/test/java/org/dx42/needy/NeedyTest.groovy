@@ -20,13 +20,14 @@ import org.junit.Test
 class NeedyTest extends AbstractTestCase {
 
 	private static final NeedyConfiguration NEEDY_CONFIGURATION = [:] as NeedyConfiguration
+    private static final String CONFIG_FILE = "abc/needy-config"
 	
 	private Needy needy = new Needy()
-	
+    private Map called = [:]
+    private needyConfiguration
+    
 	@Test
 	void test_execute() {
-		def called = [:]
-		def needyConfiguration
 		needy.createNeedyRunner = { 
 			return [
 				execute:{ called.execute = true	},
@@ -43,6 +44,25 @@ class NeedyTest extends AbstractTestCase {
 		assert called.execute
 		assert needyConfiguration == NEEDY_CONFIGURATION
 	}
+
+    @Test
+    void test_execute_PassInConfigFile() {
+        needy.createNeedyRunner = { 
+            return [
+                execute:{ called.execute = true },
+                setNeedyConfiguration:{ abs -> needyConfiguration = abs },
+                ] 
+        }
+        needy.createNeedyConfiguration = { filename ->
+            assert filename == CONFIG_FILE
+            return NEEDY_CONFIGURATION
+        }
+        
+        needy.execute([CONFIG_FILE] as String[])
+        
+        assert called.execute
+        assert needyConfiguration == NEEDY_CONFIGURATION
+    }
 
 	// TODO Test for main()
 		

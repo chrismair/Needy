@@ -1,5 +1,10 @@
 # Needy Change Log
 
+TBD: Version 0.11 (???, 2017)
+--------------------------------------------------
+- Needy: Pass in “config.needy” file/path as optional command-line arg.
+
+
 Version 0.10 (Sep 17, 2017)
 --------------------------------------------------
 - `GradleDependencyParser`: Add entries for `file()` and `fileTree()` dependencies. Add *includeFileDependencies* property.
