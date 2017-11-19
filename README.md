@@ -138,7 +138,7 @@ needy {
 
   - A "config.needy" configuration file in the current directory
   - Groovy jar
-  - (SLF4J)[https://www.slf4j.org/] API and implementation (binding) jars
+  - [SLF4J](https://www.slf4j.org/) API and implementation (binding) jars
   
 ## Road Map
 

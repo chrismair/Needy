@@ -54,7 +54,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 		}"""
 		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")]
 	}
-
+    
 	@Test
 	void test_parse_DifferentConfigurations() {
 		final SOURCE = """dependencies {
@@ -153,6 +153,24 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			}"""
 		shouldFail(FileNotFoundException) { parser.parse(APPLICATION_NAME, SOURCE, BINDING) }
 	}
+
+    @Test
+    void test_parse_buildscript() {
+        final SOURCE = """
+            buildscript {
+                repositories {
+                    maven {
+                        url "http://artifactory.acme.com/artifactory/repo"
+                    }
+                }
+                dependencies {
+                    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0"
+                }
+            }"""
+        assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"classpath", group:"org.jfrog.buildinfo", name:"build-info-extractor-gradle", version:"4.0")
+            ]
+    }
 
 	@Test
 	void test_parse_FullGradleBuildFile() {
@@ -341,7 +359,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			    cobertura.exclude group: 'xerces'
 			}
 		'''
-		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING).size() == 25
+		assert parser.parse(APPLICATION_NAME, SOURCE, BINDING).size() == 28  // 25 dependencies; 3 separate buildscript dependencies
 	}
 
 	@Test

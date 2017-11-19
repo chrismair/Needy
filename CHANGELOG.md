@@ -2,7 +2,8 @@
 
 TBD: Version 0.11 (???, 2017)
 --------------------------------------------------
-- Needy: Pass in “config.needy” file/path as optional command-line arg.
+- #1: **Needy**: Pass in “config.needy” file/path as optional command-line arg.
+- #2: **GradleDependencyParser**: Also include dependencies within the `buildscript { }` block.
 
 
 Version 0.10 (Sep 17, 2017)
