@@ -23,7 +23,7 @@ package org.dx42.needy
  */
 class NeedyVersion {
 
-	private static final String VERSION = "0.10"
+	private static final String VERSION = "0.11"
 	
 	@SuppressWarnings('GetterMethodCouldBeProperty')
 	static String getVersion() {

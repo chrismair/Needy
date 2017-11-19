@@ -1,6 +1,6 @@
 # Needy Change Log
 
-TBD: Version 0.11 (???, 2017)
+Version 0.11 (Nov 19, 2017)
 --------------------------------------------------
 - #1: **Needy**: Pass in “config.needy” file/path as optional command-line arg.
 - #2: **GradleDependencyParser**: Also include dependencies within the `buildscript { }` block.
