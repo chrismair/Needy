@@ -216,9 +216,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			final NEXUS_REPO = "http://some-nexus.acme.com:8081/nexus/content/repositories/releases"
 			final BASE_NAME = 'SomeApplication'
 			 
-			// Configure repositories included from irt-common plugin
-			ext.includeNexusReleasesRepository = true
-			ext.includeNexusThirdPartyRepository = true
+			ext.includeStuff = true
 			 
 			apply plugin: 'groovy'
 			apply plugin: 'pmd'
@@ -295,19 +293,18 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			    ruleSets = []  // do not include default rulesets
 			}
 			 
-			// Required for AHP builds (Build-Gradle.bat)
 			task buildArtifacts(dependsOn: 'ear')
 			 
 			eclipse {
 			    pathVariables 'GRADLE_IVY_REPO': file(System.getProperty("user.home") + '/.gradle/caches/modules-2/files-2.1')
-			    // After you regenerate the Eclipse .classpath (gradle eclipseClasspath), then also:
-			    //   * Remove groovy-all jar from the build path (because Eclipse includes its own Groovy support)
-			    //   * Move the servlet-api:3.0.1 above GROOVY_SUPPORT in the build path.
 			}
 
 			task createVersionFile doLast {
 			    buildExtraDir.mkdirs()
 			    versionFile.text = "abc"
+                if (!ext.includeStuff) {
+                    throw new GradleException("error creating version file")
+                }
 			}
 
 			jar.dependsOn createVersionFile

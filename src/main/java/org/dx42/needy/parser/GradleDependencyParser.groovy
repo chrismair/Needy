@@ -32,6 +32,7 @@ class GradleDependencyParser implements DependencyParser {
 	private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser)
 
 	private static final String STANDARD_GRADLE_API_IMPORTS = """
+        import org.gradle.api.*
 		import org.gradle.api.file.*
 	"""
 	

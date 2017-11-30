@@ -1,5 +1,10 @@
 # Needy Change Log
 
+Version 0.12 (Nov 29, 2017)
+--------------------------------------------------
+- #4: GradleDependencyParser: Add org.gradle.api.* to STANDARD_GRADLE_API_IMPORTS.
+
+
 Version 0.11 (Nov 19, 2017)
 --------------------------------------------------
 - #1: **Needy**: Pass in “config.needy” file/path as optional command-line arg.
