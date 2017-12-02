@@ -1,6 +1,6 @@
 # Needy Change Log
 
-Version 0.12 (Nov 29, 2017)
+Version 0.13 (Dec 2, 2017)
 --------------------------------------------------
 - #5: GradleDependencyParser: Add org.gradle.api.tasks.* to standard Gradle imports.
 
