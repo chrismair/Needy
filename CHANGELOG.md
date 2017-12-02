@@ -2,6 +2,11 @@
 
 Version 0.12 (Nov 29, 2017)
 --------------------------------------------------
+- #5: GradleDependencyParser: Add org.gradle.api.tasks.* to standard Gradle imports.
+
+
+Version 0.12 (Nov 29, 2017)
+--------------------------------------------------
 - #4: GradleDependencyParser: Add org.gradle.api.* to STANDARD_GRADLE_API_IMPORTS.
 
 

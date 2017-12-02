@@ -216,7 +216,7 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			final NEXUS_REPO = "http://some-nexus.acme.com:8081/nexus/content/repositories/releases"
 			final BASE_NAME = 'SomeApplication'
 			 
-			ext.includeStuff = true
+			ext.includeStuff = 19
 			 
 			apply plugin: 'groovy'
 			apply plugin: 'pmd'
@@ -302,7 +302,10 @@ class GradleDependencyParserTest extends AbstractTestCase {
 			task createVersionFile doLast {
 			    buildExtraDir.mkdirs()
 			    versionFile.text = "abc"
-                if (!ext.includeStuff) {
+                if (ext.includeStuff > 100) {
+                    throw new StopExecutionException("fatal error")
+                }
+                else if (ext.includeStuff > 10) {
                     throw new GradleException("error creating version file")
                 }
 			}

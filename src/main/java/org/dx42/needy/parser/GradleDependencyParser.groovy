@@ -34,6 +34,7 @@ class GradleDependencyParser implements DependencyParser {
 	private static final String STANDARD_GRADLE_API_IMPORTS = """
         import org.gradle.api.*
 		import org.gradle.api.file.*
+        import org.gradle.api.tasks.*
 	"""
 	
     boolean includeFileDependencies = true
