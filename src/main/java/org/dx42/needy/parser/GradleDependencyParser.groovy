@@ -37,9 +37,9 @@ class GradleDependencyParser implements DependencyParser {
         import org.gradle.api.file.*
         import org.gradle.api.tasks.*
     """
-    
+
     boolean includeFileDependencies = true
-    
+
     @Override
     List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {
         if (source == null) {
@@ -47,12 +47,12 @@ class GradleDependencyParser implements DependencyParser {
         }
 
         def dslContext = new DslContext(applicationName, binding, includeFileDependencies)
-        
+
         GroovyShell shell = createGroovyShell(dslContext, binding)
         try {
             String normalizedSource = STANDARD_GRADLE_API_IMPORTS + source
             shell.evaluate(normalizedSource)
-        } 
+        }
         catch (MultipleCompilationErrorsException compileError) {
             LOG.error("An error occurred compiling: [$source]", compileError)
             throw new IllegalStateException("An error occurred compiling: [$source]\n${compileError.message}")
@@ -66,18 +66,17 @@ class GradleDependencyParser implements DependencyParser {
     private GroovyShell createGroovyShell(DslContext dslContext, Map<String, Object> binding) {
         DependenciesDslEvaluator dependenciesDslEvaluator = new DependenciesDslEvaluator(dslContext)
         BuildscriptDslEvaluator buildscriptDslEvaluator = new BuildscriptDslEvaluator(dslContext)
-         
+
         def callDependencies = { Closure closure -> dependenciesDslEvaluator.evaluate(closure) }
         def callBuildscript = { Closure closure -> buildscriptDslEvaluator.evaluate(closure) }
-        
+
         Map bindingMap = [dependencies:callDependencies, buildscript:callBuildscript] + binding
         bindingMap = bindingMap.withDefault { name -> return DoNothing.INSTANCE }
-        
+
         Binding groovyShellBinding = new Binding(bindingMap)
 
         return new GroovyShell(this.class.classLoader, groovyShellBinding)
     }
-    
 }
 
 @Canonical
@@ -90,55 +89,54 @@ class DslContext {
 
 class FileDependency {
     protected static final String GROUP = "** FILE DEPENDENCY"
-    
+
     String name
-    def args
+    Object[] args
 }
 
 class BuildscriptDslEvaluator {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(BuildscriptDslEvaluator)
-    
+
     final DslContext dslContext
-    
+
     BuildscriptDslEvaluator(DslContext dslContext) {
         this.dslContext = dslContext
     }
-    
+
     void dependencies(Closure closure) {
         DependenciesDslEvaluator dslEvaluator = new DependenciesDslEvaluator(dslContext)
         dslEvaluator.evaluate(closure)
     }
-    
+
     def methodMissing(String name, args) {
         LOG.info("methodMissing: name=$name, args=$args")
     }
-        
+
     void evaluate(Closure closure) {
         closure.delegate = this
         closure.setResolveStrategy(Closure.DELEGATE_FIRST)
         closure.call()
     }
-
 }
 
 @SuppressWarnings('Instanceof')
 class DependenciesDslEvaluator {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(DependenciesDslEvaluator)
-    
+
     final DslContext dslContext
     final List ignoredMethodNames = ['project']
-    
+
     DependenciesDslEvaluator(DslContext dslContext) {
         this.dslContext = dslContext
-        
+
         this.ignoredMethodNames = ['project']
         if (!dslContext.includeFileDependencies) {
             this.ignoredMethodNames += ["files", "fileTree"]
         }
     }
-    
+
     void evaluate(Closure closure) {
         closure.delegate = this
         closure.setResolveStrategy(Closure.DELEGATE_FIRST)
@@ -187,8 +185,7 @@ class DependenciesDslEvaluator {
 
     def propertyMissing(String name) {
         def bindingValue = dslContext.binding.containsKey(name) ? dslContext.binding[name] : DoNothing.INSTANCE
-        LOG.info("propertyMissing: $name; value=$bindingValue") 
+        LOG.info("propertyMissing: $name; value=$bindingValue")
         return bindingValue
     }
-    
 }

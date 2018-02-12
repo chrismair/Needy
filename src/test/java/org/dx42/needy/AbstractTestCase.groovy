@@ -19,6 +19,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.rules.TestName
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory
 class AbstractTestCase {
 
     @SuppressWarnings(['FieldName', 'LoggerWithWrongModifiers'])
-    protected final LOG = LoggerFactory.getLogger(getClass())
+    protected final Logger LOG = LoggerFactory.getLogger(getClass())
 
     @SuppressWarnings('PublicInstanceField')
     @Rule public TestName testName = new TestName()

@@ -1,6 +1,5 @@
 import org.codenarc.rule.generic.RequiredStringRule
 
-//final TEST_FILES = ".*(Test|Tests|TestCase)\\.groovy"
 final TEST_FILES = ".*src.test.*\\.groovy"
 
 ruleset {
@@ -60,7 +59,7 @@ ruleset {
     ConfusingTernary 
     CouldBeElvis 
     CouldBeSwitchStatement 
-    //FieldTypeRequired			// TODO Re-enable 
+    FieldTypeRequired 
     HashtableIsObsolete 
     IfStatementCouldBeTernary 
     InvertedCondition 

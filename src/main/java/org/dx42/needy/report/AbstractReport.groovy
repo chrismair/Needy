@@ -48,7 +48,7 @@ abstract class AbstractReport implements Report {
         }
     }
     
-    protected getFormattedTimestamp = {
+    protected Closure getFormattedTimestamp = {
         def dateFormat = java.text.DateFormat.getDateTimeInstance()
         dateFormat.format(getDate())
     }

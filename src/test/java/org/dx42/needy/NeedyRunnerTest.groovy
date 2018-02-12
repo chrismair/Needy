@@ -45,7 +45,7 @@ class NeedyRunnerTest extends AbstractTestCase {
             }
         }"""
 
-    private static final DEPENDENCIES = [
+    private static final List<Dependency> DEPENDENCIES = [
         new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
         new Dependency(applicationName:"Sample1", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
         new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.gmetrics", name:"GMetrics", version:"0.7"),

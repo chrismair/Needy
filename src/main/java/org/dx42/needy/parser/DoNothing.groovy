@@ -24,7 +24,7 @@ package org.dx42.needy.parser
 @SuppressWarnings('UnusedMethodParameter')
 class DoNothing extends Expando {
 
-    static final INSTANCE = new DoNothing()
+    static final DoNothing INSTANCE = new DoNothing()
     
     def methodMissing(String name, args) {
         return INSTANCE

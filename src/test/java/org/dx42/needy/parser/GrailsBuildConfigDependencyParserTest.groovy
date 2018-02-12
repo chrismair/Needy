@@ -29,7 +29,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
     private static final String NAME = "MyApp1"
     private static final Map BINDING = [:]
     
-    private parser = new GrailsBuildConfigDependencyParser()
+    private GrailsBuildConfigDependencyParser parser = new GrailsBuildConfigDependencyParser()
     
     @Test
     void test_ImplementsDependencyParser() {

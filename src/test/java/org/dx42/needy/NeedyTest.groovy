@@ -24,7 +24,7 @@ class NeedyTest extends AbstractTestCase {
     
     private Needy needy = new Needy()
     private Map called = [:]
-    private needyConfiguration
+    private NeedyConfiguration needyConfiguration
     
     @Test
     void test_execute() {

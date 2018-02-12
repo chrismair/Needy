@@ -23,7 +23,7 @@ import org.dx42.needy.report.StubReport
 
 class DslNeedyConfigurationTest extends AbstractTestCase {
 
-    private static final TEST_CONFIG_FILE = "src/test/resources/test-config.txt"
+    private static final String TEST_CONFIG_FILE = "src/test/resources/test-config.txt"
     
     @Test
     void test_fromString_NullOrEmptyString() {

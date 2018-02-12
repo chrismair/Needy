@@ -25,7 +25,7 @@ class ReportUtilTest extends AbstractTestCase {
     private static final String FILE_ON_CLASSPATH = "htmlreport.css"
     private static final String FILE_PATH = "src/main/resources/$FILE_ON_CLASSPATH"
 
-    private static final DEPENDENCIES = [
+    private static final List<Dependency> DEPENDENCIES = [
         new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
         new Dependency(applicationName:"Sample1", group:"ORG.hibernate", name:"hibernate-core", version:"3.1"),
         new Dependency(applicationName:"sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),

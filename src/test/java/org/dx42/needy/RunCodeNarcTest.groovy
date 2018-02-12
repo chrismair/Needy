@@ -19,8 +19,8 @@ import org.junit.Test
 
 class RunCodeNarcTest extends AbstractTestCase {
 
-    private static final GROOVY_FILES = '**/*.groovy'
-    private static final RULESET_FILE = "codenarc.ruleset"
+    private static final String GROOVY_FILES = '**/*.groovy'
+    private static final String RULESET_FILE = "codenarc.ruleset"
             
     @Test
     void runCodeNarc() {
