@@ -24,30 +24,30 @@ import org.dx42.needy.Dependency
  * @author Chris Mair
  */
 class CreateSampleReports {
-	
-	private static final String OUTPUT_FILE = "samples/sample-html-report.html"
-	private static final List<Dependency> DEPENDENCIES = [
-		new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-		new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Sample1", group:"org.slf4j", name:"slf4j-api", version:"1.7.25"),
-		new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Sample_Two", group:"commons-codec", name:"commons-codec", version:"1.6"),
-		new Dependency(applicationName:"Sample_Two", group:"junit", name:"junit", version:"4.12"),
-		new Dependency(applicationName:"Sample_Two", group:"com.google.guava", name:"guava", version:"14.0.1"),
-		new Dependency(applicationName:"MyApp3", group:"org.other", name:"service", version:"2.0"),
-		new Dependency(applicationName:"MyApp3", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"MyApp3", group:"log4j-extra", name:"stuff", version:"1.0"),
-		new Dependency(applicationName:"MyApp3", group:"commons-codec", name:"commons-codec", version:"1.6"),
-		new Dependency(applicationName:"MyApp3", group:"org.codehaus.groovy", name:"groovy-all", version:"2.3.9"),
-		new Dependency(applicationName:"MyApp3", group:"org.slf4j", name:"slf4j-api", version:"1.7.25"),
-	]
+    
+    private static final String OUTPUT_FILE = "samples/sample-html-report.html"
+    private static final List<Dependency> DEPENDENCIES = [
+        new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+        new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Sample1", group:"org.slf4j", name:"slf4j-api", version:"1.7.25"),
+        new Dependency(applicationName:"Sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Sample_Two", group:"commons-codec", name:"commons-codec", version:"1.6"),
+        new Dependency(applicationName:"Sample_Two", group:"junit", name:"junit", version:"4.12"),
+        new Dependency(applicationName:"Sample_Two", group:"com.google.guava", name:"guava", version:"14.0.1"),
+        new Dependency(applicationName:"MyApp3", group:"org.other", name:"service", version:"2.0"),
+        new Dependency(applicationName:"MyApp3", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"MyApp3", group:"log4j-extra", name:"stuff", version:"1.0"),
+        new Dependency(applicationName:"MyApp3", group:"commons-codec", name:"commons-codec", version:"1.6"),
+        new Dependency(applicationName:"MyApp3", group:"org.codehaus.groovy", name:"groovy-all", version:"2.3.9"),
+        new Dependency(applicationName:"MyApp3", group:"org.slf4j", name:"slf4j-api", version:"1.7.25"),
+    ]
 
-	static void main(String[] args) {
-		def report = new ByArtifactHtmlReport()
-		report.outputFile = OUTPUT_FILE
-		report.title = "Sample Project"
-		report.notesHtml = "<h2>Notes</h2><p>This entire section is custom HTML you can insert using the optional <em>notesHtml</em> Report property</p>"
-		report.writeReport(DEPENDENCIES)
-	}
-	
+    static void main(String[] args) {
+        def report = new ByArtifactHtmlReport()
+        report.outputFile = OUTPUT_FILE
+        report.title = "Sample Project"
+        report.notesHtml = "<h2>Notes</h2><p>This entire section is custom HTML you can insert using the optional <em>notesHtml</em> Report property</p>"
+        report.writeReport(DEPENDENCIES)
+    }
+    
 }

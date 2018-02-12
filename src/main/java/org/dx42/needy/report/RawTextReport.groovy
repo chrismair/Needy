@@ -19,15 +19,14 @@ import org.dx42.needy.Dependency
 
 class RawTextReport implements Report {
 
-	@SuppressWarnings('Println')
-	@Override
-	void writeReport(List<Dependency> dependencies) {
-		assert dependencies != null
-	
-		dependencies.each { dependency ->
-			println(dependency)
-		}
-
-	}
+    @SuppressWarnings('Println')
+    @Override
+    void writeReport(List<Dependency> dependencies) {
+        assert dependencies != null
+    
+        dependencies.each { dependency ->
+            println(dependency)
+        }
+    }
 
 }

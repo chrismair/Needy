@@ -21,8 +21,8 @@ import groovy.transform.ToString
 @Immutable
 @ToString(includePackage=false, includeNames=true)
 class ApplicationBuild {
-	
-	String name
-	List<BuildScript> buildScripts
-	
+    
+    String name
+    List<BuildScript> buildScripts
+    
 }

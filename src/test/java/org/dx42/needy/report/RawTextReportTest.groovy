@@ -22,32 +22,32 @@ import org.dx42.needy.Dependency
 
 class RawTextReportTest extends AbstractTestCase {
 
-	private RawTextReport report = new RawTextReport()
-	
-	@Test
-	void test_writeReport_Null() {
-		shouldFailWithMessage("dependencies") { report.writeReport(null) }
-	}
-	
-	@Test
-	void test_writerReport() {
-		def dependencies = [
-			new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-			new Dependency(applicationName:"Sample1", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
-			new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
-		]
-		
-		def output = captureSystemOut {
-			report.writeReport(dependencies)
-		}
+    private RawTextReport report = new RawTextReport()
+    
+    @Test
+    void test_writeReport_Null() {
+        shouldFailWithMessage("dependencies") { report.writeReport(null) }
+    }
+    
+    @Test
+    void test_writerReport() {
+        def dependencies = [
+            new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+            new Dependency(applicationName:"Sample1", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
+            new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
+        ]
+        
+        def output = captureSystemOut {
+            report.writeReport(dependencies)
+        }
 
-		log "output=\n$output"
+        log "output=\n$output"
 
-		assert output.trim() == """
+        assert output.trim() == """
 Dependency(applicationName:Sample1, group:org.hibernate, name:hibernate-core, version:3.1, configuration:compile)
 Dependency(applicationName:Sample1, group:log4j, name:log4j, version:1.2.14, configuration:compile)
 Dependency(applicationName:Sample_Two, group:log4j, name:log4j, version:1.2.14, configuration:compile)
-		""".trim()
-	}
-	
+        """.trim()
+    }
+    
 }

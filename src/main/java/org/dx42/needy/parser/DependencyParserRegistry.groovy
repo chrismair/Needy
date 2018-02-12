@@ -21,46 +21,46 @@ package org.dx42.needy.parser
  * 
  * The predefined parser types are:
  * <p><pre>
- * 		Type 		==> DependencyParser class
- * 		------------------------------------------------
- * 		"default" 	==> GradleDependencyParser (the default)
- * 		"gradle" 	==> GradleDependencyParser
- * 		"grails2" 	==> GrailsBuildConfigDependencyParser
+ *         Type         ==> DependencyParser class
+ *         ------------------------------------------------
+ *         "default"     ==> GradleDependencyParser (the default)
+ *         "gradle"     ==> GradleDependencyParser
+ *         "grails2"     ==> GrailsBuildConfigDependencyParser
  * </pre>
  * 
  * @author Chris Mair
  */
 class DependencyParserRegistry {
 
-	private final Map<String, DependencyParser> registry = [
-		(null):new GradleDependencyParser(),
-		default:new GradleDependencyParser(),
-		gradle:new GradleDependencyParser(),
-		grails2:new GrailsBuildConfigDependencyParser()]
-	
-	/**
-	 * Return a DependencyParser object suitable for the specified (case-insensitive) type.
-	 * @param type - the type for the parser; case-insensitive; can be null 
-	 */
-	DependencyParser getDependencyParser(String type) {
-		def dependencyParser = registry[key(type)]
-		assert dependencyParser, "No such DependencyParser type [$type]"
-		return dependencyParser
-	}
-	
-	/**
-	 * Register a DependencyParser for the specified type name
-	 * @param type - the type for the parser; case-insensitive; must not be null or empty 
-	 * @param dependencyParser - the DependencyParser; must not be null
-	 */
-	void registerDependencyParser(String type, DependencyParser dependencyParser) {
-		assert type
-		assert dependencyParser
-		registry[key(type)] = dependencyParser
-	}
-	
-	private String key(String type) {
-		return type ? type.toLowerCase() : null
-	}
-	
+    private final Map<String, DependencyParser> registry = [
+        (null):new GradleDependencyParser(),
+        default:new GradleDependencyParser(),
+        gradle:new GradleDependencyParser(),
+        grails2:new GrailsBuildConfigDependencyParser()]
+    
+    /**
+     * Return a DependencyParser object suitable for the specified (case-insensitive) type.
+     * @param type - the type for the parser; case-insensitive; can be null 
+     */
+    DependencyParser getDependencyParser(String type) {
+        def dependencyParser = registry[key(type)]
+        assert dependencyParser, "No such DependencyParser type [$type]"
+        return dependencyParser
+    }
+    
+    /**
+     * Register a DependencyParser for the specified type name
+     * @param type - the type for the parser; case-insensitive; must not be null or empty 
+     * @param dependencyParser - the DependencyParser; must not be null
+     */
+    void registerDependencyParser(String type, DependencyParser dependencyParser) {
+        assert type
+        assert dependencyParser
+        registry[key(type)] = dependencyParser
+    }
+    
+    private String key(String type) {
+        return type ? type.toLowerCase() : null
+    }
+    
 }

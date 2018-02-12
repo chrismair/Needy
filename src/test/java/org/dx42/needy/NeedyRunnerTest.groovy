@@ -21,77 +21,77 @@ import org.dx42.needy.report.StubReport
 
 class NeedyRunnerTest extends AbstractTestCase {
 
-	private static final String CONFIG_TEXT = """
-		needy {
-			applications {
-				Sample1(url:"file:src/test/resources/sample1-build.gradle")
-				Sample_Two(url:"file:src/test/resources/sample2-build.gradle", type:"gradle", description:"sample", componentId:"c1", properties:[log4jVersion:"1.2.14"])
-				Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
-			}
-		}"""
+    private static final String CONFIG_TEXT = """
+        needy {
+            applications {
+                Sample1(url:"file:src/test/resources/sample1-build.gradle")
+                Sample_Two(url:"file:src/test/resources/sample2-build.gradle", type:"gradle", description:"sample", componentId:"c1", properties:[log4jVersion:"1.2.14"])
+                Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
+            }
+        }"""
 
-	private static final String CONFIG_TEXT_WITH_REPORTS = """
-		needy {
-			applications {
-				Sample1(url:"file:src/test/resources/sample1-build.gradle")
-				Sample_Two(url:"file:src/test/resources/sample2-build.gradle", properties:[log4jVersion:"1.2.14"])
-				Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
-			}
-			reports {
-				report("org.dx42.needy.report.StubReport") { }
-				report("org.dx42.needy.report.StubReport") {
-					outputFile = "report.txt"
-				}
-			}
-		}"""
+    private static final String CONFIG_TEXT_WITH_REPORTS = """
+        needy {
+            applications {
+                Sample1(url:"file:src/test/resources/sample1-build.gradle")
+                Sample_Two(url:"file:src/test/resources/sample2-build.gradle", properties:[log4jVersion:"1.2.14"])
+                Sample_Three(url:"file:src/test/resources/sample2-grails-buildconfig.txt", type:"grails2")
+            }
+            reports {
+                report("org.dx42.needy.report.StubReport") { }
+                report("org.dx42.needy.report.StubReport") {
+                    outputFile = "report.txt"
+                }
+            }
+        }"""
 
-	private static final DEPENDENCIES = [
-		new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
-		new Dependency(applicationName:"Sample1", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.gmetrics", name:"GMetrics", version:"0.7"),
-		new Dependency(applicationName:"Sample1", configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1"),
-		new Dependency(applicationName:"Sample1", configuration:"testCompile", group:"commons-cli", name:"commons-cli", version:"1.2"),
-		
-		new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
-		new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"org.codenarc", name:"CodeNarc", version:"0.28"),
-		new Dependency(applicationName:"Sample_Two", configuration:"testCompile", group:"junit", name:"junit", version:"4.12"),
-		
-		new Dependency(applicationName:"Sample_Three", group:"mysql", name:"mysql-connector-java", version:"5.1.24", configuration:"runtime"), 
-		new Dependency(applicationName:"Sample_Three", group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile") 
-	]
+    private static final DEPENDENCIES = [
+        new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
+        new Dependency(applicationName:"Sample1", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.gmetrics", name:"GMetrics", version:"0.7"),
+        new Dependency(applicationName:"Sample1", configuration:"testCompile", group:"junit", name:"junit", version:"4.8.1"),
+        new Dependency(applicationName:"Sample1", configuration:"testCompile", group:"commons-cli", name:"commons-cli", version:"1.2"),
+        
+        new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"log4j", name:"log4j", version:"1.2.14"),
+        new Dependency(applicationName:"Sample_Two", configuration:"compile", group:"org.codenarc", name:"CodeNarc", version:"0.28"),
+        new Dependency(applicationName:"Sample_Two", configuration:"testCompile", group:"junit", name:"junit", version:"4.12"),
+        
+        new Dependency(applicationName:"Sample_Three", group:"mysql", name:"mysql-connector-java", version:"5.1.24", configuration:"runtime"), 
+        new Dependency(applicationName:"Sample_Three", group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile") 
+    ]
 
-	private NeedyRunner needyRunner = new NeedyRunner()
-	
-	@Test
-	void test_execute_RequiredPropertiesNotInitialized() {
-		shouldFailWithMessage("needyConfiguration") { needyRunner.execute() }
-	}
-	
-	@Test
-	void test_execute_NoReports() {
-		def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT)
-		def applicationBuilds = needyConfiguration.getApplicationBuilds()
-		log(applicationBuilds)
-		needyRunner.needyConfiguration = needyConfiguration
-		def result = needyRunner.execute()
-		
-		assert result == DEPENDENCIES
-	}
-	
-	@Test
-	void test_execute_Reports() {
-		def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT_WITH_REPORTS)
-		needyRunner.needyConfiguration = needyConfiguration
-		def result = needyRunner.execute()
-		
-		assert result == DEPENDENCIES
-		def report = needyConfiguration.reports
-		assert report.size() == 2
-		assert report[0] instanceof StubReport
-		assert report[0].dependencies == DEPENDENCIES
-		assert report[1] instanceof StubReport
-		assert report[1].outputFile == "report.txt"
-		assert report[1].dependencies == DEPENDENCIES
-	}
-	
+    private NeedyRunner needyRunner = new NeedyRunner()
+    
+    @Test
+    void test_execute_RequiredPropertiesNotInitialized() {
+        shouldFailWithMessage("needyConfiguration") { needyRunner.execute() }
+    }
+    
+    @Test
+    void test_execute_NoReports() {
+        def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT)
+        def applicationBuilds = needyConfiguration.getApplicationBuilds()
+        log(applicationBuilds)
+        needyRunner.needyConfiguration = needyConfiguration
+        def result = needyRunner.execute()
+        
+        assert result == DEPENDENCIES
+    }
+    
+    @Test
+    void test_execute_Reports() {
+        def needyConfiguration = DslNeedyConfiguration.fromString(CONFIG_TEXT_WITH_REPORTS)
+        needyRunner.needyConfiguration = needyConfiguration
+        def result = needyRunner.execute()
+        
+        assert result == DEPENDENCIES
+        def report = needyConfiguration.reports
+        assert report.size() == 2
+        assert report[0] instanceof StubReport
+        assert report[0].dependencies == DEPENDENCIES
+        assert report[1] instanceof StubReport
+        assert report[1].outputFile == "report.txt"
+        assert report[1].dependencies == DEPENDENCIES
+    }
+    
 }

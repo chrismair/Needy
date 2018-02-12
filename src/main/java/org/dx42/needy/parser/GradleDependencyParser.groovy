@@ -29,54 +29,55 @@ import groovy.transform.Canonical
  */
 class GradleDependencyParser implements DependencyParser {
 
-	private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser)
+    private static final Logger LOG = LoggerFactory.getLogger(GradleDependencyParser)
 
-	private static final String STANDARD_GRADLE_API_IMPORTS = """
+    @SuppressWarnings('MissingBlankLineAfterImports')
+    private static final String STANDARD_GRADLE_API_IMPORTS = """
         import org.gradle.api.*
-		import org.gradle.api.file.*
+        import org.gradle.api.file.*
         import org.gradle.api.tasks.*
-	"""
-	
+    """
+    
     boolean includeFileDependencies = true
     
-	@Override
-	List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {
-		if (source == null) {
-			throw new IllegalArgumentException("Parameter source was null")
-		}
+    @Override
+    List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {
+        if (source == null) {
+            throw new IllegalArgumentException("Parameter source was null")
+        }
 
         def dslContext = new DslContext(applicationName, binding, includeFileDependencies)
-		
-		GroovyShell shell = createGroovyShell(dslContext, binding)
-		try {
-			String normalizedSource = STANDARD_GRADLE_API_IMPORTS + source
-			shell.evaluate(normalizedSource)
-		} 
-		catch (MultipleCompilationErrorsException compileError) {
-			LOG.error("An error occurred compiling: [$source]", compileError)
-			throw new IllegalStateException("An error occurred compiling: [$source]\n${compileError.message}")
-		}
+        
+        GroovyShell shell = createGroovyShell(dslContext, binding)
+        try {
+            String normalizedSource = STANDARD_GRADLE_API_IMPORTS + source
+            shell.evaluate(normalizedSource)
+        } 
+        catch (MultipleCompilationErrorsException compileError) {
+            LOG.error("An error occurred compiling: [$source]", compileError)
+            throw new IllegalStateException("An error occurred compiling: [$source]\n${compileError.message}")
+        }
 
-		List<Dependency> dependencies = dslContext.dependencies
-		LOG.info "dependencies = $dependencies"
-		return dependencies
-	}
+        List<Dependency> dependencies = dslContext.dependencies
+        LOG.info "dependencies = $dependencies"
+        return dependencies
+    }
 
-	private GroovyShell createGroovyShell(DslContext dslContext, Map<String, Object> binding) {
+    private GroovyShell createGroovyShell(DslContext dslContext, Map<String, Object> binding) {
         DependenciesDslEvaluator dependenciesDslEvaluator = new DependenciesDslEvaluator(dslContext)
         BuildscriptDslEvaluator buildscriptDslEvaluator = new BuildscriptDslEvaluator(dslContext)
          
-		def callDependencies = { Closure closure -> dependenciesDslEvaluator.evaluate(closure) }
+        def callDependencies = { Closure closure -> dependenciesDslEvaluator.evaluate(closure) }
         def callBuildscript = { Closure closure -> buildscriptDslEvaluator.evaluate(closure) }
         
         Map bindingMap = [dependencies:callDependencies, buildscript:callBuildscript] + binding
         bindingMap = bindingMap.withDefault { name -> return DoNothing.INSTANCE }
         
-		Binding groovyShellBinding = new Binding(bindingMap)
+        Binding groovyShellBinding = new Binding(bindingMap)
 
-		return new GroovyShell(this.class.classLoader, groovyShellBinding)
-	}
-	
+        return new GroovyShell(this.class.classLoader, groovyShellBinding)
+    }
+    
 }
 
 @Canonical
@@ -121,10 +122,11 @@ class BuildscriptDslEvaluator {
 
 }
 
+@SuppressWarnings('Instanceof')
 class DependenciesDslEvaluator {
     
-	private static final Logger LOG = LoggerFactory.getLogger(DependenciesDslEvaluator)
-	
+    private static final Logger LOG = LoggerFactory.getLogger(DependenciesDslEvaluator)
+    
     final DslContext dslContext
     final List ignoredMethodNames = ['project']
     
@@ -135,58 +137,58 @@ class DependenciesDslEvaluator {
         if (!dslContext.includeFileDependencies) {
             this.ignoredMethodNames += ["files", "fileTree"]
         }
-	}
-	
-	void evaluate(Closure closure) {
-		closure.delegate = this
-		closure.setResolveStrategy(Closure.DELEGATE_FIRST)
-		closure.call()
-	}
+    }
+    
+    void evaluate(Closure closure) {
+        closure.delegate = this
+        closure.setResolveStrategy(Closure.DELEGATE_FIRST)
+        closure.call()
+    }
 
-	def methodMissing(String name, args) {
-		if (ignoredMethodNames.contains(name)) {
-			return
-		}
+    def methodMissing(String name, args) {
+        if (ignoredMethodNames.contains(name)) {
+            return
+        }
         if (name in ["files", "fileTree"]) {
             def actualArgs = (args[-1] instanceof Closure) ? args[0..-2] : args
             return new FileDependency(name:name, args:actualArgs)
         }
-		if (args.length == 0) {
-			return
-		}
+        if (args.length == 0) {
+            return
+        }
         if (args[0] instanceof FileDependency) {
-            String methodString = args[0].name + "(" + args[0].args.inspect()+ ")"
+            String methodString = args[0].name + "(" + args[0].args.inspect() + ")"
             dslContext.dependencies << new Dependency(applicationName:dslContext.applicationName, group:FileDependency.GROUP, name:methodString, version:"", configuration:name)
         }
-		if (args[0] instanceof Map) {
-			LOG.info "methodMissing (Map): name=$name value=${args[0]}"
-			for (Map m: args) {
-				dslContext.dependencies << new Dependency(applicationName:dslContext.applicationName, group:m.group, name:m.name, version:m.version, configuration:name)
-			}
-		}
-		else if (args[0] instanceof List) {
-			LOG.info "methodMissing (List): name=$name value=${args[0]}"
-			for (List list: args) {
-				for (String s: list) {
-					dslContext.dependencies << ParseUtil.createDependencyFromString(dslContext.applicationName, name, s)
-				}
-			}
-		}
-		else {
-			int index = 0
-			while (index < args.length && args[index] instanceof CharSequence) {
-				String s = args[index]
-				LOG.info "methodMissing: name=$name value=${s}"
-				dslContext.dependencies << ParseUtil.createDependencyFromString(dslContext.applicationName, name, s)
-				index++
-			}
-		}
-	}
+        if (args[0] instanceof Map) {
+            LOG.info "methodMissing (Map): name=$name value=${args[0]}"
+            for (Map m: args) {
+                dslContext.dependencies << new Dependency(applicationName:dslContext.applicationName, group:m.group, name:m.name, version:m.version, configuration:name)
+            }
+        }
+        else if (args[0] instanceof List) {
+            LOG.info "methodMissing (List): name=$name value=${args[0]}"
+            for (List list: args) {
+                for (String s: list) {
+                    dslContext.dependencies << ParseUtil.createDependencyFromString(dslContext.applicationName, name, s)
+                }
+            }
+        }
+        else {
+            int index = 0
+            while (index < args.length && args[index] instanceof CharSequence) {
+                String s = args[index]
+                LOG.info "methodMissing: name=$name value=${s}"
+                dslContext.dependencies << ParseUtil.createDependencyFromString(dslContext.applicationName, name, s)
+                index++
+            }
+        }
+    }
 
-	def propertyMissing(String name) {
-		def bindingValue = dslContext.binding.containsKey(name) ? dslContext.binding[name] : DoNothing.INSTANCE
-		LOG.info("propertyMissing: $name; value=$bindingValue") 
-		return bindingValue
-	}
-	
+    def propertyMissing(String name) {
+        def bindingValue = dslContext.binding.containsKey(name) ? dslContext.binding[name] : DoNothing.INSTANCE
+        LOG.info("propertyMissing: $name; value=$bindingValue") 
+        return bindingValue
+    }
+    
 }

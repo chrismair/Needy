@@ -19,27 +19,25 @@ import org.junit.Test
 
 class RunCodeNarcTest extends AbstractTestCase {
 
-	private static final GROOVY_FILES = '**/*.groovy'
-	private static final RULESET_FILE = "codenarc.ruleset"
-			
-	@Test
-	void runCodeNarc() {
-		def ant = new AntBuilder()
-		
-		ant.taskdef(name:'codenarc', classname:'org.codenarc.ant.CodeNarcTask')
+    private static final GROOVY_FILES = '**/*.groovy'
+    private static final RULESET_FILE = "codenarc.ruleset"
+            
+    @Test
+    void runCodeNarc() {
+        def ant = new AntBuilder()
+        
+        ant.taskdef(name:'codenarc', classname:'org.codenarc.ant.CodeNarcTask')
 
-		ant.codenarc(ruleSetFiles:RULESET_FILE,
-		   maxPriority1Violations:0, maxPriority2Violations:0, maxPriority3Violations:0) {
+        ant.codenarc(ruleSetFiles:RULESET_FILE, maxPriority1Violations:0, maxPriority2Violations:0, maxPriority3Violations:0) {
+            fileset(dir:'src/main/java') {
+                include(name:GROOVY_FILES)
+            }
+            fileset(dir:'src/test/java') {
+                include(name:GROOVY_FILES)
+            }
 
-		   fileset(dir:'src/main/java') {
-			   include(name:GROOVY_FILES)
-		   }
-		   fileset(dir:'src/test/java') {
-			   include(name:GROOVY_FILES)
-		   }
-
-		   report(type:'ide')
-		}
-	}
-	
+            report(type:'ide')
+        }
+    }
+    
 }

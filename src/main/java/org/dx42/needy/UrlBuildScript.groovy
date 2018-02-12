@@ -20,25 +20,25 @@ import groovy.transform.Immutable
 @Immutable
 class UrlBuildScript implements BuildScript {
 
-	String url
-	String type
-	String description
-	String componentId
-	Map<String, Object> properties
-	
-	@Override
-	String getText() {
-		return asURL().text
-	}
+    String url
+    String type
+    String description
+    String componentId
+    Map<String, Object> properties
+    
+    @Override
+    String getText() {
+        return asURL().text
+    }
 
-	@Override
-	String toString() {
-		return "UrlBuildScript(url=$url; type=$type; properties=$properties)"
-	}
+    @Override
+    String toString() {
+        return "UrlBuildScript(url=$url; type=$type; properties=$properties)"
+    }
 
-	protected URL asURL() {
-		assert url, "The url must not be null or empty"
-		return new URL(url)
-	}
-		
+    protected URL asURL() {
+        assert url, "The url must not be null or empty"
+        return new URL(url)
+    }
+        
 }

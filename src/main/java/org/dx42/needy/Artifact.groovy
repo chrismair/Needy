@@ -19,18 +19,18 @@ import groovy.transform.Immutable
 
 @Immutable
 class Artifact {
-	
-	String group
-	String name
-	String version
+    
+    String group
+    String name
+    String version
 
-	@Override
-	String toString() {
-		return emptyIfNull(group) + ":" + name + ":" + emptyIfNull(version)
-	}
-		
-	private String emptyIfNull(String string) {
-		return string == null ? "" : string
-	}
-	
+    @Override
+    String toString() {
+        return emptyIfNull(group) + ":" + name + ":" + emptyIfNull(version)
+    }
+        
+    private String emptyIfNull(String string) {
+        return string == null ? "" : string
+    }
+    
 }

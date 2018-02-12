@@ -19,17 +19,17 @@ import org.junit.Test
 
 class StringBuildScriptTest extends AbstractTestCase {
 
-	private static final String TEXT = "abc123"
-	
-	@Test
-	void test_Constructor_NullText() {
-		shouldFail { new StringBuildScript(null) }
-	}
-	
-	@Test
-	void test_getText() {
-		def buildScript = new StringBuildScript(TEXT)
-		assert buildScript.getText() == TEXT
-	}
-	
+    private static final String TEXT = "abc123"
+    
+    @Test
+    void test_Constructor_NullText() {
+        shouldFail { new StringBuildScript(null) }
+    }
+    
+    @Test
+    void test_getText() {
+        def buildScript = new StringBuildScript(TEXT)
+        assert buildScript.getText() == TEXT
+    }
+    
 }

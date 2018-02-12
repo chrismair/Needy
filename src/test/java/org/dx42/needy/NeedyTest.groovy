@@ -19,31 +19,31 @@ import org.junit.Test
 
 class NeedyTest extends AbstractTestCase {
 
-	private static final NeedyConfiguration NEEDY_CONFIGURATION = [:] as NeedyConfiguration
+    private static final NeedyConfiguration NEEDY_CONFIGURATION = [:] as NeedyConfiguration
     private static final String CONFIG_FILE = "abc/needy-config"
-	
-	private Needy needy = new Needy()
+    
+    private Needy needy = new Needy()
     private Map called = [:]
     private needyConfiguration
     
-	@Test
-	void test_execute() {
-		needy.createNeedyRunner = { 
-			return [
-				execute:{ called.execute = true	},
-				setNeedyConfiguration:{ abs -> needyConfiguration = abs },
-				] 
-		}
-		needy.createNeedyConfiguration = { filename ->
-			assert filename == Needy.DEFAULT_CONFIG_FILE
-			return NEEDY_CONFIGURATION
-		}
-		
-		needy.execute([] as String[])
-		
-		assert called.execute
-		assert needyConfiguration == NEEDY_CONFIGURATION
-	}
+    @Test
+    void test_execute() {
+        needy.createNeedyRunner = { 
+            return [
+                execute:{ called.execute = true },
+                setNeedyConfiguration:{ abs -> needyConfiguration = abs },
+                ] 
+        }
+        needy.createNeedyConfiguration = { filename ->
+            assert filename == Needy.DEFAULT_CONFIG_FILE
+            return NEEDY_CONFIGURATION
+        }
+        
+        needy.execute([] as String[])
+        
+        assert called.execute
+        assert needyConfiguration == NEEDY_CONFIGURATION
+    }
 
     @Test
     void test_execute_PassInConfigFile() {
@@ -64,11 +64,11 @@ class NeedyTest extends AbstractTestCase {
         assert needyConfiguration == NEEDY_CONFIGURATION
     }
 
-	// TODO Test for main()
-		
-	@Test
-	void test_createNeedyRunner() {
-		assert needy.createNeedyRunner() instanceof NeedyRunner
-	}
-	
+    // TODO Test for main()
+        
+    @Test
+    void test_createNeedyRunner() {
+        assert needy.createNeedyRunner() instanceof NeedyRunner
+    }
+    
 }

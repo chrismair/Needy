@@ -26,67 +26,67 @@ import org.junit.Test
  */
 class DependencyParserRegistryTest extends AbstractTestCase {
 
-	private static final String NAME = "abc"
-	private static final DependencyParser DEPENDENCY_PARSER = new GrailsBuildConfigDependencyParser()
-	
-	private DependencyParserRegistry registry = new DependencyParserRegistry()
-	
-	@Test
-	void test_getDependencyParser_nullOrEmpty_ReturnsDefault() {
-		assert registry.getDependencyParser(null) instanceof GradleDependencyParser
-		assert registry.getDependencyParser("") instanceof GradleDependencyParser
-	}
-	
-	@Test
-	void test_getDependencyParser_default() {
-		assert registry.getDependencyParser("default") instanceof GradleDependencyParser
-		assert registry.getDependencyParser("DeFAulT") instanceof GradleDependencyParser
-	}
-	
-	@Test
-	void test_getDependencyParser_null_ReturnsDefault() {
-		assert registry.getDependencyParser(null) instanceof GradleDependencyParser
-	}
-	
-	@Test
-	void test_getDependencyParser_gradle() {
-		assert registry.getDependencyParser("gradle") instanceof GradleDependencyParser
-		assert registry.getDependencyParser("GRadLe") instanceof GradleDependencyParser
-	}
-	
-	@Test
-	void test_getDependencyParser_grails2() {
-		assert registry.getDependencyParser("grails2") instanceof GrailsBuildConfigDependencyParser
-		assert registry.getDependencyParser("gRAIls2") instanceof GrailsBuildConfigDependencyParser
-	}
-	
-	@Test
-	void test_getDependencyParser_ReturnsRegisteredType() {
-		registry.registerDependencyParser("aBc", DEPENDENCY_PARSER)
-		assert registry.getDependencyParser("abc") == DEPENDENCY_PARSER
-		assert registry.getDependencyParser("AbC") == DEPENDENCY_PARSER
-	}
-	
-	@Test
-	void test_getDependencyParser_UnknownType() {
-		shouldFailWithMessage("unknown") { registry.getDependencyParser("unknown") }
-	}
-	
-	@Test
-	void test_registerDependencyParser_OverrideDefault() {
-		registry.registerDependencyParser("defAUlt", DEPENDENCY_PARSER)
-		assert registry.getDependencyParser("default") == DEPENDENCY_PARSER
-	}
-	
-	@Test
-	void test_registerDependencyParser_NullDependencyParser() {
-		shouldFailWithMessage("dependencyParser") { registry.registerDependencyParser(NAME, null) }
-	}
-	
-	@Test
-	void test_registerDependencyParser_NullOrEmptyType() {
-		shouldFailWithMessage("type") { registry.registerDependencyParser(null, DEPENDENCY_PARSER) }
-		shouldFailWithMessage("type") { registry.registerDependencyParser("", DEPENDENCY_PARSER) }
-	}
-	
+    private static final String NAME = "abc"
+    private static final DependencyParser DEPENDENCY_PARSER = new GrailsBuildConfigDependencyParser()
+    
+    private DependencyParserRegistry registry = new DependencyParserRegistry()
+    
+    @Test
+    void test_getDependencyParser_nullOrEmpty_ReturnsDefault() {
+        assert registry.getDependencyParser(null) instanceof GradleDependencyParser
+        assert registry.getDependencyParser("") instanceof GradleDependencyParser
+    }
+    
+    @Test
+    void test_getDependencyParser_default() {
+        assert registry.getDependencyParser("default") instanceof GradleDependencyParser
+        assert registry.getDependencyParser("DeFAulT") instanceof GradleDependencyParser
+    }
+    
+    @Test
+    void test_getDependencyParser_null_ReturnsDefault() {
+        assert registry.getDependencyParser(null) instanceof GradleDependencyParser
+    }
+    
+    @Test
+    void test_getDependencyParser_gradle() {
+        assert registry.getDependencyParser("gradle") instanceof GradleDependencyParser
+        assert registry.getDependencyParser("GRadLe") instanceof GradleDependencyParser
+    }
+    
+    @Test
+    void test_getDependencyParser_grails2() {
+        assert registry.getDependencyParser("grails2") instanceof GrailsBuildConfigDependencyParser
+        assert registry.getDependencyParser("gRAIls2") instanceof GrailsBuildConfigDependencyParser
+    }
+    
+    @Test
+    void test_getDependencyParser_ReturnsRegisteredType() {
+        registry.registerDependencyParser("aBc", DEPENDENCY_PARSER)
+        assert registry.getDependencyParser("abc") == DEPENDENCY_PARSER
+        assert registry.getDependencyParser("AbC") == DEPENDENCY_PARSER
+    }
+    
+    @Test
+    void test_getDependencyParser_UnknownType() {
+        shouldFailWithMessage("unknown") { registry.getDependencyParser("unknown") }
+    }
+    
+    @Test
+    void test_registerDependencyParser_OverrideDefault() {
+        registry.registerDependencyParser("defAUlt", DEPENDENCY_PARSER)
+        assert registry.getDependencyParser("default") == DEPENDENCY_PARSER
+    }
+    
+    @Test
+    void test_registerDependencyParser_NullDependencyParser() {
+        shouldFailWithMessage("dependencyParser") { registry.registerDependencyParser(NAME, null) }
+    }
+    
+    @Test
+    void test_registerDependencyParser_NullOrEmptyType() {
+        shouldFailWithMessage("type") { registry.registerDependencyParser(null, DEPENDENCY_PARSER) }
+        shouldFailWithMessage("type") { registry.registerDependencyParser("", DEPENDENCY_PARSER) }
+    }
+    
 }

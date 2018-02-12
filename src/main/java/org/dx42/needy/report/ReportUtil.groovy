@@ -20,32 +20,31 @@ import org.dx42.needy.Dependency
 
 class ReportUtil {
 
-	public static final Comparator ARTIFACT_COMPARATOR = { Artifact a1, Artifact a2 ->
-		def c1 =  a1.toString().replace(":", " ")
-		def c2 =  a2.toString().replace(":", " ")
-		return c1.compareToIgnoreCase(c2)
-	} as Comparator
+    public static final Comparator ARTIFACT_COMPARATOR = { Artifact a1, Artifact a2 ->
+        def c1 =  a1.toString().replace(":", " ")
+        def c2 =  a2.toString().replace(":", " ")
+        return c1.compareToIgnoreCase(c2)
+    } as Comparator
+    
+    static SortedMap<Artifact, Set<String>> buildMapOfArtifactToApplicationNames(List<Dependency> dependencies) {
+        SortedMap<Artifact, Set<String>> map = new TreeMap<>(ARTIFACT_COMPARATOR)
+        
+        dependencies.each { dependency ->
+            Artifact key = dependency.artifact
+            if (!map.containsKey(key)) {
+                map[key] = new TreeSet<String>()
+            }
+            map[key] << dependency.applicationName
+        }
+        return map
+    }
 
-	
-	static SortedMap<Artifact, Set<String>> buildMapOfArtifactToApplicationNames(List<Dependency> dependencies) {
-		SortedMap<Artifact, Set<String>> map = new TreeMap<>(ARTIFACT_COMPARATOR)
-		
-		dependencies.each { dependency ->
-			Artifact key = dependency.artifact
-			if (!map.containsKey(key)) {
-				map[key] = new TreeSet<String>()
-			}
-			map[key] << dependency.applicationName
-		}
-		return map
-	}
-
-	static InputStream getClasspathFileInputStream(String path) throws IOException {
-		def inputStream = ReportUtil.classLoader.getResourceAsStream(path)
-		if (!inputStream) {
-			throw new FileNotFoundException("File [$path] does not exist or is not accessible")
-		}
-		inputStream
-	}
+    static InputStream getClasspathFileInputStream(String path) throws IOException {
+        def inputStream = ReportUtil.classLoader.getResourceAsStream(path)
+        if (!inputStream) {
+            throw new FileNotFoundException("File [$path] does not exist or is not accessible")
+        }
+        inputStream
+    }
 
 }

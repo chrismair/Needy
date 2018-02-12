@@ -23,38 +23,38 @@ import org.slf4j.LoggerFactory
 
 class NeedyRunner {
 
-	private static final Logger LOG = LoggerFactory.getLogger(NeedyRunner)
-	
-	NeedyConfiguration needyConfiguration
-	DependencyParserRegistry dependencyParserRegistry = new DependencyParserRegistry() 
-	
-	List<Dependency>  execute() {
-		assert needyConfiguration
-		
-		def applicationBuilds = needyConfiguration.getApplicationBuilds()
-		LOG.info("applicationBuilds=" + applicationBuilds)
-		List<Dependency> allDependencies = []
-		
-		applicationBuilds.forEach{ ApplicationBuild applicationBuild ->
-			LOG.info("Processing application [${applicationBuild.name}]")
-			applicationBuild.buildScripts.each { BuildScript buildScript ->
-				DependencyParser dependencyParser = dependencyParserRegistry.getDependencyParser(buildScript.type)
-				String buildFileText = buildScript.getText()
-				Map binding = buildScript.properties ?: [:]
-				List<Dependency> buildFileDependencies = dependencyParser.parse(applicationBuild.name, buildFileText, binding)
-				allDependencies.addAll(buildFileDependencies)
-				
-				buildFileDependencies.each { dependency ->
-					LOG.info("  + $dependency")
-				}
-			}
-		}
-		
-		needyConfiguration.reports.each { Report report ->
-			report.writeReport(allDependencies)
-		}
-		
-		return allDependencies
-	}
-	
+    private static final Logger LOG = LoggerFactory.getLogger(NeedyRunner)
+    
+    NeedyConfiguration needyConfiguration
+    DependencyParserRegistry dependencyParserRegistry = new DependencyParserRegistry() 
+    
+    List<Dependency>  execute() {
+        assert needyConfiguration
+        
+        def applicationBuilds = needyConfiguration.getApplicationBuilds()
+        LOG.info("applicationBuilds=" + applicationBuilds)
+        List<Dependency> allDependencies = []
+        
+        applicationBuilds.forEach { ApplicationBuild applicationBuild ->
+            LOG.info("Processing application [${applicationBuild.name}]")
+            applicationBuild.buildScripts.each { BuildScript buildScript ->
+                DependencyParser dependencyParser = dependencyParserRegistry.getDependencyParser(buildScript.type)
+                String buildFileText = buildScript.getText()
+                Map binding = buildScript.properties ?: [:]
+                List<Dependency> buildFileDependencies = dependencyParser.parse(applicationBuild.name, buildFileText, binding)
+                allDependencies.addAll(buildFileDependencies)
+                
+                buildFileDependencies.each { dependency ->
+                    LOG.info("  + $dependency")
+                }
+            }
+        }
+        
+        needyConfiguration.reports.each { Report report ->
+            report.writeReport(allDependencies)
+        }
+        
+        return allDependencies
+    }
+    
 }

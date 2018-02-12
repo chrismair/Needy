@@ -29,71 +29,70 @@ import org.slf4j.LoggerFactory
 @SuppressWarnings('Println')
 class AbstractTestCase {
 
-	@SuppressWarnings(['FieldName', 'LoggerWithWrongModifiers'])
-	protected final LOG = LoggerFactory.getLogger(getClass())
+    @SuppressWarnings(['FieldName', 'LoggerWithWrongModifiers'])
+    protected final LOG = LoggerFactory.getLogger(getClass())
 
-	@SuppressWarnings('PublicInstanceField')
-	@Rule public TestName testName = new TestName()
-
-	
-	@After
-	void afterAbstractTestCase() {
+    @SuppressWarnings('PublicInstanceField')
+    @Rule public TestName testName = new TestName()
+    
+    @After
+    void afterAbstractTestCase() {
         println("----------[ ${getClass().getSimpleName()}.${getName()} ]----------")
-	}
-	
-	@SuppressWarnings('ConfusingMethodName')
-	protected void log(message) {
-		println "[${getClass().getSimpleName()}] " + message.toString()
-	}
+    }
+    
+    @SuppressWarnings('ConfusingMethodName')
+    protected void log(message) {
+        println "[${getClass().getSimpleName()}] " + message.toString()
+    }
 
-	protected String getName() {
-		return testName.getMethodName()
-	}
-	
-	protected Throwable shouldFail(Closure code) {
-		GroovyAssert.shouldFail(code)
-	}
-	
-	protected Throwable shouldFail(Class clazz, Closure code) {
-		GroovyAssert.shouldFail(clazz, code)
-	}
-	
-	protected void shouldFailWithMessage(String message, Closure closure) {
-		def e = shouldFail(closure)
-		assert e.message?.contains(message) 
-	}
+    protected String getName() {
+        return testName.getMethodName()
+    }
+    
+    protected Throwable shouldFail(Closure code) {
+        GroovyAssert.shouldFail(code)
+    }
+    
+    protected Throwable shouldFail(Class clazz, Closure code) {
+        GroovyAssert.shouldFail(clazz, code)
+    }
+    
+    protected void shouldFailWithMessage(String message, Closure closure) {
+        def e = shouldFail(closure)
+        assert e.message?.contains(message) 
+    }
 
-	protected void shouldFailWithMessage(Class theClass, String message, Closure closure) {
-		def e = shouldFail(theClass, closure)
-		assert e.message?.contains(message) 
-	}
+    protected void shouldFailWithMessage(Class theClass, String message, Closure closure) {
+        def e = shouldFail(theClass, closure)
+        assert e.message?.contains(message) 
+    }
 
-	protected static String captureSystemOut(Closure closure) {
-		def originalSystemOut = System.out
-		def outputStream = new ByteArrayOutputStream()
-		try {
-			System.out = new PrintStream(outputStream)
-			closure()
-		}
-		finally {
-			System.out = originalSystemOut
-		}
-		outputStream.toString()
-	}
-	
-	protected void assertSameXml(String actual, String expected) {
-		Assert.assertEquals(normalizeXml(expected), normalizeXml(actual))
-	}
+    protected static String captureSystemOut(Closure closure) {
+        def originalSystemOut = System.out
+        def outputStream = new ByteArrayOutputStream()
+        try {
+            System.out = new PrintStream(outputStream)
+            closure()
+        }
+        finally {
+            System.out = originalSystemOut
+        }
+        outputStream.toString()
+    }
+    
+    protected void assertSameXml(String actual, String expected) {
+        Assert.assertEquals(normalizeXml(expected), normalizeXml(actual))
+    }
 
-	/**
-	 * Normalize the XML string. Remove all whitespace between elements, and normalize line-endings.
-	 * @param xml - the input XML string to normalize
-	 * @return the normalized XML
-	 */
-	protected static String normalizeXml(String xml) {
-		assert xml != null
-		def resultXml = xml.replaceAll(/\>\s*\</, '><').trim()
-		return resultXml.replace('\r\n', '\n')
-	}
+    /**
+     * Normalize the XML string. Remove all whitespace between elements, and normalize line-endings.
+     * @param xml - the input XML string to normalize
+     * @return the normalized XML
+     */
+    protected static String normalizeXml(String xml) {
+        assert xml != null
+        def resultXml = xml.replaceAll(/\>\s*\</, '><').trim()
+        return resultXml.replace('\r\n', '\n')
+    }
 
 }

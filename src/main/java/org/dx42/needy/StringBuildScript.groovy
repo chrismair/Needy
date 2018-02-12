@@ -17,20 +17,20 @@ package org.dx42.needy
 
 class StringBuildScript implements BuildScript {
 
-	private final String text
-	String type
-	String description
-	String componentId
-	Map<String, Object> properties
+    private final String text
+    String type
+    String description
+    String componentId
+    Map<String, Object> properties
 
-	StringBuildScript(String text) {
-		assert text != null, "The text value must not be null"
-		this.text = text
-	}
-	
-	@Override
-	String getText() {
-		return text
-	}
+    StringBuildScript(String text) {
+        assert text != null, "The text value must not be null"
+        this.text = text
+    }
+    
+    @Override
+    String getText() {
+        return text
+    }
 
 }

@@ -20,27 +20,26 @@ import org.slf4j.LoggerFactory
 
 class Needy {
 
-	public static final String DEFAULT_CONFIG_FILE = "config.needy" 
-	private static final Logger LOG = LoggerFactory.getLogger(Needy)
+    public static final String DEFAULT_CONFIG_FILE = "config.needy" 
+    private static final Logger LOG = LoggerFactory.getLogger(Needy)
 
-	// Abstract creation of instance dependencies to allow substitution of test spy for unit tests
-	protected Closure createNeedyRunner = { new NeedyRunner() }
-	protected Closure createNeedyConfiguration = { filename -> DslNeedyConfiguration.fromFile(filename) }
+    // Abstract creation of instance dependencies to allow substitution of test spy for unit tests
+    protected Closure createNeedyRunner = { new NeedyRunner() }
+    protected Closure createNeedyConfiguration = { filename -> DslNeedyConfiguration.fromFile(filename) }
 
+    static void main(String[] args) {
+        LOG.info("Needy command-line")
+        def needy = new Needy()
+        needy.execute(args) 
+    }
 
-	static void main(String[] args) {
-		LOG.info("Needy command-line")
-		def needy = new Needy()
-		needy.execute(args) 
-	}
-
-	@SuppressWarnings('UnusedMethodParameter')
-	protected void execute(String[] args) {
+    @SuppressWarnings('UnusedMethodParameter')
+    protected void execute(String[] args) {
         String configFile = args.size() > 0 ? args[0] : DEFAULT_CONFIG_FILE
-		def needyConfiguration = createNeedyConfiguration(configFile)
-		def needyRunner = createNeedyRunner()
-		needyRunner.setNeedyConfiguration(needyConfiguration)
-		needyRunner.execute()
-	}
-	
+        def needyConfiguration = createNeedyConfiguration(configFile)
+        def needyRunner = createNeedyRunner()
+        needyRunner.setNeedyConfiguration(needyConfiguration)
+        needyRunner.execute()
+    }
+    
 }

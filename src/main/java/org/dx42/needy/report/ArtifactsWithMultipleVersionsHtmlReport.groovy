@@ -29,72 +29,73 @@ import org.dx42.needy.Dependency
  */
 class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
 
-	protected buildBodySection(List<Dependency> dependencies) {
-		Map sortedMap = buildArtifactMap(dependencies)
+    @Override
+    protected buildBodySection(List<Dependency> dependencies) {
+        Map sortedMap = buildArtifactMap(dependencies)
 
-		return {
-			body {
-				h1(STANDARD_TITLE)
-				out << buildReportMetadata()
-				if (notesHtml) {
-					unescaped << notesHtml
-				}
-				out << buildDependencyTable(sortedMap)
+        return {
+            body {
+                h1(STANDARD_TITLE)
+                out << buildReportMetadata()
+                if (notesHtml) {
+                    unescaped << notesHtml
+                }
+                out << buildDependencyTable(sortedMap)
                 out << buildApplicationList(dependencies)
-			}
-		}
-	}
+            }
+        }
+    }
 
-	private buildDependencyTable(Map sortedMap) {
-		return {
-			div(class: 'summary') {
-				h2("Artifacts with Multiple Versions")
-				table {
-					tr(class:'tableHeader') {
-						th("#")
-						th("Group")
-						th("Name")
-						th("Version")
-						th("Applications")
-					}
-					int index = 1
-					sortedMap.each{ k, v ->
-						def closure = buildDependencyRow(k, v, index)
-						if (closure) {
-							out << closure
-							index++
-						}
-					} 
-				}
-			}
-		}
-	}
+    private buildDependencyTable(Map sortedMap) {
+        return {
+            div(class:'summary') {
+                h2("Artifacts with Multiple Versions")
+                table {
+                    tr(class:'tableHeader') {
+                        th("#")
+                        th("Group")
+                        th("Name")
+                        th("Version")
+                        th("Applications")
+                    }
+                    int index = 1
+                    sortedMap.each { k, v ->
+                        def closure = buildDependencyRow(k, v, index)
+                        if (closure) {
+                            out << closure
+                            index++
+                        }
+                    } 
+                }
+            }
+        }
+    }
 
-	private SortedMap<Artifact, Set<String>> buildArtifactMap(List<Dependency> dependencies) {
-		SortedMap<Artifact, Set<String>> map = new TreeMap<>(ARTIFACT_COMPARATOR)
-		
-		dependencies.each { dependency ->
-			Artifact artifact = dependency.artifact
-			
-			if (isIncludedArtifact(artifact) && containsArtifactWithDifferentVersion(dependencies, dependency)) {
-				if (!map.containsKey(artifact)) {
-					map[artifact] = new TreeSet<String>()
-				}
-				map[artifact] << dependency.applicationName
-			}
-		}
-		return map
-	}
+    private SortedMap<Artifact, Set<String>> buildArtifactMap(List<Dependency> dependencies) {
+        SortedMap<Artifact, Set<String>> map = new TreeMap<>(ARTIFACT_COMPARATOR)
+        
+        dependencies.each { dependency ->
+            Artifact artifact = dependency.artifact
+            
+            if (isIncludedArtifact(artifact) && containsArtifactWithDifferentVersion(dependencies, dependency)) {
+                if (!map.containsKey(artifact)) {
+                    map[artifact] = new TreeSet<String>()
+                }
+                map[artifact] << dependency.applicationName
+            }
+        }
+        return map
+    }
 
-	private boolean containsArtifactWithDifferentVersion(List<Dependency> dependencies, Dependency dependency) {
-		Artifact artifact = dependency.artifact
-		return dependencies.find { dep ->  			
-			Artifact otherArtifact = dep.artifact
-			
-			// If any other dependency artifact has the same group and name, but different version
-			return isIncludedApplication(dep.applicationName) && 
-				artifact.group == otherArtifact.group && artifact.name == otherArtifact.name && artifact.version != otherArtifact.version
-		}
-	}
+    private boolean containsArtifactWithDifferentVersion(List<Dependency> dependencies, Dependency dependency) {
+        Artifact artifact = dependency.artifact
+        return dependencies.find { dep ->              
+            Artifact otherArtifact = dep.artifact
+            
+            // If any other dependency artifact has the same group and name, but different version
+            return isIncludedApplication(dep.applicationName) && 
+                artifact.group == otherArtifact.group && artifact.name == otherArtifact.name && artifact.version != otherArtifact.version
+        }
+    }
 
 }

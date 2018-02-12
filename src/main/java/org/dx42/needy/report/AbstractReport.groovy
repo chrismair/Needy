@@ -23,57 +23,57 @@ import org.slf4j.LoggerFactory
 
 abstract class AbstractReport implements Report {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractReport)
-	
-	String outputFile
-	String includeApplications 
-	String excludeApplications
-	String includeArtifacts 
-	String excludeArtifacts
-	String notesHtml
-	
-	protected Closure getDate = { new Date() }
-	
-	abstract void writeReport(Writer writer, List<Dependency> dependencies) 
-	
-	@Override
-	void writeReport(List<Dependency> dependencies) {
-		assert dependencies != null
-	
-		def printWriter = createPrintWriter()
-		writeReport(printWriter, dependencies)
-		
-		if (outputFile) {
-			LOG.info("Report written to [$outputFile]")
-		}
-	}
-	
-	protected getFormattedTimestamp = {
-		def dateFormat = java.text.DateFormat.getDateTimeInstance()
-		dateFormat.format(getDate())
-	}
-	
-	protected PrintWriter createPrintWriter() {
-		if (outputFile) {
-			new File(outputFile).getParentFile()?.mkdirs()
-			def file = new File(outputFile)
-			return file.newPrintWriter()
-		}
-		return System.out.newPrintWriter()
-	}
-	
-	protected boolean matchesIncludeApplications(String applicationName) {
-		return includeApplications ? WildcardUtil.matches(applicationName, includeApplications) : true
-	}
-	
-	protected boolean matchesExcludeApplications(String applicationName) {
-		return excludeApplications ? WildcardUtil.matches(applicationName, excludeApplications) : false
-	}
-	
-	protected boolean isIncludedApplication(String applicationName) {
-		return matchesIncludeApplications(applicationName) && !matchesExcludeApplications(applicationName)
-	}
-	
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractReport)
+    
+    String outputFile
+    String includeApplications 
+    String excludeApplications
+    String includeArtifacts 
+    String excludeArtifacts
+    String notesHtml
+    
+    protected Closure getDate = { new Date() }
+    
+    abstract void writeReport(Writer writer, List<Dependency> dependencies) 
+    
+    @Override
+    void writeReport(List<Dependency> dependencies) {
+        assert dependencies != null
+    
+        def printWriter = createPrintWriter()
+        writeReport(printWriter, dependencies)
+        
+        if (outputFile) {
+            LOG.info("Report written to [$outputFile]")
+        }
+    }
+    
+    protected getFormattedTimestamp = {
+        def dateFormat = java.text.DateFormat.getDateTimeInstance()
+        dateFormat.format(getDate())
+    }
+    
+    protected PrintWriter createPrintWriter() {
+        if (outputFile) {
+            new File(outputFile).getParentFile()?.mkdirs()
+            def file = new File(outputFile)
+            return file.newPrintWriter()
+        }
+        return System.out.newPrintWriter()
+    }
+    
+    protected boolean matchesIncludeApplications(String applicationName) {
+        return includeApplications ? WildcardUtil.matches(applicationName, includeApplications) : true
+    }
+    
+    protected boolean matchesExcludeApplications(String applicationName) {
+        return excludeApplications ? WildcardUtil.matches(applicationName, excludeApplications) : false
+    }
+    
+    protected boolean isIncludedApplication(String applicationName) {
+        return matchesIncludeApplications(applicationName) && !matchesExcludeApplications(applicationName)
+    }
+    
     protected boolean matchesIncludeArtifacts(Artifact artifact) {
         return includeArtifacts ? WildcardUtil.matches(artifact.toString(), includeArtifacts) : true
     }

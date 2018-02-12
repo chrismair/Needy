@@ -19,12 +19,12 @@ import org.dx42.needy.Dependency
 
 class StubReport implements Report {
 
-	List<Dependency> dependencies
-	String outputFile
-	
-	@Override
-	void writeReport(List<Dependency> dependencies) {
-		this.dependencies = dependencies
-	}
+    List<Dependency> dependencies
+    String outputFile
+    
+    @Override
+    void writeReport(List<Dependency> dependencies) {
+        this.dependencies = dependencies
+    }
 
 }

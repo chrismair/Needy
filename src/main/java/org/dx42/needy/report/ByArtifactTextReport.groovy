@@ -19,16 +19,16 @@ import org.dx42.needy.Dependency
 
 class ByArtifactTextReport extends AbstractReport {
 
-	@Override
-	void writeReport(Writer writer, List<Dependency> dependencies) {
-		Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
+    @Override
+    void writeReport(Writer writer, List<Dependency> dependencies) {
+        Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 
-		writer.withWriter { w ->
-			w.println "Needy\n"
-			sortedMap.each { k, v ->
-				w.println(/"$k" -- $v/)
-			}
-		}
-	}
-	
+        writer.withWriter { w ->
+            w.println "Needy\n"
+            sortedMap.each { k, v ->
+                w.println(/"$k" -- $v/)
+            }
+        }
+    }
+    
 }

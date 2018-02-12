@@ -19,10 +19,10 @@ import org.dx42.needy.Dependency
 
 interface Report {
 
-	/**
-	 * Write out a report for the specified dependencies
-	 * @param dependencies - The List of Dependencies
-	 */
-	void writeReport(List<Dependency> dependencies)
-	
+    /**
+     * Write out a report for the specified dependencies
+     * @param dependencies - The List of Dependencies
+     */
+    void writeReport(List<Dependency> dependencies)
+    
 }

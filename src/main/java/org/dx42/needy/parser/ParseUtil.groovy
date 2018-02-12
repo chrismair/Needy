@@ -26,42 +26,42 @@ import org.slf4j.LoggerFactory
  */
 class ParseUtil {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ParseUtil)
-	
-	protected static Dependency createDependencyFromString(String applicationName, String configurationName, String s) {
-		assert s.size() > 0, "String format dependency error - empty string"
-		s = removeUnknownProperties(s)
-		def strings = s.tokenize(':')
+    private static final Logger LOG = LoggerFactory.getLogger(ParseUtil)
+    
+    protected static Dependency createDependencyFromString(String applicationName, String configurationName, String str) {
+        assert str.size() > 0, "String format dependency error - empty string"
+        def s = removeUnknownProperties(str)
+        def strings = s.tokenize(':')
 
-		def group = (strings.size() > 2) ? strings[0] : null
-		def artifactName = (strings.size() < 3) ? strings[0] : strings[1]
-		def version = (strings.size() == 2) ? strings[1] : strings[2]
-		version = scrubVersion(version)
-	
-		return new Dependency([applicationName:applicationName, group:group, name:artifactName, version:version, configuration:configurationName])
-	}
-	
-	private static String removeUnknownProperties(String s) {
-		return s.replace("[:]", "?")
-	}
-	
-	private static String scrubVersion(String version) {
-		if (version?.contains('@')) {
-			return version.substring(0, version.indexOf('@'))
-		}
-		return version
-	}
-	
-	protected static Closure ignoreEverything() {
-		def inner = { n ->
-			LOG.info("inner for [$n]")
-			return [:]
-		}
-		def ignoreEverything = { n ->
-			LOG.info("ignoreEverything for [$n]")
-			return [:].withDefault(inner)
-		}
-		return ignoreEverything
-	}
+        def group = (strings.size() > 2) ? strings[0] : null
+        def artifactName = (strings.size() < 3) ? strings[0] : strings[1]
+        def version = (strings.size() == 2) ? strings[1] : strings[2]
+        version = scrubVersion(version)
+    
+        return new Dependency([applicationName:applicationName, group:group, name:artifactName, version:version, configuration:configurationName])
+    }
+    
+    private static String removeUnknownProperties(String s) {
+        return s.replace("[:]", "?")
+    }
+    
+    private static String scrubVersion(String version) {
+        if (version?.contains('@')) {
+            return version.substring(0, version.indexOf('@'))
+        }
+        return version
+    }
+    
+    protected static Closure ignoreEverything() {
+        def inner = { n ->
+            LOG.info("inner for [$n]")
+            return [:]
+        }
+        def ignoreEverything = { n ->
+            LOG.info("ignoreEverything for [$n]")
+            return [:].withDefault(inner)
+        }
+        return ignoreEverything
+    }
 
 }

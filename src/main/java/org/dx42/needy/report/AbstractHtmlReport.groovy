@@ -30,82 +30,82 @@ import groovy.xml.StreamingMarkupBuilder
  */
 abstract class AbstractHtmlReport extends AbstractReport {
 
-	protected static final String STANDARD_TITLE = "Needy Dependency Report"
-	protected static final String CSS_FILE = 'htmlreport.css'
-	
-	String title = "Dependency Report"
-	
-	abstract protected buildBodySection(List<Dependency> dependencies)
-	
-	@Override
-	void writeReport(Writer writer, List<Dependency> dependencies) {
-		def builder = new StreamingMarkupBuilder()
-		def html = builder.bind {
-			mkp.yieldUnescaped('<!DOCTYPE html>')
-			html {
-				out << buildHeaderSection()
-				out << buildBodySection(dependencies)
-			}
-		}
-		writer << html
-	}
-	
-	protected buildHeaderSection() {
-		return {
-			head {
-				title(STANDARD_TITLE + ": " + title)
-				mkp.yieldUnescaped('<meta http-equiv="Content-Type" content="text/html">')
-				out << buildCSS()
-			}
-		}
-	}
+    protected static final String STANDARD_TITLE = "Needy Dependency Report"
+    protected static final String CSS_FILE = 'htmlreport.css'
+    
+    String title = "Dependency Report"
+    
+    abstract protected buildBodySection(List<Dependency> dependencies)
+    
+    @Override
+    void writeReport(Writer writer, List<Dependency> dependencies) {
+        def builder = new StreamingMarkupBuilder()
+        def html = builder.bind {
+            mkp.yieldUnescaped('<!DOCTYPE html>')
+            html {
+                out << buildHeaderSection()
+                out << buildBodySection(dependencies)
+            }
+        }
+        writer << html
+    }
+    
+    protected buildHeaderSection() {
+        return {
+            head {
+                title(STANDARD_TITLE + ": " + title)
+                mkp.yieldUnescaped('<meta http-equiv="Content-Type" content="text/html">')
+                out << buildCSS()
+            }
+        }
+    }
 
-	protected buildCSS() {
-		return {
-			def cssInputStream = getClasspathFileInputStream(CSS_FILE)
-			def css = cssInputStream.text
-			style(type: 'text/css') {
-				unescaped << css
-			}
-		}
-	}
+    protected buildCSS() {
+        return {
+            def cssInputStream = getClasspathFileInputStream(CSS_FILE)
+            def css = cssInputStream.text
+            style(type:'text/css') {
+                unescaped << css
+            }
+        }
+    }
 
-	protected buildReportMetadata() {
-		return {
-			div(class: 'metadata') {
-				table {
-					tr {
-						td(class: 'em', "Report Title:")
-						td(class: 'reportTitle', title)
-					}
-					tr {
-						td(class: 'em', "Timestamp:")
-						td getFormattedTimestamp()
-					}
-					tr {
-						td(class: 'em', "Generated With:")
-						td { a("Needy v" + NeedyVersion.version, href:"https://github.com/dx42/Needy") }
-					}
-				}
-			}
-		}
-	}
+    protected buildReportMetadata() {
+        return {
+            div(class:'metadata') {
+                table {
+                    tr {
+                        td(class:'em', "Report Title:")
+                        td(class:'reportTitle', title)
+                    }
+                    tr {
+                        td(class:'em', "Timestamp:")
+                        td getFormattedTimestamp()
+                    }
+                    tr {
+                        td(class:'em', "Generated With:")
+                        td { a("Needy v" + NeedyVersion.version, href:"https://github.com/dx42/Needy") }
+                    }
+                }
+            }
+        }
+    }
 
-	protected Closure buildDependencyRow(artifact, names, int index) {
-		def applicationNames = names.findAll { name -> isIncludedApplication(name) }
-		if (!applicationNames) {
-			return null
-		}
-		return {
-			tr {
-				td(index)
-				td(artifact.group)
-				td(artifact.name)
-				td(artifact.version)
-				td(applicationNames.join(", "), class:'applicationNames')
-			}
-		}
-	}
+    protected Closure buildDependencyRow(artifact, names, int index) {
+        def applicationNames = names.findAll { name -> isIncludedApplication(name) }
+        if (!applicationNames) {
+            return null
+        }
+        return {
+            tr {
+                td(index)
+                td(artifact.group)
+                td(artifact.name)
+                td(artifact.version)
+                td(applicationNames.join(", "), class:'applicationNames')
+            }
+        }
+    }
 
     protected buildApplicationList(List<Dependency> dependencies) {
         SortedSet<String> applicationNames = getApplicationNames(dependencies)

@@ -19,10 +19,10 @@ import org.junit.Test
 
 class DependencyTest extends AbstractTestCase {
 
-	@Test
-	void test_getArtifact() {
-		def dependency = new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")
-		assert dependency.getArtifact() == new Artifact(group:"org.hibernate", name:"hibernate-core", version:"3.1")
-	}
-	
+    @Test
+    void test_getArtifact() {
+        def dependency = new Dependency(applicationName:"Sample1", configuration:"compile", group:"org.hibernate", name:"hibernate-core", version:"3.1")
+        assert dependency.getArtifact() == new Artifact(group:"org.hibernate", name:"hibernate-core", version:"3.1")
+    }
+    
 }

@@ -22,8 +22,8 @@ import org.junit.Test
 
 class ReportUtilTest extends AbstractTestCase {
 
-	private static final String FILE_ON_CLASSPATH = "htmlreport.css"
-	private static final String FILE_PATH = "src/main/resources/$FILE_ON_CLASSPATH"
+    private static final String FILE_ON_CLASSPATH = "htmlreport.css"
+    private static final String FILE_PATH = "src/main/resources/$FILE_ON_CLASSPATH"
 
     private static final DEPENDENCIES = [
         new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
@@ -34,54 +34,54 @@ class ReportUtilTest extends AbstractTestCase {
         new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
     ]
 
-	@Test
-	void test_buildMapOfArtifactToApplicationNames_EmptyDependencies() {
-		def dependencies = []
+    @Test
+    void test_buildMapOfArtifactToApplicationNames_EmptyDependencies() {
+        def dependencies = []
 
-		def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
-		assert map == [:]
-	}
-	
-	@Test
-	void test_buildMapOfArtifactToApplicationNames_SingleDependency() {
-		def dependencies = [
-			new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
-		]
+        def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
+        assert map == [:]
+    }
+    
+    @Test
+    void test_buildMapOfArtifactToApplicationNames_SingleDependency() {
+        def dependencies = [
+            new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
+        ]
 
-		def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
-		assert map == [(new Artifact(group:"org.other", name:"service", version:"2.0")): ["Third"] as SortedSet]
-	}
-	
-	@Test
-	void test_buildMapOfArtifactToApplicationNames() {
-		def map = ReportUtil.buildMapOfArtifactToApplicationNames(DEPENDENCIES)
+        def map = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
+        assert map == [(new Artifact(group:"org.other", name:"service", version:"2.0")):["Third"] as SortedSet]
+    }
+    
+    @Test
+    void test_buildMapOfArtifactToApplicationNames() {
+        def map = ReportUtil.buildMapOfArtifactToApplicationNames(DEPENDENCIES)
 
-		def a1 = new Artifact(group:"log4j", name:"log4j", version:"1.2.14")
-		def a2 = new Artifact(group:"log4j-extra", name:"stuff", version:"1.0") 
-		def a3 = new Artifact(group:"ORG.hibernate", name:"hibernate-core", version:"3.1")
-		def a4 = new Artifact(group:"org.other", name:"service", version:"2.0")
-				
-		// Verify sort order of keys
-		assert map.keySet() as List == [a1, a2, a3, a4]
-		
-		assert map == [
-			(a1): ["Sample1", "sample_Two", "Third"] as SortedSet,
-			(a2): ["Third"] as SortedSet,
-			(a3): ["Sample1"] as SortedSet,
-			(a4): ["Third"] as SortedSet]
-	}
-	
-	@Test
-	void test_getClasspathFileInputStream() {
-		def fileText = new File(FILE_PATH).text
-		def inputStream = ReportUtil.getClasspathFileInputStream(FILE_ON_CLASSPATH)
-		assert inputStream instanceof InputStream
-		assert inputStream.text == fileText
-	}
-	
-	@Test
-	void test_getClasspathFileInputStream_FileNotFound() {
-		shouldFail(FileNotFoundException) { ReportUtil.getClasspathFileInputStream("BadDir/NotFound") }
-	}
-	
+        def a1 = new Artifact(group:"log4j", name:"log4j", version:"1.2.14")
+        def a2 = new Artifact(group:"log4j-extra", name:"stuff", version:"1.0") 
+        def a3 = new Artifact(group:"ORG.hibernate", name:"hibernate-core", version:"3.1")
+        def a4 = new Artifact(group:"org.other", name:"service", version:"2.0")
+                
+        // Verify sort order of keys
+        assert map.keySet() as List == [a1, a2, a3, a4]
+        
+        assert map == [
+            (a1):["Sample1", "sample_Two", "Third"] as SortedSet,
+            (a2):["Third"] as SortedSet,
+            (a3):["Sample1"] as SortedSet,
+            (a4):["Third"] as SortedSet]
+    }
+    
+    @Test
+    void test_getClasspathFileInputStream() {
+        def fileText = new File(FILE_PATH).text
+        def inputStream = ReportUtil.getClasspathFileInputStream(FILE_ON_CLASSPATH)
+        assert inputStream instanceof InputStream
+        assert inputStream.text == fileText
+    }
+    
+    @Test
+    void test_getClasspathFileInputStream_FileNotFound() {
+        shouldFail(FileNotFoundException) { ReportUtil.getClasspathFileInputStream("BadDir/NotFound") }
+    }
+    
 }

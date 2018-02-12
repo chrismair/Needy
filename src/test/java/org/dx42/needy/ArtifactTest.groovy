@@ -19,11 +19,11 @@ import org.junit.Test
 
 class ArtifactTest extends AbstractTestCase {
 
-	@Test
-	void test_toString() {
-		assert new Artifact(group:"org.hibernate", name:"hibernate", version:"3.1").toString() == "org.hibernate:hibernate:3.1"
-		assert new Artifact(group:null, name:"hibernate", version:"3.1").toString() == ":hibernate:3.1"
-		assert new Artifact(group:"org.hibernate", name:"hibernate", version:null).toString() == "org.hibernate:hibernate:"
-	}
-	
+    @Test
+    void test_toString() {
+        assert new Artifact(group:"org.hibernate", name:"hibernate", version:"3.1").toString() == "org.hibernate:hibernate:3.1"
+        assert new Artifact(group:null, name:"hibernate", version:"3.1").toString() == ":hibernate:3.1"
+        assert new Artifact(group:"org.hibernate", name:"hibernate", version:null).toString() == "org.hibernate:hibernate:"
+    }
+    
 }

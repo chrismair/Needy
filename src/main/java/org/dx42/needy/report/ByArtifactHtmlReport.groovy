@@ -26,47 +26,48 @@ import org.dx42.needy.Dependency
  */
 class ByArtifactHtmlReport extends AbstractHtmlReport {
 
-	protected buildBodySection(List<Dependency> dependencies) {
-		Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
+    @Override
+    protected buildBodySection(List<Dependency> dependencies) {
+        Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 
-		return {
-			body {
-				h1(STANDARD_TITLE)
-				out << buildReportMetadata()
-				if (notesHtml) {
-					unescaped << notesHtml
-				}
-				out << buildDependencyTable(sortedMap)
-				out << buildApplicationList(dependencies)
-			}
-		}
-	}
+        return {
+            body {
+                h1(STANDARD_TITLE)
+                out << buildReportMetadata()
+                if (notesHtml) {
+                    unescaped << notesHtml
+                }
+                out << buildDependencyTable(sortedMap)
+                out << buildApplicationList(dependencies)
+            }
+        }
+    }
 
-	private buildDependencyTable(Map sortedMap) {
-		return {
-			div(class: 'summary') {
-				h2("Dependencies")
-				table {
-					tr(class:'tableHeader') {
-						th("#")
-						th("Group")
-						th("Name")
-						th("Version")
-						th("Applications")
-					}
-					int index = 1
-					sortedMap.each{ artifact, names ->
+    private buildDependencyTable(Map sortedMap) {
+        return {
+            div(class:'summary') {
+                h2("Dependencies")
+                table {
+                    tr(class:'tableHeader') {
+                        th("#")
+                        th("Group")
+                        th("Name")
+                        th("Version")
+                        th("Applications")
+                    }
+                    int index = 1
+                    sortedMap.each { artifact, names ->
                         if (isIncludedArtifact(artifact)) {
-    						def closure = buildDependencyRow(artifact, names, index)
-    						if (closure) {
-    							out << closure
-    							index++
-    						}
+                            def closure = buildDependencyRow(artifact, names, index)
+                            if (closure) {
+                                out << closure
+                                index++
+                            }
                         }
-					} 
-				}
-			}
-		}
-	}
+                    } 
+                }
+            }
+        }
+    }
 
 }
