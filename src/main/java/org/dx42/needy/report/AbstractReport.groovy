@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,35 +24,35 @@ import org.slf4j.LoggerFactory
 abstract class AbstractReport implements Report {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractReport)
-    
+
     String outputFile
-    String includeApplications 
+    String includeApplications
     String excludeApplications
-    String includeArtifacts 
+    String includeArtifacts
     String excludeArtifacts
     String notesHtml
-    
+
     protected Closure getDate = { new Date() }
-    
-    abstract void writeReport(Writer writer, List<Dependency> dependencies) 
-    
+
+    abstract void writeReport(Writer writer, List<Dependency> dependencies)
+
     @Override
     void writeReport(List<Dependency> dependencies) {
         assert dependencies != null
-    
+
         def printWriter = createPrintWriter()
         writeReport(printWriter, dependencies)
-        
+
         if (outputFile) {
             LOG.info("Report written to [$outputFile]")
         }
     }
-    
+
     protected Closure getFormattedTimestamp = {
         def dateFormat = java.text.DateFormat.getDateTimeInstance()
         dateFormat.format(getDate())
     }
-    
+
     protected PrintWriter createPrintWriter() {
         if (outputFile) {
             new File(outputFile).getParentFile()?.mkdirs()
@@ -61,31 +61,31 @@ abstract class AbstractReport implements Report {
         }
         return System.out.newPrintWriter()
     }
-    
+
     protected boolean matchesIncludeApplications(String applicationName) {
         return includeApplications ? WildcardUtil.matches(applicationName, includeApplications) : true
     }
-    
+
     protected boolean matchesExcludeApplications(String applicationName) {
         return excludeApplications ? WildcardUtil.matches(applicationName, excludeApplications) : false
     }
-    
+
     protected boolean isIncludedApplication(String applicationName) {
         return matchesIncludeApplications(applicationName) && !matchesExcludeApplications(applicationName)
     }
-    
+
     protected boolean matchesIncludeArtifacts(Artifact artifact) {
         return includeArtifacts ? WildcardUtil.matches(artifact.toString(), includeArtifacts) : true
     }
-    
+
     protected boolean matchesExcludeArtifacts(Artifact artifact) {
         return excludeArtifacts ? WildcardUtil.matches(artifact.toString(), excludeArtifacts) : false
     }
-    
+
     protected boolean isIncludedArtifact(Artifact artifact) {
         return matchesIncludeArtifacts(artifact) && !matchesExcludeArtifacts(artifact)
     }
-    
+
     protected SortedSet<String> getApplicationNames(List<Dependency> dependencies) {
         SortedSet<String> names = [] as SortedSet
         dependencies.each { dependency ->

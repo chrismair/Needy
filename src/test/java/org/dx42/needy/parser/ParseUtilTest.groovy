@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@ class ParseUtilTest extends AbstractTestCase {
         assert fromString("org.hibernate:hibernate-core:3.1") == dependency(group:"org.hibernate", name:"hibernate-core", version:"3.1")
         assert fromString("org.hibernate:hibernate-core:3.1") == dependency(group:"org.hibernate", name:"hibernate-core", version:"3.1")
     }
-    
+
     @Test
     void test_createDependencyFromString_NameAndVersionOnly() {
         assert fromString("MyUtil:9") == dependency(group:null, name:"MyUtil", version:"9")
@@ -61,11 +61,11 @@ class ParseUtilTest extends AbstractTestCase {
     //--------------------------------------------------------------------------
     // Helper methods
     //--------------------------------------------------------------------------
-    
+
     private Dependency fromString(String string) {
         return ParseUtil.createDependencyFromString(APPLICATION_NAME, CONFIGURATION_NAME, string)
     }
-    
+
     private Dependency dependency(Map map) {
         def fullMap = [applicationName:APPLICATION_NAME, configuration:CONFIGURATION_NAME] + map
         return new Dependency(fullMap)

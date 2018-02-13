@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,14 +66,14 @@ abstract class AbstractHtmlReportTestCase extends AbstractTestCase {
 
     protected Report report
     protected StringWriter writer = new StringWriter()
-    
+
     protected abstract String getExpectedReportText()
     protected abstract Report createReport()
-    
+
     //------------------------------------------------------------------------------------
     // Common Tests
     //------------------------------------------------------------------------------------
-    
+
     @Test
     void test_writeReport_Null() {
         shouldFailWithMessage("dependencies") { report.writeReport(null) }
@@ -94,10 +94,10 @@ abstract class AbstractHtmlReportTestCase extends AbstractTestCase {
 
         def file = new File(OUTPUT_FILE)
         file.deleteOnExit()
-        
+
         assertSameXml(file.text, getExpectedReportText())
     }
-    
+
     @Test
     void test_writeReport_OutputFile_CannotCreateOutputFile() {
         report.outputFile = "///noSuchDir/orSubDir/file.txt"
@@ -107,7 +107,7 @@ abstract class AbstractHtmlReportTestCase extends AbstractTestCase {
     //------------------------------------------------------------------------------------
     // Setup and Helper Methods
     //------------------------------------------------------------------------------------
-    
+
     @Before
     void setUp_AbstractHtmlReportTestCase() {
         report = createReport()

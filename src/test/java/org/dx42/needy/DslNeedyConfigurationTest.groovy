@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@ import org.dx42.needy.report.StubReport
 class DslNeedyConfigurationTest extends AbstractTestCase {
 
     private static final String TEST_CONFIG_FILE = "src/test/resources/test-config.txt"
-    
+
     @Test
     void test_fromString_NullOrEmptyString() {
         shouldFailWithMessage("text") { DslNeedyConfiguration.fromString(null) }
@@ -66,7 +66,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
         def applicationBuilds = needyConfiguration.getApplicationBuilds()
-        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
+        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]])
         assert needyConfiguration.getReports() == []
     }
 
@@ -93,7 +93,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         shouldFailWithMessage("unknown") { DslNeedyConfiguration.fromString(TEXT) }
     }
-    
+
     @Test
     void test_getApplicationBuilds_Application_MapSyntax_MisingUrl() {
         final TEXT = """
@@ -105,7 +105,7 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         shouldFailWithMessage("url") { DslNeedyConfiguration.fromString(TEXT) }
     }
-    
+
     @Test
     void test_getApplicationBuilds_MultipleApplications() {
         final TEXT = """
@@ -118,61 +118,61 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
         def applicationBuilds = needyConfiguration.getApplicationBuilds()
-        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
-        assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle", type:"gradle", properties:[a:1]]]) 
+        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]])
+        assertApplicationBuild(applicationBuilds[1], "Wallace", [[url:"http://svn/Wallace/custom-build.gradle", type:"gradle", properties:[a:1]]])
         assert needyConfiguration.getReports() == []
     }
-    
+
     @Test
     void test_getApplicationBuilds_MultipleUrlsPerApplication() {
         final TEXT = """
             needy {
                 applications {
                     Fidget(
-                        [url:"http://svn/Fidget/build.gradle", properties:[:]], 
+                        [url:"http://svn/Fidget/build.gradle", properties:[:]],
                         [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"])
                 }
             }
         """
         def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
         def applicationBuilds = needyConfiguration.getApplicationBuilds()
-        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle", properties:[:]], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
+        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle", properties:[:]], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]])
         assert needyConfiguration.getReports() == []
     }
-    
+
     @Test
     void test_getApplicationBuilds_MultipleUrlsPerApplication_ExplicitListOfMaps() {
         final TEXT = """
             needy {
                 applications {
                     Fidget([
-                        [url:"http://svn/Fidget/build.gradle"], 
+                        [url:"http://svn/Fidget/build.gradle"],
                         [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]])
                 }
             }
         """
         def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
         def applicationBuilds = needyConfiguration.getApplicationBuilds()
-        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]]) 
+        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"], [url:"http://svn/Fidget2/BuildConfig.groovy", type:"grails2"]])
         assert needyConfiguration.getReports() == []
     }
-    
+
     @Test
     void test_getApplicationBuilds_Application_ListSyntax_Invalid() {
         final TEXT = """
             needy {
                 applications {
                     Fidget([
-                        [url:"http://svn/Fidget/build.gradle"], 
+                        [url:"http://svn/Fidget/build.gradle"],
                         "Not a Map"])
                 }
             }
         """
         shouldFailWithMessage("Each element of the List must be a Map") { DslNeedyConfiguration.fromString(TEXT) }
     }
-    
+
     // Tests for Reports
-    
+
     @Test
     void test_SingleReport() {
         final TEXT = """
@@ -190,12 +190,12 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
         def applicationBuilds = needyConfiguration.getApplicationBuilds()
-        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
+        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]])
         assert needyConfiguration.getReports().size() == 1
         assert needyConfiguration.getReports()[0] instanceof ByArtifactTextReport
         assert needyConfiguration.getReports()[0].outputFile == "xxx"
     }
-    
+
     @Test
     void test_MultipleReports() {
         final TEXT = """
@@ -214,13 +214,13 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         def needyConfiguration = DslNeedyConfiguration.fromString(TEXT)
         def applicationBuilds = needyConfiguration.getApplicationBuilds()
-        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]]) 
+        assertApplicationBuild(applicationBuilds[0], "Fidget", [[url:"http://svn/Fidget/build.gradle"]])
         assert needyConfiguration.getReports().size() == 2
         assert needyConfiguration.getReports()[0] instanceof ByArtifactTextReport
         assert needyConfiguration.getReports()[0].outputFile == "xxx"
         assert needyConfiguration.getReports()[1] instanceof StubReport
     }
-    
+
     @Test
     void test_getApplicationBuilds_UnknownMethodOutsideApplications() {
         final TEXT = """
@@ -231,20 +231,20 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         shouldFail(MissingMethodException) { DslNeedyConfiguration.fromString(TEXT) }
     }
-    
+
     @Test
     void test_getApplicationBuilds_WrongMethodSignatureInsideReports() {
         final TEXT1 = """
-            needy { 
+            needy {
                 reports {
                     unknown()
                 }
             }
         """
         shouldFail(MissingMethodException) { DslNeedyConfiguration.fromString(TEXT1) }
-        
+
         final TEXT2 = """
-            needy { 
+            needy {
                 reports {
                     unknown("org.dx42.needy.report.StubReport", [a:1], "tooManyParameters")
                 }
@@ -252,11 +252,11 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         shouldFail(MissingMethodException) { DslNeedyConfiguration.fromString(TEXT2) }
     }
-    
+
     @Test
     void test_getApplicationBuilds_2ndReportParameterNotAClosure() {
         final TEXT1 = """
-            needy { 
+            needy {
                 reports {
                     unknown("org.dx42.needy.report.StubReport", "shouldBeAClosure")
                 }
@@ -264,11 +264,11 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         shouldFailWithMessage("must be a Closure") { DslNeedyConfiguration.fromString(TEXT1) }
     }
-    
+
     @Test
     void test_getApplicationBuilds_NotAReportClass() {
         final TEXT1 = """
-            needy { 
+            needy {
                 reports {
                     unknown("org.dx42.needy.Artifact")
                 }
@@ -276,20 +276,20 @@ class DslNeedyConfigurationTest extends AbstractTestCase {
         """
         shouldFailWithMessage(Report.name) { DslNeedyConfiguration.fromString(TEXT1) }
     }
-    
+
     @Test
     void test_InvalidSyntaxOfNeedyConfigFile() {
         final TEXT = "%^&*()GHJ"
         shouldFail(IllegalStateException) { DslNeedyConfiguration.fromString(TEXT) }
     }
-    
+
     //--------------------------------------------------------------------------
     // Helper methods
     //--------------------------------------------------------------------------
-        
+
     private void assertApplicationBuild(ApplicationBuild actual, String name, List<Map> expectedBuildScripts) {
         assert actual.name == name
-        assert actual.buildScripts.size() == expectedBuildScripts.size() 
+        assert actual.buildScripts.size() == expectedBuildScripts.size()
         assert actual.buildScripts.every { buildScript -> buildScript instanceof UrlBuildScript }
         expectedBuildScripts.eachWithIndex { Map expectedBuildScript, int index ->
             assert actual.buildScripts[index].url.toString() == expectedBuildScript.url

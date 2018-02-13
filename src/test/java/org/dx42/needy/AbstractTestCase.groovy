@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,12 +35,12 @@ class AbstractTestCase {
 
     @SuppressWarnings('PublicInstanceField')
     @Rule public TestName testName = new TestName()
-    
+
     @After
     void afterAbstractTestCase() {
         println("----------[ ${getClass().getSimpleName()}.${getName()} ]----------")
     }
-    
+
     @SuppressWarnings('ConfusingMethodName')
     protected void log(Object message) {
         println "[${getClass().getSimpleName()}] " + message.toString()
@@ -49,23 +49,23 @@ class AbstractTestCase {
     protected String getName() {
         return testName.getMethodName()
     }
-    
+
     protected Throwable shouldFail(Closure code) {
         GroovyAssert.shouldFail(code)
     }
-    
+
     protected Throwable shouldFail(Class clazz, Closure code) {
         GroovyAssert.shouldFail(clazz, code)
     }
-    
+
     protected void shouldFailWithMessage(String message, Closure closure) {
         def e = shouldFail(closure)
-        assert e.message?.contains(message) 
+        assert e.message?.contains(message)
     }
 
     protected void shouldFailWithMessage(Class theClass, String message, Closure closure) {
         def e = shouldFail(theClass, closure)
-        assert e.message?.contains(message) 
+        assert e.message?.contains(message)
     }
 
     protected static String captureSystemOut(Closure closure) {
@@ -80,7 +80,7 @@ class AbstractTestCase {
         }
         outputStream.toString()
     }
-    
+
     protected void assertSameXml(String actual, String expected) {
         Assert.assertEquals(normalizeXml(expected), normalizeXml(actual))
     }

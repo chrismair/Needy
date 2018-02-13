@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,9 +28,9 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
 
     private static final String NAME = "MyApp1"
     private static final Map BINDING = [:]
-    
+
     private GrailsBuildConfigDependencyParser parser = new GrailsBuildConfigDependencyParser()
-    
+
     @Test
     void test_ImplementsDependencyParser() {
         assert parser instanceof DependencyParser
@@ -58,7 +58,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
             }"""
         assert parser.parse(NAME, SOURCE, BINDING) == []
     }
-    
+
     @Test
     void test_parse_Single() {
         final SOURCE = """grails.project.dependency.resolution = {
@@ -102,7 +102,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
             dependency(configuration:"test", group:"junit", name:"junit", version:"4.8.1")
         ]
     }
-    
+
     @Test
     void test_parse_StringFormat_NameAndVersionOnly() {
         final SOURCE = """grails.project.dependency.resolution = {
@@ -166,7 +166,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
             dependency(configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")
         ]
     }
-    
+
     @Test
     void test_parse_MultipleDependenciesPerStatement_Maps() {
         final SOURCE = """grails.project.dependency.resolution = {
@@ -182,7 +182,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
             dependency(configuration:"runtime", group:"net.sf.ehcache", name:"ehcache", version:"1.6.1")
         ]
     }
-    
+
     @Test
     void test_parse_LocalVariablesUsedWithinDependencySpecification() {
         final SOURCE = """grails.project.dependency.resolution = {
@@ -327,15 +327,15 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
         parser.includePlugins = false
         def dependencies = parser.parse(NAME, source, binding)
         assert dependencies.size() == 11
-        assert dependencies[0] == dependency(group:"mydb", name:"client", version:"16.0.EBF26086", configuration:"runtime") 
-        assert dependencies[1] == dependency(group:"acme", name:"util", version:"1.0", configuration:"runtime") 
-        assert dependencies[2] == dependency(group:"commons-dbcp", name:"commons-dbcp", version:"1.4", configuration:"build") 
+        assert dependencies[0] == dependency(group:"mydb", name:"client", version:"16.0.EBF26086", configuration:"runtime")
+        assert dependencies[1] == dependency(group:"acme", name:"util", version:"1.0", configuration:"runtime")
+        assert dependencies[2] == dependency(group:"commons-dbcp", name:"commons-dbcp", version:"1.4", configuration:"build")
         assert dependencies[3] == dependency(group:"acme", name:"architecture", version:"3.29.0", configuration:"compile")
-        assert dependencies[4] == dependency(group:"commons-collections", name:"commons-collections", version:"3.2.2", configuration:"compile") 
+        assert dependencies[4] == dependency(group:"commons-collections", name:"commons-collections", version:"3.2.2", configuration:"compile")
         assert dependencies[5] == dependency(group:"javax.validation", name:"validation-api", version:"1.1.0.Final", configuration:"compile")
         assert dependencies[6] == dependency(group:"org.springframework", name:"spring-orm", version:"?", configuration:"compile")
-        assert dependencies[7] == dependency(group:"org.springframework", name:"spring-aop", version:"4.0.5.RELEASE", configuration:"compile") 
-        assert dependencies[8] == dependency(group:"org.springframework", name:"spring-expression", version:"4.0.5.RELEASE", configuration:"compile") 
+        assert dependencies[7] == dependency(group:"org.springframework", name:"spring-aop", version:"4.0.5.RELEASE", configuration:"compile")
+        assert dependencies[8] == dependency(group:"org.springframework", name:"spring-expression", version:"4.0.5.RELEASE", configuration:"compile")
         assert dependencies[9] == dependency(group:"org.hamcrest", name:"hamcrest-core", version:"1.3", configuration:"test")
         assert dependencies[10] == dependency(group:"org.hsqldb", name:"hsqldb", version:"2.3.2", configuration:"test")
     }
@@ -345,8 +345,8 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
         String source = new File('src/test/resources/sample2-grails-buildconfig.txt').text
         def dependencies = parser.parse(NAME, source, BINDING)
         assert dependencies.size() == 2
-        assert dependencies[0] == dependency(group:"mysql", name:"mysql-connector-java", version:"5.1.24", configuration:"runtime") 
-        assert dependencies[1] == dependency(group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile") 
+        assert dependencies[0] == dependency(group:"mysql", name:"mysql-connector-java", version:"5.1.24", configuration:"runtime")
+        assert dependencies[1] == dependency(group:"org.springframework.integration", name:"spring-integration-core", version:"2.2.5.RELEASE", configuration:"compile")
     }
 
     @Test
@@ -359,7 +359,7 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
     }
 
     // Tests for invalid DSL syntax/format
-    
+
     @Test
     void test_parse_InvalidConfigurationName() {
         final SOURCE = """grails.project.dependency.resolution = {
@@ -377,9 +377,9 @@ class GrailsBuildConfigDependencyParserTest extends AbstractTestCase {
         }"""
         shouldFailWithMessage("empty") { parser.parse(NAME, SOURCE, BINDING) }
     }
-    
+
     private Dependency dependency(Map map) {
         return new Dependency([applicationName:NAME] + map)
     }
-            
+
 }

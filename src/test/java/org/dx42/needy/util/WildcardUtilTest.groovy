@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import org.junit.Test
 class WildcardUtilTest extends AbstractTestCase {
 
     // No wildcards
-    
+
     @Test
     void test_matches_NoWildcards() {
         // Matches
@@ -43,7 +43,7 @@ class WildcardUtilTest extends AbstractTestCase {
         assert !WildcardUtil.matches("a", "ab")
         assert !WildcardUtil.matches("ab", "a")
     }
-    
+
     @Test
     void test_matches_CommaSeparatedListOfPatterns_NoWildcards() {
         // Matches
@@ -66,14 +66,14 @@ class WildcardUtilTest extends AbstractTestCase {
         assert WildcardUtil.matches(null, "")
         assert WildcardUtil.matches(null, "a")
         assert WildcardUtil.matches(null, "a*")
-        
+
         assert WildcardUtil.matches("", "")
         assert WildcardUtil.matches("", "a")
         assert WildcardUtil.matches("", "a*")
     }
-    
+
     // Wildcards
-        
+
     @Test
     void test_matches_Wildcards() {
         // Matches
@@ -88,14 +88,14 @@ class WildcardUtilTest extends AbstractTestCase {
 
         // Trims pattern strings
         assert WildcardUtil.matches("abc", " a*c  ")
-        
+
         // Does not match
         assert !WildcardUtil.matches("a", "b*")
         assert !WildcardUtil.matches("a", "*b")
         assert !WildcardUtil.matches("a", "*ab")
         assert !WildcardUtil.matches("ab", "ab*c")
     }
-    
+
     @Test
     void test_matches_CommaSeparatedListOfPatterns_Wildcards() {
         // Matches
@@ -115,12 +115,12 @@ class WildcardUtilTest extends AbstractTestCase {
         assert WildcardUtil.matches("a", "a ,* ")
         assert WildcardUtil.matches("ab", "a,  *,a*  ")
         assert WildcardUtil.matches("abc", "a, *abc")
-        
+
         // Does not match
         assert !WildcardUtil.matches("a", "aa,b*")
         assert !WildcardUtil.matches("a", "*b,ab")
         assert !WildcardUtil.matches("a", "*ab,aa")
         assert !WildcardUtil.matches("ab", "a,ab*c,b")
     }
-    
+
 }

@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +20,11 @@ import org.dx42.needy.Dependency
 
 /**
  * Java application to create a sample Needy HTML report
- * 
+ *
  * @author Chris Mair
  */
 class CreateSampleReports {
-    
+
     private static final String OUTPUT_FILE = "samples/sample-html-report.html"
     private static final List<Dependency> DEPENDENCIES = [
         new Dependency(applicationName:"Sample1", group:"org.hibernate", name:"hibernate-core", version:"3.1"),
@@ -49,5 +49,5 @@ class CreateSampleReports {
         report.notesHtml = "<h2>Notes</h2><p>This entire section is custom HTML you can insert using the optional <em>notesHtml</em> Report property</p>"
         report.writeReport(DEPENDENCIES)
     }
-    
+
 }

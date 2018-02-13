@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,37 +25,37 @@ import org.codehaus.groovy.control.MultipleCompilationErrorsException
 class DslNeedyConfiguration implements NeedyConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(DslNeedyConfiguration)
-    
+
     private String text
     private List<ApplicationBuild> applicationBuilds
     private List<Report> reports
-    
+
     static DslNeedyConfiguration fromFile(String file) {
         assert file, "The file parameter must not be null or empty"
         String text = new File(file).text
         return new DslNeedyConfiguration(text)
     }
-    
+
     static DslNeedyConfiguration fromString(String text) {
         assert text, "The text parameter must not be null or empty"
         return new DslNeedyConfiguration(text)
     }
-    
+
     private DslNeedyConfiguration(String text) {
         this.text = text
         parse(text)
     }
-    
+
     @Override
     List<ApplicationBuild> getApplicationBuilds() {
         return applicationBuilds
     }
-    
+
     @Override
     List<Report> getReports() {
         return reports
     }
-    
+
     // For testing
     protected String getText() {
         return text
@@ -65,7 +65,7 @@ class DslNeedyConfiguration implements NeedyConfiguration {
         assert source
 
         DslEvaluator dslEvaluator = new DslEvaluator()
-        
+
         GroovyShell shell = createGroovyShell(dslEvaluator)
         try {
             shell.evaluate(source)
@@ -94,32 +94,32 @@ class DslNeedyConfiguration implements NeedyConfiguration {
 
 @SuppressWarnings("Instanceof")
 class DslEvaluator {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(DslEvaluator)
 
     List<ApplicationBuild> applicationBuilds = []
     List<Report> reports = []
     private boolean withinApplications = false
-    
+
     void evaluate(Closure closure) {
         closure.delegate = this
         closure.setResolveStrategy(Closure.DELEGATE_FIRST)
         closure.call()
     }
-    
+
     void applications(Closure closure) {
         withinApplications = true
         closure.call()
         withinApplications = false
     }
-    
+
     @SuppressWarnings("ConfusingMethodName")
     void reports(Closure closure) {
         def reportsDslEvaluator = new Reports_DslEvaluator()
         reportsDslEvaluator.evaluate(closure)
         this.reports = reportsDslEvaluator.reports
     }
-    
+
     @SuppressWarnings('MethodParameterTypeRequired')
     void methodMissing(String name, def args) {
         if (!withinApplications) {
@@ -131,8 +131,8 @@ class DslEvaluator {
             int index = 0
             List buildScripts = []
             while (index < args.size() && args[index] instanceof Map) {
-                args[index].each { k, v -> 
-                    assert k in MAP_KEYS, "Map key [$k] is not one of allowed keys: $MAP_KEYS" 
+                args[index].each { k, v ->
+                    assert k in MAP_KEYS, "Map key [$k] is not one of allowed keys: $MAP_KEYS"
                 }
                 buildScripts << createBuildScriptFromMap(args[index])
                 index++
@@ -143,7 +143,7 @@ class DslEvaluator {
             List list = args[0]
             LOG.info "methodMissing (List): name=$name value=${list}"
             assert list.every { element -> element instanceof Map }, "Each element of the List must be a Map"
-            def urlBuildScripts = list.collect { Map map -> 
+            def urlBuildScripts = list.collect { Map map ->
                 createBuildScriptFromMap(map)
             }
             applicationBuilds << new ApplicationBuild(name, urlBuildScripts)
@@ -152,18 +152,18 @@ class DslEvaluator {
             throw new MissingMethodException(name, getClass(), args)
         }
     }
-    
+
     private UrlBuildScript createBuildScriptFromMap(Map map) {
         String url = map.url
         assert url, "The url is missing"
         return new UrlBuildScript(url:url, type:map.type, properties:map['properties'])
     }
-    
+
 }
 
 @SuppressWarnings('Instanceof')
 class Reports_DslEvaluator {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(Reports_DslEvaluator)
 
     List<Report> reports = []
@@ -182,7 +182,7 @@ class Reports_DslEvaluator {
             Class reportClass = getClass().classLoader.loadClass(reportClassName)
             assert Report.isAssignableFrom(reportClass), "The classname must be a " + Report.name
             Report report = reportClass.newInstance()
-            
+
             if (args.size() == 2) {
                 assert args[1] instanceof Closure, "The 2nd argument must be a Closure"
                 def reportClosure = args[1]
@@ -190,11 +190,11 @@ class Reports_DslEvaluator {
                 reportClosure.resolveStrategy = Closure.DELEGATE_FIRST
                 reportClosure.call()
             }
-            
+
             reports << report
             return
         }
-        
+
         throw new MissingMethodException(name, getClass(), args)
     }
 

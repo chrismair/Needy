@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
     private static final Logger LOG = LoggerFactory.getLogger(GrailsBuildConfigDependencyParser)
 
     boolean includePlugins = true
-    
+
     @Override
     List<Dependency> parse(String applicationName, String source, Map<String, Object> binding) {
         if (source == null) {
@@ -48,7 +48,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
         GroovyShell shell = createGroovyShell(grailsMap, binding)
         try {
             shell.evaluate(source)
-        } 
+        }
         catch (MultipleCompilationErrorsException compileError) {
             LOG.error("An error occurred compiling: [$source]", compileError)
             throw new IllegalStateException("An error occurred compiling: [$source]\n${compileError.message}")
@@ -57,16 +57,16 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
         def project = grailsMap.project
         def dependency = project.dependency
         Closure resolutionClosure = dependency['resolution']
-        
+
         if (resolutionClosure) {
             dslEvaluator.evaluate(resolutionClosure)
         }
-        
+
         List<Dependency> dependencies = dslEvaluator.dependencies
         LOG.info "dependencies = $dependencies"
         return dependencies
     }
-    
+
     private GroovyShell createGroovyShell(Map grailsMap, Map<String, Object> binding) {
         def grailsSettingsMap = [:].withDefault(ParseUtil.ignoreEverything())
         Map predefinedMap = [
@@ -83,26 +83,26 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
 
 @SuppressWarnings('Instanceof')
 class GrailsBuildConfig_DslEvaluator {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(GrailsBuildConfig_DslEvaluator)
-    
+
     final List<Dependency> dependencies = []
     final String applicationName
     final Map<String, Object> binding
     final boolean includePlugins = false
-    
+
     GrailsBuildConfig_DslEvaluator(String applicationName, Map<String, Object> binding, boolean includePlugins) {
         this.applicationName = applicationName
         this.binding = binding
         this.includePlugins = includePlugins
     }
-    
+
     void evaluate(Closure closure) {
         closure.delegate = this
         closure.setResolveStrategy(Closure.DELEGATE_FIRST)
         closure.call()
     }
-    
+
     @SuppressWarnings('MethodParameterTypeRequired')
     Object methodMissing(String name, args) {
         if (name == "dependencies" && args.size() == 1 && args[0] instanceof Closure) {
@@ -124,10 +124,10 @@ class GrailsBuildConfig_DslEvaluator {
         LOG.info("** ignoring [$name]")
         return
     }
-    
+
     Object propertyMissing(String name) {
         def bindingValue = binding.containsKey(name) ? binding[name] : DoNothing.INSTANCE
-        LOG.info("propertyMissing: $name; value=$bindingValue") 
+        LOG.info("propertyMissing: $name; value=$bindingValue")
         return bindingValue
     }
 }
@@ -136,16 +136,16 @@ class GrailsBuildConfig_DslEvaluator {
 class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrailsBuildConfig_DependenciesClosure_DslEvaluator)
-    
+
     final List<Dependency> dependencies = []
     final String applicationName
     final Map<String, Object> binding
-    
+
     GrailsBuildConfig_DependenciesClosure_DslEvaluator(String applicationName, Map<String, Object> binding) {
         this.applicationName = applicationName
         this.binding = binding
     }
-    
+
     void evaluate(Closure closure) {
         closure.delegate = this
         closure.setResolveStrategy(Closure.DELEGATE_FIRST)
@@ -190,12 +190,12 @@ class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
 
     Object propertyMissing(String name) {
         def bindingValue = binding.containsKey(name) ? binding[name] : DoNothing.INSTANCE
-        LOG.info("propertyMissing: $name; value=$bindingValue") 
+        LOG.info("propertyMissing: $name; value=$bindingValue")
         return bindingValue
     }
-    
+
     private boolean isValidConfigurationName(String name) {
         return name in ['compile', 'test', 'runtime', 'build', 'provided']
     }
-    
+
 }
