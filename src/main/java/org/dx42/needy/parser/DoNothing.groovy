@@ -26,11 +26,11 @@ class DoNothing extends Expando {
 
     static final DoNothing INSTANCE = new DoNothing()
     
-    def methodMissing(String name, args) {
+    Object methodMissing(String name, args) {
         return INSTANCE
     }
     
-    def propertyMissing(String name) {
+    Object propertyMissing(String name) {
         return INSTANCE
     }
 

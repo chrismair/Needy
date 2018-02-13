@@ -109,7 +109,7 @@ class BuildscriptDslEvaluator {
         dslEvaluator.evaluate(closure)
     }
 
-    def methodMissing(String name, args) {
+    Object methodMissing(String name, args) {
         LOG.info("methodMissing: name=$name, args=$args")
     }
 
@@ -143,7 +143,7 @@ class DependenciesDslEvaluator {
         closure.call()
     }
 
-    def methodMissing(String name, args) {
+    Object methodMissing(String name, args) {
         if (ignoredMethodNames.contains(name)) {
             return
         }
@@ -183,7 +183,7 @@ class DependenciesDslEvaluator {
         }
     }
 
-    def propertyMissing(String name) {
+    Object propertyMissing(String name) {
         def bindingValue = dslContext.binding.containsKey(name) ? dslContext.binding[name] : DoNothing.INSTANCE
         LOG.info("propertyMissing: $name; value=$bindingValue")
         return bindingValue

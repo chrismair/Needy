@@ -27,7 +27,7 @@ import org.dx42.needy.Dependency
 class ByArtifactHtmlReport extends AbstractHtmlReport {
 
     @Override
-    protected buildBodySection(List<Dependency> dependencies) {
+    protected Closure buildBodySection(List<Dependency> dependencies) {
         Map sortedMap = ReportUtil.buildMapOfArtifactToApplicationNames(dependencies)
 
         return {
@@ -43,7 +43,7 @@ class ByArtifactHtmlReport extends AbstractHtmlReport {
         }
     }
 
-    private buildDependencyTable(Map sortedMap) {
+    private Closure buildDependencyTable(Map sortedMap) {
         return {
             div(class:'summary') {
                 h2("Dependencies")

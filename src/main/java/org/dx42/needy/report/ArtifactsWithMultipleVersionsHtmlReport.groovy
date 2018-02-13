@@ -30,7 +30,7 @@ import org.dx42.needy.Dependency
 class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
 
     @Override
-    protected buildBodySection(List<Dependency> dependencies) {
+    protected Closure buildBodySection(List<Dependency> dependencies) {
         Map sortedMap = buildArtifactMap(dependencies)
 
         return {
@@ -46,7 +46,7 @@ class ArtifactsWithMultipleVersionsHtmlReport extends AbstractHtmlReport {
         }
     }
 
-    private buildDependencyTable(Map sortedMap) {
+    private Closure buildDependencyTable(Map sortedMap) {
         return {
             div(class:'summary') {
                 h2("Artifacts with Multiple Versions")

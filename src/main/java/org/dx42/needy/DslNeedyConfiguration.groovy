@@ -107,20 +107,20 @@ class DslEvaluator {
         closure.call()
     }
     
-    def applications(Closure closure) {
+    void applications(Closure closure) {
         withinApplications = true
         closure.call()
         withinApplications = false
     }
     
     @SuppressWarnings("ConfusingMethodName")
-    def reports(Closure closure) {
+    void reports(Closure closure) {
         def reportsDslEvaluator = new Reports_DslEvaluator()
         reportsDslEvaluator.evaluate(closure)
         this.reports = reportsDslEvaluator.reports
     }
     
-    def methodMissing(String name, def args) {
+    void methodMissing(String name, def args) {
         if (!withinApplications) {
             throw new MissingMethodException(name, getClass(), args)
         }
@@ -173,7 +173,7 @@ class Reports_DslEvaluator {
         closure.call()
     }
 
-    def methodMissing(String name, def args) {
+    void methodMissing(String name, def args) {
         LOG.info "methodMissing: name=$name args=$args"
         if (args.size() in [1, 2] && args[0] instanceof String) {
             String reportClassName = args[0]

@@ -35,7 +35,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
     
     String title = "Dependency Report"
     
-    abstract protected buildBodySection(List<Dependency> dependencies)
+    abstract protected Closure buildBodySection(List<Dependency> dependencies)
     
     @Override
     void writeReport(Writer writer, List<Dependency> dependencies) {
@@ -50,7 +50,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
         writer << html
     }
     
-    protected buildHeaderSection() {
+    protected Closure buildHeaderSection() {
         return {
             head {
                 title(STANDARD_TITLE + ": " + title)
@@ -60,7 +60,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
         }
     }
 
-    protected buildCSS() {
+    protected Closure buildCSS() {
         return {
             def cssInputStream = getClasspathFileInputStream(CSS_FILE)
             def css = cssInputStream.text
@@ -70,7 +70,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
         }
     }
 
-    protected buildReportMetadata() {
+    protected Closure buildReportMetadata() {
         return {
             div(class:'metadata') {
                 table {
@@ -107,7 +107,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
         }
     }
 
-    protected buildApplicationList(List<Dependency> dependencies) {
+    protected Closure buildApplicationList(List<Dependency> dependencies) {
         SortedSet<String> applicationNames = getApplicationNames(dependencies)
         return {
             h2("Application Names")

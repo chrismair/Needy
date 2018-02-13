@@ -103,7 +103,7 @@ class GrailsBuildConfig_DslEvaluator {
         closure.call()
     }
     
-    def methodMissing(String name, args) {
+    Object methodMissing(String name, args) {
         if (name == "dependencies" && args.size() == 1 && args[0] instanceof Closure) {
             Closure dependenciesClosure = args[0]
             def dependenciesDslEvaluator = new GrailsBuildConfig_DependenciesClosure_DslEvaluator(applicationName, binding)
@@ -124,7 +124,7 @@ class GrailsBuildConfig_DslEvaluator {
         return
     }
     
-    def propertyMissing(String name) {
+    Object propertyMissing(String name) {
         def bindingValue = binding.containsKey(name) ? binding[name] : DoNothing.INSTANCE
         LOG.info("propertyMissing: $name; value=$bindingValue") 
         return bindingValue
@@ -151,7 +151,7 @@ class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
         closure.call()
     }
 
-    def methodMissing(String name, args) {
+    Object methodMissing(String name, args) {
         if (isValidConfigurationName(name)) {
             LOG.info("Processing [$name]")
             if (args[0] instanceof Map) {
@@ -186,7 +186,7 @@ class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
         }
     }
 
-    def propertyMissing(String name) {
+    Object propertyMissing(String name) {
         def bindingValue = binding.containsKey(name) ? binding[name] : DoNothing.INSTANCE
         LOG.info("propertyMissing: $name; value=$bindingValue") 
         return bindingValue
