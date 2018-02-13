@@ -18,6 +18,7 @@ package org.dx42.needy.report
 
 import static org.dx42.needy.report.ReportUtil.*
 
+import org.dx42.needy.Artifact
 import org.dx42.needy.Dependency
 import org.dx42.needy.NeedyVersion
 
@@ -91,7 +92,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
         }
     }
 
-    protected Closure buildDependencyRow(artifact, names, int index) {
+    protected Closure buildDependencyRow(Artifact artifact, Set<String> names, int index) {
         def applicationNames = names.findAll { name -> isIncludedApplication(name) }
         if (!applicationNames) {
             return null

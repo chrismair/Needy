@@ -65,7 +65,7 @@ ruleset {
     InvertedCondition 
     InvertedIfElse 
     LongLiteralWithLowerCaseL 
-    //MethodParameterTypeRequired	// TODO Re-enable 
+    MethodParameterTypeRequired 
     MethodReturnTypeRequired
     //NoDef 
     NoTabCharacter 

@@ -120,6 +120,7 @@ class DslEvaluator {
         this.reports = reportsDslEvaluator.reports
     }
     
+    @SuppressWarnings('MethodParameterTypeRequired')
     void methodMissing(String name, def args) {
         if (!withinApplications) {
             throw new MissingMethodException(name, getClass(), args)
@@ -173,6 +174,7 @@ class Reports_DslEvaluator {
         closure.call()
     }
 
+    @SuppressWarnings('MethodParameterTypeRequired')
     void methodMissing(String name, def args) {
         LOG.info "methodMissing: name=$name args=$args"
         if (args.size() in [1, 2] && args[0] instanceof String) {

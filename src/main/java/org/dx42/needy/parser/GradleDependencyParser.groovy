@@ -109,6 +109,7 @@ class BuildscriptDslEvaluator {
         dslEvaluator.evaluate(closure)
     }
 
+    @SuppressWarnings('MethodParameterTypeRequired')
     Object methodMissing(String name, args) {
         LOG.info("methodMissing: name=$name, args=$args")
     }
@@ -143,6 +144,7 @@ class DependenciesDslEvaluator {
         closure.call()
     }
 
+    @SuppressWarnings('MethodParameterTypeRequired')
     Object methodMissing(String name, args) {
         if (ignoredMethodNames.contains(name)) {
             return

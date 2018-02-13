@@ -26,6 +26,7 @@ class DoNothing extends Expando {
 
     static final DoNothing INSTANCE = new DoNothing()
     
+    @SuppressWarnings('MethodParameterTypeRequired')
     Object methodMissing(String name, args) {
         return INSTANCE
     }

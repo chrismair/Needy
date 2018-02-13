@@ -67,7 +67,7 @@ class GrailsBuildConfigDependencyParser implements DependencyParser {
         return dependencies
     }
     
-    private GroovyShell createGroovyShell(def grailsMap, Map<String, Object> binding) {
+    private GroovyShell createGroovyShell(Map grailsMap, Map<String, Object> binding) {
         def grailsSettingsMap = [:].withDefault(ParseUtil.ignoreEverything())
         Map predefinedMap = [
             grails:grailsMap,
@@ -103,6 +103,7 @@ class GrailsBuildConfig_DslEvaluator {
         closure.call()
     }
     
+    @SuppressWarnings('MethodParameterTypeRequired')
     Object methodMissing(String name, args) {
         if (name == "dependencies" && args.size() == 1 && args[0] instanceof Closure) {
             Closure dependenciesClosure = args[0]
@@ -151,6 +152,7 @@ class GrailsBuildConfig_DependenciesClosure_DslEvaluator {
         closure.call()
     }
 
+    @SuppressWarnings('MethodParameterTypeRequired')
     Object methodMissing(String name, args) {
         if (isValidConfigurationName(name)) {
             LOG.info("Processing [$name]")

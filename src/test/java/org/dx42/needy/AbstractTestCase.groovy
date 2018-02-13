@@ -42,7 +42,7 @@ class AbstractTestCase {
     }
     
     @SuppressWarnings('ConfusingMethodName')
-    protected void log(message) {
+    protected void log(Object message) {
         println "[${getClass().getSimpleName()}] " + message.toString()
     }
 
