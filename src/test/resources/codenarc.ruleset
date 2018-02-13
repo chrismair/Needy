@@ -164,7 +164,7 @@ ruleset {
     SpaceAroundOperator 
     SpaceBeforeClosingBrace 
     SpaceBeforeOpeningBrace(checkClosureMapEntryValue:false) 
-    //TrailingWhitespace	// TODO Re-enable 
+    TrailingWhitespace 
     
     // rulesets/groovyism.xml
     AssignCollectionSort 

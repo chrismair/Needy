@@ -1,5 +1,11 @@
 # Needy Change Log
 
+
+TODO: Version 0.14 (???, 2018)
+--------------------------------------------------
+- #7: Upgrade to CodeNarc 1.1. Enable new rules: Indentation., MethodReturnTypeRequired, InvertedCondition, MethodParameterTypeRequired, FieldTypeRequired, BlockStartsWithBlankLine, BlockEndsWithBlankLine., NoTabCharacter. Switch to explicit list of rules rather than using legacy rulesets. Also: ConsecutiveBlankLines, MissingBlankLineAfterImports, MissingBlankLineAfterPackage.
+
+
 Version 0.13 (Dec 2, 2017)
 --------------------------------------------------
 - #5: GradleDependencyParser: Add org.gradle.api.tasks.* to standard Gradle imports.
