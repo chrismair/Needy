@@ -1,8 +1,9 @@
 # Needy Change Log
 
 
-TODO: Version 0.14 (???, 2018)
+Version 0.14 (Feb 17, 2018)
 --------------------------------------------------
+- #8: Fix Error: GroovyCastException: Cannot cast Closure to Map.
 - #7: Upgrade to CodeNarc 1.1. Enable new rules: Indentation., MethodReturnTypeRequired, InvertedCondition, MethodParameterTypeRequired, FieldTypeRequired, BlockStartsWithBlankLine, BlockEndsWithBlankLine., NoTabCharacter. Switch to explicit list of rules rather than using legacy rulesets. Also: ConsecutiveBlankLines, MissingBlankLineAfterImports, MissingBlankLineAfterPackage.
 
 
