@@ -162,8 +162,10 @@ class DependenciesDslEvaluator {
         }
         if (args[0] instanceof Map) {
             LOG.info "methodMissing (Map): name=$name value=${args[0]}"
-            for (Map m: args) {
-                dslContext.dependencies << new Dependency(applicationName:dslContext.applicationName, group:m.group, name:m.name, version:m.version, configuration:name)
+            args.each { arg ->
+                if (arg instanceof Map) {
+                    dslContext.dependencies << new Dependency(applicationName:dslContext.applicationName, group:arg.group, name:arg.name, version:arg.version, configuration:name)
+                }
             }
         }
         else if (args[0] instanceof List) {

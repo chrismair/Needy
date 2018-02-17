@@ -471,6 +471,18 @@ class GradleDependencyParserTest extends AbstractTestCase {
     }
 
     @Test
+    void test_parse_ClosureAfterDependencySpec() {
+        final SOURCE = """dependencies {
+            compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.10.0', {
+                exclude group:'org.slf4j', module:'slf4j-api'
+            }
+        }"""
+        assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.apache.logging.log4j", name:"log4j-slf4j-impl", version:"2.10.0"),
+        ]
+    }
+
+    @Test
     void test_parse_OtherSyntax() {
         final SOURCE = """dependencies {
             compile("org.gradle:api:1.0") {
@@ -480,8 +492,8 @@ class GradleDependencyParserTest extends AbstractTestCase {
             alllife configurations.sealife                        // ignored
 
             compile project(':shared')                            // ignored
-            compile gradleApi()                                    // ignored
-            compile localGroovy()                                // ignored
+            compile gradleApi()                                   // ignored
+            compile localGroovy()                                 // ignored
         }"""
         assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
             new Dependency(applicationName:APPLICATION_NAME, configuration:"compile", group:"org.gradle", name:"api", version:"1.0"),
