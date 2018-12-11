@@ -1,6 +1,11 @@
 # Needy Change Log
 
 
+Version 0.15 (Dec 11, 2018)
+--------------------------------------------------
+- #10: MissingMethodException: No signature of method: org.dx42.needy.parser.GradleDependencyParser.classpath()
+
+
 Version 0.14 (Feb 17, 2018)
 --------------------------------------------------
 - #8: Fix Error: GroovyCastException: Cannot cast Closure to Map.
