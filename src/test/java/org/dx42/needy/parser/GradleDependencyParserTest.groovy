@@ -166,10 +166,13 @@ class GradleDependencyParserTest extends AbstractTestCase {
                 dependencies {
                     classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0"
                 }
+
+                // Alternate syntax
+                dependencies.classpath 'org.jfrog.buildinfo:other-stuff:4.5.2'
             }"""
         assert parser.parse(APPLICATION_NAME, SOURCE, BINDING) == [
-            new Dependency(applicationName:APPLICATION_NAME, configuration:"classpath", group:"org.jfrog.buildinfo", name:"build-info-extractor-gradle", version:"4.0")
-            ]
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"classpath", group:"org.jfrog.buildinfo", name:"build-info-extractor-gradle", version:"4.0"),
+            new Dependency(applicationName:APPLICATION_NAME, configuration:"classpath", group:"org.jfrog.buildinfo", name:"other-stuff", version:"4.5.2")]
     }
 
     @Test

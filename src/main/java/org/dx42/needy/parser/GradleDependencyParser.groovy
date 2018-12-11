@@ -109,6 +109,11 @@ class BuildscriptDslEvaluator {
         dslEvaluator.evaluate(closure)
     }
 
+    // Handles syntax such as: dependencies.classpath 'org.jfrog.buildinfo:other-stuff:4.5.2'
+    Map getDependencies() {
+        return [classpath:{ artifact -> dslContext.dependencies << ParseUtil.createDependencyFromString(dslContext.applicationName, "classpath", artifact) }]
+    }
+
     @SuppressWarnings('MethodParameterTypeRequired')
     Object methodMissing(String name, args) {
         LOG.info("methodMissing: name=$name, args=$args")
