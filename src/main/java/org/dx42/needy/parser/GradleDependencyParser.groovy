@@ -77,10 +77,12 @@ class GradleDependencyParser implements DependencyParser {
 
         return new GroovyShell(this.class.classLoader, groovyShellBinding)
     }
+
 }
 
 @Canonical
 class DslContext {
+
     String applicationName
     Map<String, Object> binding
     boolean includeFileDependencies
@@ -88,6 +90,7 @@ class DslContext {
 }
 
 class FileDependency {
+
     protected static final String GROUP = "** FILE DEPENDENCY"
 
     String name

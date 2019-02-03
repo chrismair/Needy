@@ -53,8 +53,21 @@ ruleset {
     ForStatementBraces 
     IfStatementBraces 
     WhileStatementBraces 
-    
-    
+
+    // rulesets/comments.xml
+    //ClassJavadoc 
+    JavadocConsecutiveEmptyLines 
+    JavadocEmptyAuthorTag 
+    JavadocEmptyExceptionTag 
+    JavadocEmptyFirstLine 
+    JavadocEmptyLastLine 
+    JavadocEmptyParamTag 
+    JavadocEmptyReturnTag 
+    JavadocEmptySeeTag 
+    JavadocEmptySinceTag 
+    JavadocEmptyThrowsTag 
+    JavadocEmptyVersionTag 
+
     // rulesets/convention.xml
     ConfusingTernary 
     CouldBeElvis 
@@ -141,8 +154,9 @@ ruleset {
     BracesForForLoop 
     BracesForIfElse 
     BracesForMethod 
-    BracesForTryCatchFinally 
-    //ClassJavadoc 
+    BracesForTryCatchFinally
+    //ClassEndsWithBlankLine 
+    ClassStartsWithBlankLine  
     ClosureStatementOnOpeningLineOfMultipleLineClosure 
     ConsecutiveBlankLines 
     //FileEndsWithoutNewline 

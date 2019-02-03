@@ -40,6 +40,7 @@ class AbstractReportTest extends AbstractTestCase {
     private Writer writer
     private List<Dependency> dependencies
     private AbstractReport report = new AbstractReport() {
+
         @Override
         void writeReport(Writer writer, List<Dependency> dependencies) {
             this.writer = writer
