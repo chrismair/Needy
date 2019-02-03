@@ -1,0 +1,60 @@
+/*
+ * Copyright 2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.dx42.needy.service
+
+import org.dx42.needy.AbstractTestCase
+import org.junit.Test
+
+/**
+ * Integration tests for MavenCentralArtifactLatestVersionService
+ *
+ * @author Chris Mair
+ */
+class MavenCentralArtifactLatestVersionServiceTest extends AbstractTestCase {
+
+    private static final String GROUP = 'org.codenarc'
+    private static final String NAME = 'CodeNarc'
+    private static final int NUM_VERSIONS = 3
+
+    private MavenCentralArtifactLatestVersionService service = new MavenCentralArtifactLatestVersionService()
+
+    @Test
+    void test_ImplementsArtifactLatestVersionService() {
+        assert service instanceof ArtifactLatestVersionService
+    }
+
+    @Test
+    void test_getLatestVersion() {
+        def latestVersions = service.getLatestVersions(GROUP, NAME, NUM_VERSIONS)
+        log("latestVersion=$latestVersions")
+        assert latestVersions.size() == NUM_VERSIONS
+        assert latestVersions.contains('1.3')
+    }
+
+    @Test
+    void test_getLatestVersion_NoMatchingArtifact() {
+        def latestVersions = service.getLatestVersions(GROUP, 'NoSuchName', NUM_VERSIONS)
+        log("latestVersion=$latestVersions")
+        assert latestVersions.size() == 0
+    }
+
+    @Test
+    void test_getLatestVersion_Error() {
+        service.baseUrl = 'http://NoSuchHost'
+        shouldFail(IOException) { service.getLatestVersions(GROUP, NAME, NUM_VERSIONS) }
+    }
+
+}
