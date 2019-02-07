@@ -30,7 +30,6 @@ abstract class AbstractReport implements Report {
     String excludeApplications
     String includeArtifacts
     String excludeArtifacts
-    String notesHtml
 
     protected Closure getDate = { new Date() }
 

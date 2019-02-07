@@ -35,6 +35,7 @@ abstract class AbstractHtmlReport extends AbstractReport {
     protected static final String CSS_FILE = 'htmlreport.css'
 
     String title = "Dependency Report"
+    String notesHtml
 
     abstract protected Closure buildBodySection(List<Dependency> dependencies)
 
