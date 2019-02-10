@@ -17,6 +17,6 @@ package org.dx42.needy.service
 
 interface ArtifactLatestVersionService {
 
-    List<String> getLatestVersions(String group, String name, int numVersions)
+    String getLatestVersion(String group, String name)
 
 }

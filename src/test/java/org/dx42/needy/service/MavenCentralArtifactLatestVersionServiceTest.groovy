@@ -27,7 +27,6 @@ class MavenCentralArtifactLatestVersionServiceTest extends AbstractTestCase {
 
     private static final String GROUP = 'org.codenarc'
     private static final String NAME = 'CodeNarc'
-    private static final int NUM_VERSIONS = 3
 
     private MavenCentralArtifactLatestVersionService service = new MavenCentralArtifactLatestVersionService()
 
@@ -38,23 +37,22 @@ class MavenCentralArtifactLatestVersionServiceTest extends AbstractTestCase {
 
     @Test
     void test_getLatestVersion() {
-        def latestVersions = service.getLatestVersions(GROUP, NAME, NUM_VERSIONS)
-        log("latestVersion=$latestVersions")
-        assert latestVersions.size() == NUM_VERSIONS
-        assert latestVersions.contains('1.3')
+        def latestVersion = service.getLatestVersion(GROUP, NAME)
+        log("latestVersion=$latestVersion")
+        assert latestVersion.contains('1.3')
     }
 
     @Test
     void test_getLatestVersion_NoMatchingArtifact() {
-        def latestVersions = service.getLatestVersions(GROUP, 'NoSuchName', NUM_VERSIONS)
-        log("latestVersion=$latestVersions")
-        assert latestVersions.size() == 0
+        def latestVersion = service.getLatestVersion(GROUP, 'NoSuchName')
+        log("latestVersion=$latestVersion")
+        assert latestVersion == null
     }
 
     @Test
     void test_getLatestVersion_Error() {
         service.baseUrl = 'http://NoSuchHost'
-        shouldFail(IOException) { service.getLatestVersions(GROUP, NAME, NUM_VERSIONS) }
+        shouldFail(IOException) { service.getLatestVersion(GROUP, NAME) }
     }
 
 }

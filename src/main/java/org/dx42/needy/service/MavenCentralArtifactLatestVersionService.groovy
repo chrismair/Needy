@@ -34,16 +34,16 @@ class MavenCentralArtifactLatestVersionService implements ArtifactLatestVersionS
     private final JsonSlurper jsonSlurper = new JsonSlurper()
 
     @Override
-    List<String> getLatestVersions(String group, String name, int numVersions) {
-        String urlString = baseUrl + '?q=g:%22' + group + '%22+AND+a:%22' + name + '%22&core=gav&rows=' + numVersions + '&wt=json'
+    String getLatestVersion(String group, String name) {
+        String urlString = baseUrl + '?q=g:%22' + group + '%22+AND+a:%22' + name + '%22&core=gav&rows=1&wt=json'
         def url = new URL(urlString)
         LOG.info("Contacting Maven Central for latest version; url=$url")
 
         def urlContent = getUrlContent(url)
         def json = jsonSlurper.parseText(urlContent)
 
-        List<String> versions = json.response.docs.v
-        return versions
+        String version = json.response.docs[0]?.v
+        return version
     }
 
     private String getUrlContent(URL url) {
