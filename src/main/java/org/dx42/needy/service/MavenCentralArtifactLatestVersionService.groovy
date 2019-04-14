@@ -31,22 +31,35 @@ class MavenCentralArtifactLatestVersionService implements ArtifactLatestVersionS
     private static final Logger LOG = LoggerFactory.getLogger(MavenCentralArtifactLatestVersionService)
 
     protected String baseUrl = BASE_URL
+    protected Map<String, String> cachedVersions = [:]
     private final JsonSlurper jsonSlurper = new JsonSlurper()
 
     @Override
     String getLatestVersion(String group, String name) {
-        String urlString = baseUrl + '?q=g:%22' + group + '%22+AND+a:%22' + name + '%22&core=gav&rows=1&wt=json'
-        def url = new URL(urlString)
-        LOG.info("Contacting Maven Central for latest version; url=$url")
+        def cacheKey = group + ':' + name
+        if (cachedVersions[cacheKey]) {
+            return cachedVersions[cacheKey]
+        }
 
+        def url = buildURL(group, name)
         def urlContent = getUrlContent(url)
-        def json = jsonSlurper.parseText(urlContent)
-
-        String version = json.response.docs[0]?.v
+        String version = parseVersion(urlContent)
+        cachedVersions[cacheKey] = version
         return version
     }
 
+    private String parseVersion(String urlContent) {
+        def json = jsonSlurper.parseText(urlContent)
+        return json.response.docs[0]?.v
+    }
+
+    private URL buildURL(String group, String name) {
+        String urlString = baseUrl + '?q=g:%22' + group + '%22+AND+a:%22' + name + '%22&core=gav&rows=1&wt=json'
+        return new URL(urlString)
+    }
+
     private String getUrlContent(URL url) {
+        LOG.info("Contacting Maven Central for latest version; url=$url")
         return url.text
     }
 

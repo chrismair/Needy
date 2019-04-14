@@ -55,4 +55,16 @@ class MavenCentralArtifactLatestVersionServiceTest extends AbstractTestCase {
         shouldFail(IOException) { service.getLatestVersion(GROUP, NAME) }
     }
 
+    @Test
+    void test_UsesCachedVersions() {
+        // Stores version in the cache
+        def latestVersion = service.getLatestVersion(GROUP, NAME)
+        def key = GROUP + ':' + NAME
+        assert service.cachedVersions[key] == latestVersion
+
+        // Retrieves version from the cache
+        service.cachedVersions['a:b'] = 'v1.2'
+        assert service.getLatestVersion('a', 'b') == 'v1.2'
+    }
+
 }
