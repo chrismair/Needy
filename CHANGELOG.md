@@ -1,6 +1,13 @@
 # Needy Change Log
 
 
+TODO Version 0.16 (???, 2019)
+--------------------------------------------------
+- #11: New **ArtifactLatestVersionHtmlReport**: Report listing latest version available for each artifact.
+- #12: Upgrade to CodeNarc v1.3. Enable new rules.
+- Upgrade to Groovy 2.4.13
+
+
 Version 0.15 (Dec 11, 2018)
 --------------------------------------------------
 - #10: MissingMethodException: No signature of method: org.dx42.needy.parser.GradleDependencyParser.classpath()
@@ -14,7 +21,7 @@ Version 0.14 (Feb 17, 2018)
 
 Version 0.13 (Dec 2, 2017)
 --------------------------------------------------
-- #5: GradleDependencyParser: Add org.gradle.api.tasks.* to standard Gradle imports.
+- #5: **GradleDependencyParser**: Add org.gradle.api.tasks.* to standard Gradle imports.
 
 
 Version 0.12 (Nov 29, 2017)
