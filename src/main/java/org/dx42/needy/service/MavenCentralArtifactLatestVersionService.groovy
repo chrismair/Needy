@@ -15,6 +15,7 @@
  */
 package org.dx42.needy.service
 
+import org.dx42.needy.parser.FileDependency
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -36,6 +37,10 @@ class MavenCentralArtifactLatestVersionService implements ArtifactLatestVersionS
 
     @Override
     String getLatestVersion(String group, String name) {
+        if (group == FileDependency.GROUP) {
+            return null
+        }
+        
         def cacheKey = group + ':' + name
         if (cachedVersions[cacheKey]) {
             return cachedVersions[cacheKey]

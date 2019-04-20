@@ -16,6 +16,7 @@
 package org.dx42.needy.service
 
 import org.dx42.needy.AbstractTestCase
+import org.dx42.needy.parser.FileDependency
 import org.junit.Test
 
 /**
@@ -45,6 +46,13 @@ class MavenCentralArtifactLatestVersionServiceTest extends AbstractTestCase {
     @Test
     void test_getLatestVersion_NoMatchingArtifact() {
         def latestVersion = service.getLatestVersion(GROUP, 'NoSuchName')
+        log("latestVersion=$latestVersion")
+        assert latestVersion == null
+    }
+
+    @Test
+    void test_getLatestVersion_FileDependency() {
+        def latestVersion = service.getLatestVersion(FileDependency.GROUP, NAME)
         log("latestVersion=$latestVersion")
         assert latestVersion == null
     }
