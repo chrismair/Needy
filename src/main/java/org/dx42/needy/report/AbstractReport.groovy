@@ -30,6 +30,8 @@ abstract class AbstractReport implements Report {
     String excludeApplications
     String includeArtifacts
     String excludeArtifacts
+    String includeConfigurationNames
+    String excludeConfigurationNames
 
     protected Closure getDate = { new Date() }
 
@@ -40,7 +42,8 @@ abstract class AbstractReport implements Report {
         assert dependencies != null
 
         def printWriter = createPrintWriter()
-        writeReport(printWriter, dependencies)
+        def includedDependencies = dependencies.findAll { dep -> isIncludedConfiguration(dep.configuration) }
+        writeReport(printWriter, includedDependencies)
 
         if (outputFile) {
             LOG.info("Report written to [$outputFile]")
@@ -83,6 +86,18 @@ abstract class AbstractReport implements Report {
 
     protected boolean isIncludedArtifact(Artifact artifact) {
         return matchesIncludeArtifacts(artifact) && !matchesExcludeArtifacts(artifact)
+    }
+
+    protected boolean matchesIncludeConfigurationNames(String configurationName) {
+        return includeConfigurationNames ? WildcardUtil.matches(configurationName, includeConfigurationNames) : true
+    }
+
+    protected boolean matchesExcludeConfigurationNames(String configurationName) {
+        return excludeConfigurationNames ? WildcardUtil.matches(configurationName, excludeConfigurationNames) : false
+    }
+
+    protected boolean isIncludedConfiguration(String configurationName) {
+        return matchesIncludeConfigurationNames(configurationName) && !matchesExcludeConfigurationNames(configurationName)
     }
 
     protected SortedSet<String> getApplicationNames(List<Dependency> dependencies) {

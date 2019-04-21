@@ -4,6 +4,7 @@
 TODO Version 0.16 (???, 2019)
 --------------------------------------------------
 - #11: New **ArtifactLatestVersionHtmlReport**: Report listing latest version available for each artifact.
+- #9: Report: Include/exclude configuration (scope); *includeConfigurationNames* and *excludeConfigurationNames* properties.
 - #12: Upgrade to CodeNarc v1.3. Enable new rules.
 - Upgrade to Groovy 2.4.13
 

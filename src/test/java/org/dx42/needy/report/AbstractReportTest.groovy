@@ -30,12 +30,12 @@ class AbstractReportTest extends AbstractTestCase {
 
     private static final Date DATE = new Date(1499477419708L)
     private static final List<Dependency> DEPENDENCIES = [
-        new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0"),
-        new Dependency(applicationName:"Sample1", group:"ORG.hibernate", name:"hibernate-core", version:"3.1"),
-        new Dependency(applicationName:"sample_Two", group:"log4j", name:"log4j", version:"1.2.14"),
-        new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14"),
-        new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14"),
-        new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0"),
+        new Dependency(applicationName:"Third", group:"org.other", name:"service", version:"2.0", configuration:'compile'),
+        new Dependency(applicationName:"Sample1", group:"ORG.hibernate", name:"hibernate-core", version:"3.1", configuration:'compile'),
+        new Dependency(applicationName:"sample_Two", group:"log4j", name:"log4j", version:"1.2.14", configuration:'compile-only'),
+        new Dependency(applicationName:"Sample1", group:"log4j", name:"log4j", version:"1.2.14", configuration:'testCompile'),
+        new Dependency(applicationName:"Third", group:"log4j", name:"log4j", version:"1.2.14", configuration:'other'),
+        new Dependency(applicationName:"Third", group:"log4j-extra", name:"stuff", version:"1.0", configuration:'other'),
     ]
     private Writer writer
     private List<Dependency> dependencies
@@ -68,6 +68,20 @@ class AbstractReportTest extends AbstractTestCase {
         new File(reportFile).deleteOnExit()
         report.writeReport(DEPENDENCIES)
         assert dependencies == DEPENDENCIES
+    }
+
+    @Test
+    void test_writeReport_includeConfigurationNames() {
+        report.includeConfigurationNames = 'compile'
+        report.writeReport(DEPENDENCIES)
+        assert dependencies == DEPENDENCIES.findAll { d -> d.configuration == 'compile' }
+    }
+
+    @Test
+    void test_writeReport_excludeConfigurationNames() {
+        report.excludeConfigurationNames = 'compile'
+        report.writeReport(DEPENDENCIES)
+        assert dependencies == DEPENDENCIES.findAll { d -> d.configuration != 'compile' }
     }
 
     @Test
@@ -220,6 +234,57 @@ class AbstractReportTest extends AbstractTestCase {
         assert !report.isIncludedArtifact(ARTIFACT_BB_YY_11)
         assert report.isIncludedArtifact(ARTIFACT_A_Y_1)
         assert !report.isIncludedArtifact(ARTIFACT_BB_XX_22)
+    }
+
+    // Tests for include/exclude configurations
+
+    @Test
+    void test_matchesIncludeConfigurationNames() {
+        assert report.matchesIncludeConfigurationNames("a")
+
+        report.includeConfigurationNames = "A*"
+        assert report.matchesIncludeConfigurationNames("AAA")
+        assert report.matchesIncludeConfigurationNames("A-B")
+        assert !report.matchesIncludeConfigurationNames("B")
+
+        report.includeConfigurationNames = "A, B*"
+        assert report.matchesIncludeConfigurationNames("A")
+        assert report.matchesIncludeConfigurationNames("B")
+        assert report.matchesIncludeConfigurationNames("BAB")
+        assert !report.matchesIncludeConfigurationNames("A-B")
+        assert !report.matchesIncludeConfigurationNames("AB")
+    }
+
+    @Test
+    void test_matchesExcludeConfigurationNames() {
+        assert !report.matchesExcludeConfigurationNames("a")
+
+        report.excludeConfigurationNames = "A*"
+        assert report.matchesExcludeConfigurationNames("AAA")
+        assert report.matchesExcludeConfigurationNames("A-B")
+        assert !report.matchesExcludeConfigurationNames("B")
+
+        report.excludeConfigurationNames = "A, B*"
+        assert report.matchesExcludeConfigurationNames("A")
+        assert report.matchesExcludeConfigurationNames("B")
+        assert report.matchesExcludeConfigurationNames("BAB")
+        assert !report.matchesExcludeConfigurationNames("A-B")
+        assert !report.matchesExcludeConfigurationNames("AB")
+    }
+
+    @Test
+    void test_isIncludedConfiguration() {
+        report.includeConfigurationNames = "A*"
+        report.excludeConfigurationNames = "B*, CCC"
+
+        assert report.isIncludedConfiguration("AAA")
+        assert report.isIncludedConfiguration("ABC")
+
+        assert !report.isIncludedConfiguration("B")
+        assert !report.isIncludedConfiguration("BBB")
+        assert !report.isIncludedConfiguration("CCC")
+        assert !report.isIncludedConfiguration("CXX")
+        assert !report.isIncludedConfiguration("Other")
     }
 
 }

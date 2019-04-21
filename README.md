@@ -69,6 +69,8 @@ needy {
             excludeApplications = null       // Optional; String value; comma-separated list of application names with optional wildcards ("*"); null mean exclude none
             includeArtifacts = null          // Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean include all
             excludeArtifacts = null          // Optional; String value; comma-separated list of artifact names with optional wildcards ("*"); null mean exclude none
+            includeConfigurationNames = null // Optional; String value; comma-separated list of configuration names with optional wildcards ("*"); null mean include all
+            excludeConfigurationNames = null // Optional; String value; comma-separated list of configuration names with optional wildcards ("*"); null mean exclude none
         }
     }
 }
@@ -102,6 +104,8 @@ needy {
 | *excludeApplications*  | A comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
 | *includeArtifacts*     | A comma-separated list of artifact names to include in the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean include all. | null |
 | *excludeArtifacts*     | A comma-separated list of artifact names to exclude from the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean exclude none. | null |
+| *includeConfigurationNames* | A comma-separated list of configuration names to include in the report, with optional wildcards ("*"); For example: `test*`; null mean include all. | null |
+| *excludeConfigurationNames* | A comma-separated list of configuration names to exclude from the report, with optional wildcards ("*"); For example: `test*`; null mean exclude none. | null |
 
 #### ArtifactsWithMultipleVersionsHtmlReport (org.dx42.needy.report.ArtifactsWithMultipleVersionsHtmlReport)
 
@@ -116,6 +120,8 @@ needy {
 | *excludeApplications*  | A comma-separated list of application names to exclude from the report, with optional wildcards ("*"); null mean exclude none. | null |
 | *includeArtifacts*     | A comma-separated list of artifact names to include in the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean include all.    | null |
 | *excludeArtifacts*     | A comma-separated list of artifact names to exclude from the report, with optional wildcards ("*"); For example: `log4j:log4j*:1.*`; null mean exclude none. | null |
+| *includeConfigurationNames* | A comma-separated list of configuration names to include in the report, with optional wildcards ("*"); For example: `test*`; null mean include all. | null |
+| *excludeConfigurationNames* | A comma-separated list of configuration names to exclude from the report, with optional wildcards ("*"); For example: `test*`; null mean exclude none. | null |
 
 #### ByArtifactTextReport (org.dx42.needy.report.ByArtifactTextReport)
  
@@ -124,7 +130,8 @@ needy {
 | Configuration Property | Description                                                           | Default        |
 | ---------------------- |-----------------------------------------------------------------------|----------------|
 | *outputFile*           | The path for the report output file. If null, write to *standard out*.| null           |
-
+| *includeConfigurationNames* | A comma-separated list of configuration names to include in the report, with optional wildcards ("*"); For example: `test*`; null mean include all. | null |
+| *excludeConfigurationNames* | A comma-separated list of configuration names to exclude from the report, with optional wildcards ("*"); For example: `test*`; null mean exclude none. | null |
 
 ## Known Limitations
 
