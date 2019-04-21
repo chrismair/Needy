@@ -17,7 +17,7 @@ package org.dx42.needy.report
 
 import org.junit.Test
 
-class ByArtifactHtmlReportTest extends AbstractHtmlReportTestCase {
+class ByArtifactHtmlReportTest extends AbstractHtmlReportTestCase<ByArtifactHtmlReport> {
 
     private static final String EXPECTED_REPORT_TEXT = """
         <!DOCTYPE html><html>$HEAD_HTML    <body>$H1_HTML    $METADATA_HTML

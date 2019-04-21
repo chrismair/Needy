@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 the original author or authors.
+ * Copyright 2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.dx42.needy.NeedyVersion
 import org.junit.Before
 import org.junit.Test
 
-abstract class AbstractHtmlReportTestCase extends AbstractTestCase {
+abstract class AbstractHtmlReportTestCase<T extends AbstractHtmlReport> extends AbstractTestCase {
 
     protected static final String OUTPUT_FILE = "src/test/resources/temp-html-report.html"
     protected static final List<Dependency> DEPENDENCIES = [
@@ -64,7 +64,7 @@ abstract class AbstractHtmlReportTestCase extends AbstractTestCase {
         return """<head><title>Needy Dependency Report: $title</title><meta http-equiv="Content-Type" content="text/html"><style type='text/css'>$CSS</style></head>"""
     }
 
-    protected Report report
+    protected T report
     protected StringWriter writer = new StringWriter()
 
     protected abstract String getExpectedReportText()

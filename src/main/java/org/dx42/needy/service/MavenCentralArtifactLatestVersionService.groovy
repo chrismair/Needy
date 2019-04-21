@@ -40,7 +40,7 @@ class MavenCentralArtifactLatestVersionService implements ArtifactLatestVersionS
         if (group == FileDependency.GROUP) {
             return null
         }
-        
+
         def cacheKey = group + ':' + name
         if (cachedVersions[cacheKey]) {
             return cachedVersions[cacheKey]

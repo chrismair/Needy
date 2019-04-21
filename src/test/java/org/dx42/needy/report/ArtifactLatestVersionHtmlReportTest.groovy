@@ -25,7 +25,7 @@ import org.junit.Test
  *
  * @author Chris Mair
  */
-class ArtifactLatestVersionHtmlReportTest extends AbstractHtmlReportTestCase {
+class ArtifactLatestVersionHtmlReportTest extends AbstractHtmlReportTestCase<ArtifactLatestVersionHtmlReport> {
 
     private static final String TITLE = 'Latest Artifact Version'
     private static final String H1_HTML = "<h1>$TITLE</h1>"
