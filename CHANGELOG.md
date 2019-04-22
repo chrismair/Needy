@@ -1,7 +1,7 @@
 # Needy Change Log
 
 
-TODO Version 0.16 (???, 2019)
+Version 0.16 (April 21, 2019)
 --------------------------------------------------
 - #11: New **ArtifactLatestVersionHtmlReport**: Report listing latest version available for each artifact.
 - #9: Report: Include/exclude configuration (scope); *includeConfigurationNames* and *excludeConfigurationNames* properties.
