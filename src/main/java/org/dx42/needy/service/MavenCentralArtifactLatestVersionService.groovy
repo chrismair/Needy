@@ -28,12 +28,14 @@ import groovy.json.JsonSlurper
  */
 class MavenCentralArtifactLatestVersionService implements ArtifactLatestVersionService {
 
+    protected static final String DELAY_SYSTEM_PROPERTY = 'needy.maven-central.delay.milliseconds'
     private static final String BASE_URL = 'https://search.maven.org/solrsearch/select'
     private static final Logger LOG = LoggerFactory.getLogger(MavenCentralArtifactLatestVersionService)
 
     protected String baseUrl = BASE_URL
     protected Map<String, String> cachedVersions = [:]
     private final JsonSlurper jsonSlurper = new JsonSlurper()
+    protected long delayMilliseconds = Long.getLong(DELAY_SYSTEM_PROPERTY, 0L)
 
     @Override
     String getLatestVersion(String group, String name) {
@@ -46,6 +48,7 @@ class MavenCentralArtifactLatestVersionService implements ArtifactLatestVersionS
             return cachedVersions[cacheKey]
         }
 
+        sleep(delayMilliseconds)
         def url = buildURL(group, name)
         def urlContent = getUrlContent(url)
         String version = parseVersion(urlContent)

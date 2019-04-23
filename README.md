@@ -143,6 +143,9 @@ needy {
 | *title*                | The title for the report.                                             | "Dependency Report" |
 | *notesHtml*            | If not null, embed this HTML in the report after the title and report info, before the *Dependencies* section.  | null |
 
+System Properties
+  - Optionally set the "needy.maven-central.delay.milliseconds" system property to set a delay in milliseconds between each Maven Central request.
+
 ## Known Limitations
 
   - It supports only relatively standard Gradle syntax.

@@ -15,6 +15,8 @@
  */
 package org.dx42.needy.service
 
+import static MavenCentralArtifactLatestVersionService.*
+
 import org.dx42.needy.AbstractTestCase
 import org.dx42.needy.parser.FileDependency
 import org.junit.Test
@@ -75,4 +77,14 @@ class MavenCentralArtifactLatestVersionServiceTest extends AbstractTestCase {
         assert service.getLatestVersion('a', 'b') == 'v1.2'
     }
 
+    @Test
+    void test_SetsDelay() {
+        assert new MavenCentralArtifactLatestVersionService().delayMilliseconds == 0L
+        
+        System.setProperty(DELAY_SYSTEM_PROPERTY, '999')
+        assert new MavenCentralArtifactLatestVersionService().delayMilliseconds == 999L
+        
+        System.clearProperty(DELAY_SYSTEM_PROPERTY)
+    }
+    
 }

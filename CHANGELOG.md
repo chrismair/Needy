@@ -1,6 +1,11 @@
 # Needy Change Log
 
 
+Version 0.17 (April 23, 2019)
+--------------------------------------------------
+- MavenCentralArtifactLatestVersionService: Add support for "needy.maven-central.delay.milliseconds" system property.
+
+
 Version 0.16 (April 21, 2019)
 --------------------------------------------------
 - #11: New **ArtifactLatestVersionHtmlReport**: Report listing latest version available for each artifact.
