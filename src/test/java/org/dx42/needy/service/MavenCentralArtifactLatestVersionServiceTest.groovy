@@ -80,11 +80,11 @@ class MavenCentralArtifactLatestVersionServiceTest extends AbstractTestCase {
     @Test
     void test_SetsDelay() {
         assert new MavenCentralArtifactLatestVersionService().delayMilliseconds == 0L
-        
+
         System.setProperty(DELAY_SYSTEM_PROPERTY, '999')
         assert new MavenCentralArtifactLatestVersionService().delayMilliseconds == 999L
-        
+
         System.clearProperty(DELAY_SYSTEM_PROPERTY)
     }
-    
+
 }
