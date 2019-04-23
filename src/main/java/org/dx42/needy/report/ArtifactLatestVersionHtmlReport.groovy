@@ -21,6 +21,11 @@ import org.dx42.needy.service.MavenCentralArtifactLatestVersionService
 
 import groovy.transform.Immutable
 
+/**
+ * HTML Report that displays the latest version for all artifacts (group+name) referenced within the dependencies list.
+ *
+ * @author Chris Mair
+ */
 class ArtifactLatestVersionHtmlReport extends AbstractHtmlReport {
 
     protected static final String TITLE = 'Latest Artifact Version'

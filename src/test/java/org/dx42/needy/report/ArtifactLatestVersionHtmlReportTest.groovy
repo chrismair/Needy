@@ -29,7 +29,6 @@ class ArtifactLatestVersionHtmlReportTest extends AbstractHtmlReportTestCase<Art
 
     private static final String TITLE = 'Latest Artifact Version'
     private static final String H1_HTML = "<h1>$TITLE</h1>"
-//    private static final String METADATA_HTML = metadataHtml(TITLE)
     private static final String TABLE_HEADER_HTML = "<tr class='tableHeader'><th>#</th><th>Group</th><th>Name</th><th>Latest Version</th></tr>"
 
     private static final String EXPECTED_REPORT_TEXT = """

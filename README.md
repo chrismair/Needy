@@ -133,6 +133,16 @@ needy {
 | *includeConfigurationNames* | A comma-separated list of configuration names to include in the report, with optional wildcards ("*"); For example: `test*`; null mean include all. | null |
 | *excludeConfigurationNames* | A comma-separated list of configuration names to exclude from the report, with optional wildcards ("*"); For example: `test*`; null mean exclude none. | null |
 
+#### ArtifactLatestVersionHtmlReport (org.dx42.needy.report.ArtifactLatestVersionHtmlReport)
+
+  This is an HTML report that displays the latest version for all artifacts (group+name) referenced within the dependencies list.
+
+| Configuration Property | Description                                                           | Default             |
+| ---------------------- |-----------------------------------------------------------------------|---------------------|
+| *outputFile*           | The path for the report output file. If null, write to *standard out*.| null                |
+| *title*                | The title for the report.                                             | "Dependency Report" |
+| *notesHtml*            | If not null, embed this HTML in the report after the title and report info, before the *Dependencies* section.  | null |
+
 ## Known Limitations
 
   - It supports only relatively standard Gradle syntax.
